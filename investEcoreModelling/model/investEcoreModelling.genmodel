@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/investEcoreModelling/src" modelPluginID="investEcoreModelling"
+    modelName="InvestEcoreModelling" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>investEcoreModelling.ecore</foreignModel>
+  <genPackages prefix="InvestEcoreModelling" disposableProviderFactory="true" ecorePackage="investEcoreModelling.ecore#/">
+    <genClasses ecoreClass="investEcoreModelling.ecore#//Transaction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Transaction/portfolio"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Transaction/security"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Transaction/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Transaction/number"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Transaction/price"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Transaction/fee"/>
+    </genClasses>
+    <genClasses ecoreClass="investEcoreModelling.ecore#//Security">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Security/transaction"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Security/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Security/code"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Security/quote"/>
+    </genClasses>
+    <genClasses ecoreClass="investEcoreModelling.ecore#//Quote">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Quote/security"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/bid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/ask"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/high"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/low"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/first"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/last"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/volumeNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Quote/volumeAmount"/>
+    </genClasses>
+    <genClasses ecoreClass="investEcoreModelling.ecore#//Portfolio">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Portfolio/user"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//Portfolio/transaction"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute investEcoreModelling.ecore#//Portfolio/name"/>
+    </genClasses>
+    <genClasses ecoreClass="investEcoreModelling.ecore#//User">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference investEcoreModelling.ecore#//User/portfolio"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

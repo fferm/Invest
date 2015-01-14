@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="investEcoreModelling" nsURI="http://www.example.org/investEcoreModelling"
+    nsPrefix="investEcoreModelling">
+  <eClassifiers xsi:type="ecore:EClass" name="Transaction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portfolio" eType="#//Portfolio"
+        eOpposite="#//Portfolio/transaction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="security" eType="#//Security"
+        eOpposite="#//Security/transaction"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fee"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Security">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transaction" eType="#//Transaction"
+        eOpposite="#//Transaction/security"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="quote" eType="#//Quote"
+        eOpposite="#//Quote/security"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Quote">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="security" eType="#//Security"
+        eOpposite="#//Security/quote"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bid"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ask"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="high"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="low"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="first"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="last"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeNumber"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeAmount"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Portfolio">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="user" eType="#//User" eOpposite="#//User/portfolio"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transaction" eType="#//Transaction"
+        eOpposite="#//Transaction/portfolio"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portfolio" eType="#//Portfolio"
+        eOpposite="#//Portfolio/user"/>
+  </eClassifiers>
+</ecore:EPackage>
