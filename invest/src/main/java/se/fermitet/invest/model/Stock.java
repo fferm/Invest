@@ -7,8 +7,7 @@ public class Stock {
 
 	public Stock(String symbol) {
 		super();
-		validateSymbol(symbol);
-		this.symbol = symbol;
+		this.setSymbol(symbol);
 	}
 
 	private void validateSymbol(String symbol) {
