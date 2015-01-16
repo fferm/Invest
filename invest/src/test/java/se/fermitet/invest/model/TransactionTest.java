@@ -23,6 +23,7 @@ public class TransactionTest {
 		assertEquals("Transaction date today if used with default constructor", LocalDate.now(), tx.getDate());
 	}
 	
+	
 	@Test
 	public void testDateProperty() throws Exception {
 		Transaction tx = new Transaction();
