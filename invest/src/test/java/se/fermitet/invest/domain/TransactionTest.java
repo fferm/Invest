@@ -1,4 +1,4 @@
-package se.fermitet.invest.model;
+package se.fermitet.invest.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,6 +11,9 @@ import static org.junit.Assert.fail;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+
+import se.fermitet.invest.domain.Stock;
+import se.fermitet.invest.domain.Transaction;
 
 public class TransactionTest {
 

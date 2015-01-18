@@ -1,4 +1,4 @@
-package se.fermitet.invest.model;
+package se.fermitet.invest.domain;
 
 public class Stock {
 

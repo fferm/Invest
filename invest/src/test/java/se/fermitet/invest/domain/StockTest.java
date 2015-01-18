@@ -1,4 +1,4 @@
-package se.fermitet.invest.model;
+package se.fermitet.invest.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,6 +8,8 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import se.fermitet.invest.domain.Stock;
 
 public class StockTest {
 
