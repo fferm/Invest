@@ -1,26 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>se.fermitet.invest</groupId>
-  <artifactId>invest</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Invest</name>
-  <description>Tool to keep track of personal investments (or for small businesses)</description>
-  <dependencies>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>4.12</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>joda-time</groupId>
-  		<artifactId>joda-time</artifactId>
-  		<version>2.6</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.joda</groupId>
-  		<artifactId>joda-money</artifactId>
-  		<version>0.10.0</version>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>se.fermitet.invest</groupId>
+	<artifactId>invest</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Invest</name>
+	<description>Tool to keep track of personal investments (or for small businesses)</description>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>joda-money</artifactId>
+			<version>0.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<!-- See https://github.com/mongodb/morphia/releases for the latest version -->
+			<version>0.109</version>
+		</dependency>
+
+		<!-- Optional Jars (for certain features) but required by maven for building. -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>[2.1_3,)</version>
+			<type>jar</type>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.proxytoys</groupId>
+			<artifactId>proxytoys</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 </project>

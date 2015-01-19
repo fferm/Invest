@@ -5,6 +5,10 @@ public class Stock {
 	private String symbol;
 	private String name;
 
+	Stock() {
+		super();
+	}
+	
 	public Stock(String symbol) {
 		super();
 		this.setSymbol(symbol);

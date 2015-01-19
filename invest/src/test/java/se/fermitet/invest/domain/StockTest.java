@@ -6,10 +6,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 
 import org.junit.Test;
-
-import se.fermitet.invest.domain.Stock;
 
 public class StockTest {
 
@@ -17,6 +19,27 @@ public class StockTest {
 	public void testConstructor() throws Exception {
 		Stock stock = new Stock("TST");
 		assertNotNull(stock);
+	}
+	
+	@Test
+	public void testDefaultConstructorNotPublic() throws Exception {
+		Class<Stock> clz = Stock.class;
+		Constructor<?>[] constructors = clz.getDeclaredConstructors();
+		
+		boolean foundDefault = false;
+		for (int i = 0; i < constructors.length; i++) {
+			Constructor<?> constructor = constructors[i];
+			
+			if (constructor.getParameterCount() == 0) {
+				if ((constructor.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC) {
+					fail("Found a public default constructor");
+				}
+				foundDefault = true;
+				break;
+			}
+		}
+		
+		assertTrue("Did not find a default constructor", foundDefault);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
