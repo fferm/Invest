@@ -14,10 +14,10 @@ public class StockListPresenter {
 	private StockListView view;
 	private StocksModel model;
 	
-	public StockListPresenter(StockListView view) {
+	public StockListPresenter(StockListView view, StocksModel model) {
 		super();
 		this.view = view;
-		this.model = new StocksModel();
+		this.model = model;
 		
 		view.displayStocks(model.getAllStocks());
 	}

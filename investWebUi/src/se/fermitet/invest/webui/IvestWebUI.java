@@ -2,6 +2,7 @@ package se.fermitet.invest.webui;
 
 import javax.servlet.annotation.WebServlet;
 
+import se.fermitet.invest.model.StocksModel;
 import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.webui.views.StockListViewImpl;
 
@@ -23,7 +24,8 @@ public class IvestWebUI extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		StockListViewImpl view = new StockListViewImpl();
-		StockListPresenter presenter = new StockListPresenter(view);
+		StocksModel model = new StocksModel();
+		StockListPresenter presenter = new StockListPresenter(view, model);
 		
 		setContent(view);
 	}
