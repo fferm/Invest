@@ -7,9 +7,13 @@ import se.fermitet.invest.storage.Storage;
 import se.fermitet.invest.storage.StorageFactory;
 
 public class StocksModel {
-
+	
 	public List<Stock> getAllStocks() {
-		Storage storage = StorageFactory.instance().getStorage();
+		Storage storage = createStorageFactory().getStorage();
 		return storage.getAllStocks();
+	}
+
+	protected StorageFactory createStorageFactory() {
+		return new StorageFactory();
 	}
 }
