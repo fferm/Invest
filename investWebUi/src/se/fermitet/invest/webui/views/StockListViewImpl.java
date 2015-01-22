@@ -11,7 +11,10 @@ import com.vaadin.ui.VerticalLayout;
 public class StockListViewImpl extends VerticalLayout implements StockListView {
 
 	private static final long serialVersionUID = 1037623075906362499L;
-	private Table stockTable;
+	Table stockTable;
+
+	static final String CODE_PROP_ID = "symbol";
+	static final String NAME_PROP_ID = "name";
 
 	public StockListViewImpl() {
 		super();
@@ -23,19 +26,18 @@ public class StockListViewImpl extends VerticalLayout implements StockListView {
 		setMargin(true);
 		
 		stockTable = new Table("Aktier");
-		String codePropertyId = "symbol";
-		String namePropertyId = "name";
 
-		stockTable.addContainerProperty(codePropertyId, String.class, null);
-		stockTable.addContainerProperty(namePropertyId, String.class, null);
-		stockTable.setColumnHeader(codePropertyId, "Symbol");
-		stockTable.setColumnHeader(namePropertyId, "Namn");
+		stockTable.addContainerProperty(CODE_PROP_ID, String.class, null);
+		stockTable.addContainerProperty(NAME_PROP_ID, String.class, null);
+		stockTable.setColumnHeader(CODE_PROP_ID, "Symbol");
+		stockTable.setColumnHeader(NAME_PROP_ID, "Namn");
 
 		addComponent(stockTable);
 	}
 
 	@Override
 	public void displayStocks(List<Stock> stocks) {
+		stockTable.removeAllItems();
 		for (Stock stock: stocks) {
 			stockTable.addItem(new Object[] {stock.getSymbol(), stock.getName()}, stock.getSymbol());
 		}

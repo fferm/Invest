@@ -101,6 +101,6 @@ class ExceptionMongoStorage extends TestMongoStorage {
 	protected MongoClient createMongoClient() throws UnknownHostException {
 		throw new UnknownHostException(message);
 	}
-}
+	}
 
 
