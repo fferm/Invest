@@ -53,6 +53,22 @@ public class MongoStorageTest {
 	}
 	
 	@Test
+	public void testRemoveStock() throws Exception {
+		Stock s1 = new Stock("S1").setName("S1");
+		Stock s2 = new Stock("S2").setName("S2");
+		
+		objUnderTest.saveStock(s1);
+		objUnderTest.saveStock(s2);
+		
+		objUnderTest.removeStock(s1);
+		
+		List<Stock> allLeft = objUnderTest.getAllStocks();
+		
+		assertEquals("size", 1, allLeft.size());
+		assertTrue("contains", allLeft.contains(s2));
+	}
+	
+	@Test
 	public void testMongoThrowingExceptionShouldGiveStorageExceptionWithSameMessage() throws Exception {
 		final String message = "TEST MESSAGE";
 		
@@ -101,6 +117,6 @@ class ExceptionMongoStorage extends TestMongoStorage {
 	protected MongoClient createMongoClient() throws UnknownHostException {
 		throw new UnknownHostException(message);
 	}
-	}
+}
 
 

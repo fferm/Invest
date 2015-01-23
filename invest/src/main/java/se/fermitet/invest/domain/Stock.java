@@ -1,7 +1,14 @@
 package se.fermitet.invest.domain;
 
+import java.util.UUID;
+
+import org.mongodb.morphia.annotations.Id;
+
 public class Stock {
 
+	@Id
+	private UUID id = UUID.randomUUID();
+	
 	private String symbol;
 	private String name;
 

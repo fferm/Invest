@@ -27,6 +27,12 @@ class MongoStorage implements Storage {
 
 		ds.save(stock);
 	}
+	
+	public void removeStock(Stock stock) {
+		Datastore ds = getDatastore();
+		
+		ds.delete(stock);
+	}
 
 	protected String getDbName() {
 		return "invest";
@@ -66,26 +72,4 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
-
-	//	public static void main(String[] args) {
-	//		MongoStorage obj = new MongoStorage();
-	//		obj.run();
-	//	}
-	//	
-	//	private void run() {
-	//		try {
-	//			Datastore ds = getDataStore();
-	//
-	//			Stock s1 = new Stock("AXIS").setName("Axis");
-	//			Stock s2 = new Stock("SHB B").setName("Handelsbanken B");
-	//			
-	//			ds.save(s1);
-	//			ds.save(s2);
-	//			
-	//			System.out.println("Saved");
-	//		} catch (UnknownHostException e) {
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//	
 }
