@@ -29,6 +29,9 @@ public class StockListViewImpl extends VerticalLayout implements StockListView {
 		stockTable.addColumn("getSymbol", "Symbol");
 		stockTable.addColumn("getName", "Namn");
 
+		stockTable.setSelectable(true);
+		stockTable.setImmediate(true);
+		
 		addComponent(stockTable);
 	}
 
