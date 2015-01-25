@@ -4,14 +4,16 @@ import java.util.List;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.StockListPresenter.StockListView;
-import se.fermitet.vaadin.widgets.POJOTable;
+import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 public class StockListViewImpl extends VerticalLayout implements StockListView {
 
 	private static final long serialVersionUID = 1037623075906362499L;
-	POJOTable<Stock> stockTable;
+	POJOTableAdapter<Stock> stockTableAdapter;
+	Table stockTable;
 
 	static final String CODE_PROP_ID = "symbol";
 	static final String NAME_PROP_ID = "name";
@@ -25,9 +27,11 @@ public class StockListViewImpl extends VerticalLayout implements StockListView {
 	private void init() {
 		setMargin(true);
 		
-		stockTable = new POJOTable<Stock>(Stock.class, "Aktier");
-		stockTable.addColumn("getSymbol", "Symbol");
-		stockTable.addColumn("getName", "Namn");
+		stockTableAdapter = new POJOTableAdapter<Stock>(Stock.class, "Aktier");
+		stockTable = stockTableAdapter.getTable();
+		
+		stockTableAdapter.addColumn("getSymbol", "Symbol");
+		stockTableAdapter.addColumn("getName", "Namn");
 
 		stockTable.setSelectable(true);
 		stockTable.setImmediate(true);
@@ -37,7 +41,7 @@ public class StockListViewImpl extends VerticalLayout implements StockListView {
 
 	@Override
 	public void displayStocks(List<Stock> stocks) {
-		stockTable.setDisplayedData(stocks);
+		stockTableAdapter.setdData(stocks);
 	}
 
 }

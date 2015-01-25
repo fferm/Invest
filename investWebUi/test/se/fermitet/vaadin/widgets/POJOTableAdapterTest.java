@@ -3,7 +3,6 @@ package se.fermitet.vaadin.widgets;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
@@ -17,72 +16,78 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
 
-public class POJOTableTest {
-	private POJOTable<TestPOJO> table;
+public class POJOTableAdapterTest {
+	private POJOTableAdapter<TestPOJO> tableAdapter;
 	
 	@Before
 	public void setUp() throws Exception {
-		table = new POJOTable<TestPOJO>(TestPOJO.class);
+		tableAdapter = new POJOTableAdapter<TestPOJO>(TestPOJO.class);
 	}
 	
 	@Test
 	public void testSimpleConstructor() throws Exception {
-		POJOTable<TestPOJO> table = new POJOTable<TestPOJO>(TestPOJO.class);
+		POJOTableAdapter<TestPOJO> table = new POJOTableAdapter<TestPOJO>(TestPOJO.class);
 		
 		assertNotNull("not null", table);
-		assertTrue("instanceof Table", Table.class.isAssignableFrom(table.getClass()));
 	}
 	
 	@Test
 	public void testConstructorWithCaption() throws Exception {
 		String myCaption = "MY TEST CAPTION";
-		POJOTable<TestPOJO> table = new POJOTable<TestPOJO>(TestPOJO.class, myCaption);
+		POJOTableAdapter<TestPOJO> tableAdapter = new POJOTableAdapter<TestPOJO>(TestPOJO.class, myCaption);
 		
-		assertEquals(myCaption, table.getCaption());
+		assertEquals(myCaption, tableAdapter.getTable().getCaption());
+	}
+	
+	@Test
+	public void testGetTable() throws Exception {
+		Table table = tableAdapter.getTable();
+		
+		assertNotNull(table);
 	}
 
 	@Test(expected=RuntimeException.class)
-	public void testSetDisplayedDataBeforeColumnDefinitionShouldGiveRuntimeException() throws Exception {
-		table.setDisplayedData(getTestData());
+	public void testSetDataBeforeColumnDefinitionShouldGiveRuntimeException() throws Exception {
+		tableAdapter.setdData(getTestData());
 	}
 
 	@Test
-	public void testSetDisplayedDataAfterColumnDefinitionShouldNotGiveRuntimeException () throws Exception {
+	public void testSetDataAfterColumnDefinitionShouldNotGiveRuntimeException () throws Exception {
 		setColumnDefinitions();
-		table.setDisplayedData(getTestData());
+		tableAdapter.setdData(getTestData());
 	}
 	
 	@Test(expected=RuntimeException.class)
 	public void testExceptionWhenGetterNameDoesNotCorrespondToRealMethod() {
-		table.addColumn("test", "test");
+		tableAdapter.addColumn("test", "test");
 	}
 	
 	@Test
 	public void testTableSize() throws Exception {
 		setColumnDefinitions();
 
-		assertEquals("Empty before", 0, table.size());
+		assertEquals("Empty before", 0, tableAdapter.getTable().size());
 		
 		List<TestPOJO> testData= getTestData();
-		table.setDisplayedData(testData);
+		tableAdapter.setdData(testData);
 		
-		assertEquals("Size after", testData.size(), table.size());
+		assertEquals("Size after", testData.size(), tableAdapter.getTable().size());
 
 		// Call again and check size
 		List<TestPOJO> testDataSecond = getTestDataSecond();
-		table.setDisplayedData(testDataSecond);
-		assertEquals("Size after second", testDataSecond.size(), table.size());
+		tableAdapter.setdData(testDataSecond);
+		assertEquals("Size after second", testDataSecond.size(), tableAdapter.getTable().size());
 	}
 	
 	@Test
 	public void testDisplayedData() throws Exception {
 		setColumnDefinitions();
 		List<TestPOJO> testData = getTestData();
-		table.setDisplayedData(testData);
+		tableAdapter.setdData(testData);
 		
 		int i = 0;
-		for (Object itemId : table.getItemIds()) {
-			Item item = table.getItem(itemId);
+		for (Object itemId : tableAdapter.getTable().getItemIds()) {
+			Item item = tableAdapter.getTable().getItem(itemId);
 			TestPOJO pojo = testData.get(i);
 			
 			for (Object propId : item.getItemPropertyIds()) {
@@ -99,12 +104,12 @@ public class POJOTableTest {
 	}
 	
 	@Test
-	public void testGetDisplayedData() throws Exception {
+	public void testGetData() throws Exception {
 		setColumnDefinitions();
 		List<TestPOJO> testData = getTestData();
-		table.setDisplayedData(testData);
+		tableAdapter.setdData(testData);
 		
-		List<TestPOJO> dataFromTable = table.getDisplayedData();
+		List<TestPOJO> dataFromTable = tableAdapter.getData();
 		assertArrayEquals(testData.toArray(), dataFromTable.toArray());
 		
 		// Check that it is unmodifiable
@@ -120,9 +125,9 @@ public class POJOTableTest {
 	}
 	
 	private void setColumnDefinitions() {
-		table.addColumn("getStrAttribute", "String attribute");
-		table.addColumn("getIntAttribute", "Int attribute");
-		table.addColumn("getObjAttribute", "Object attribute");
+		tableAdapter.addColumn("getStrAttribute", "String attribute");
+		tableAdapter.addColumn("getIntAttribute", "Int attribute");
+		tableAdapter.addColumn("getObjAttribute", "Object attribute");
 	}
 
 	private List<TestPOJO> getTestData() {

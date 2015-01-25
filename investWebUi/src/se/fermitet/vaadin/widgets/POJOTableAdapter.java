@@ -1,5 +1,6 @@
 package se.fermitet.vaadin.widgets;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,30 +10,43 @@ import java.util.UUID;
 
 import com.vaadin.ui.Table;
 
-public class POJOTable<T> extends Table {
+public class POJOTableAdapter<T> implements Serializable {
 
 	private static final long serialVersionUID = 3689523044777603458L;
 
 	private List<ColumnDefinition> columnDefinitions;
 	private Class<T> pojoClass;
-	private List<T> displayedData;
+	private List<T> data;
 
-	public POJOTable(Class<T> pojoClass) {
+	private Table table;
+
+	public POJOTableAdapter(Class<T> pojoClass) {
 		this(pojoClass, null);
 	}
 
-	public POJOTable(Class<T> pojoClass, String myCaption) {
-		super(myCaption);
+	public POJOTableAdapter(Class<T> pojoClass, String myCaption) {
+		super();
+		
+		this.table = new Table(myCaption);
 		this.pojoClass = pojoClass;
 		columnDefinitions = new ArrayList<ColumnDefinition>();
 	}
+	
+	public Table getTable() {
+		return table;
+	}
 
-	public void setDisplayedData(List<T> allData) {
+
+	public void setdData(List<T> allData) {
 		checkThatColumnDefinitionsExist();
 		
-		this.displayedData = allData;
+		this.data = allData;
 		
-		removeAllItems();
+		syncData(allData);
+	}
+
+	protected void syncData(List<T> allData) {
+		table.removeAllItems();
 		for (T data : allData) {
 			List<Object> dataList = new ArrayList<Object>();
 			for (ColumnDefinition def : columnDefinitions) {
@@ -43,12 +57,12 @@ public class POJOTable<T> extends Table {
 				}
 			}
 			
-			addItem(dataList.toArray(), UUID.randomUUID());
+			table.addItem(dataList.toArray(), UUID.randomUUID());
 		}
 	}
 	
-	public List<T> getDisplayedData() {
-		return Collections.unmodifiableList(this.displayedData);
+	public List<T> getData() {
+		return Collections.unmodifiableList(this.data);
 	}
 	
 	private void checkThatColumnDefinitionsExist() {
@@ -90,7 +104,7 @@ public class POJOTable<T> extends Table {
 		return def;
 	}
 
-	private void handlePrimitiveTypes(POJOTable<T>.ColumnDefinition def) {
+	private void handlePrimitiveTypes(POJOTableAdapter<T>.ColumnDefinition def) {
 		if (def.clazz.equals(byte.class)) 	def.clazz = Byte.class;
 		if (def.clazz.equals(short.class)) 	def.clazz = Short.class;
 		if (def.clazz.equals(int.class)) 	def.clazz = Integer.class;
@@ -101,10 +115,11 @@ public class POJOTable<T> extends Table {
 		if (def.clazz.equals(char.class)) def.clazz = Character.class;
 	}
 
-	private void addColumnToTableProperties(POJOTable<T>.ColumnDefinition def) {
+	private void addColumnToTableProperties(POJOTableAdapter<T>.ColumnDefinition def) {
 		// Assumption that name of property is same as name of getter
 		Object propId = def.getterName;
-		addContainerProperty(propId, def.clazz, null);
-		setColumnHeader(propId, def.headerText);
+		table.addContainerProperty(propId, def.clazz, null);
+		table.setColumnHeader(propId, def.headerText);
 	}
+
 }

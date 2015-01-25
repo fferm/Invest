@@ -8,19 +8,19 @@ import java.util.List;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.vaadin.widgets.POJOTable;
+import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
 public class StockListViewImplTest {
 	@Test
 	public void testCallingDisplayStocksDisplaysStocks() throws Exception {
 		StockListViewImpl view = new StockListViewImpl();
 		
-		POJOTable<Stock> table = view.stockTable;
+		POJOTableAdapter<Stock> tableAdapter = view.stockTableAdapter;
 		
 		List<Stock> testStocks = getTestStocks();
 		view.displayStocks(testStocks);
 
-		List<Stock> displayedData = table.getDisplayedData();
+		List<Stock> displayedData = tableAdapter.getData();
 		assertArrayEquals(testStocks.toArray(), displayedData.toArray());
 	}
 
