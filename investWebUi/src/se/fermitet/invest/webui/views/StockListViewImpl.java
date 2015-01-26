@@ -1,5 +1,6 @@
 package se.fermitet.invest.webui.views;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import se.fermitet.invest.domain.Stock;
@@ -44,9 +45,15 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		stockTableAdapter = new POJOTableAdapter<Stock>(Stock.class, "Aktier");
 		stockTable = stockTableAdapter.getTable();
 		
-		stockTableAdapter.addColumn("getSymbol", "Symbol");
-		stockTableAdapter.addColumn("getName", "Namn");
+		List<String> cols = new ArrayList<String>();
+		cols.add("name");
 
+		stockTableAdapter.setColumns(cols);
+//		stockTableAdapter.addColumn("getSymbol", "Symbol");
+//		stockTableAdapter.addColumn("getName", "Namn");
+		
+//		stockTableAdapter.addProperty("symbol");
+		
 		stockTable.setSelectable(true);
 		stockTable.setImmediate(true);
 		stockTable.setPageLength(10);

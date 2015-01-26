@@ -1,15 +1,13 @@
 package se.fermitet.vaadin.widgets;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Set;
 
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Table;
 
 public class POJOTableAdapter<T> implements Serializable {
@@ -19,10 +17,8 @@ public class POJOTableAdapter<T> implements Serializable {
 	private List<ColumnDefinition> columnDefinitions;
 	private Class<T> pojoClass;
 	private List<T> data;
-	private Map<T, UUID> itemIdPerPOJO;
-	private Map<UUID, T> POJOPerItemId;
-
 	private Table table;
+	private BeanContainer<Integer, T> container;
 
 	public POJOTableAdapter(Class<T> pojoClass) {
 		this(pojoClass, null);
@@ -31,11 +27,12 @@ public class POJOTableAdapter<T> implements Serializable {
 	public POJOTableAdapter(Class<T> pojoClass, String myCaption) {
 		super();
 		
-		this.table = new Table(myCaption);
 		this.pojoClass = pojoClass;
 		this.columnDefinitions = new ArrayList<ColumnDefinition>();
-		this.itemIdPerPOJO = new HashMap<T, UUID>();
-		this.POJOPerItemId = new HashMap<UUID, T>();
+
+		this.table = new Table(myCaption);
+		this.container = new BeanContainer<Integer, T>(pojoClass);
+		this.table.setContainerDataSource(this.container);
 	}
 	
 	public Table getTable() {
@@ -52,30 +49,17 @@ public class POJOTableAdapter<T> implements Serializable {
 	}
 
 	private void checkPrerequisites(List<T> allData) {
-		checkThatColumnDefinitionsExist();
-		checkThatListContainsValidData(allData);
+//		checkThatColumnDefinitionsExist();
+//		checkThatListContainsValidData(allData);
 	}
 
 	protected void syncData(List<T> allData) {
 		table.removeAllItems();
-		itemIdPerPOJO.clear();
-		POJOPerItemId.clear();
 		
+		int i = 0;
 		for (T data : allData) {
-			List<Object> dataList = new ArrayList<Object>();
-			for (ColumnDefinition def : columnDefinitions) {
-				try {
-					dataList.add(def.getter.invoke(data));
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new RuntimeException("Problem with calling method " + def.getterName + " on object " + data.toString());
-				}
-			}
-			
-			UUID itemId = UUID.randomUUID();
-			this.itemIdPerPOJO.put(data, itemId);
-			this.POJOPerItemId.put(itemId, data);
-			
-			table.addItem(dataList.toArray(), itemId);
+			container.addItem(i, data);
+			i++;
 		}
 	}
 	
@@ -84,21 +68,22 @@ public class POJOTableAdapter<T> implements Serializable {
 	}
 	
 	public void select(T toSelect) {
-		table.select(this.itemIdPerPOJO.get(toSelect));
+//		table.select(this.itemIdPerPOJO.get(toSelect));
 	}
 
 	public void unselect() {
-		select(null);
+//		select(null);
 	}
 
 	public T getSelectedData() {
-		UUID selectedItemId = (UUID) table.getValue();
-		
-		if (selectedItemId != null) {
-			return POJOPerItemId.get(selectedItemId);
-		} else {
-			return null;
-		}
+//		UUID selectedItemId = (UUID) table.getValue();
+//		
+//		if (selectedItemId != null) {
+//			return POJOPerItemId.get(selectedItemId);
+//		} else {
+//			return null;
+//		}
+		return null;
 	}
 	
 
@@ -122,54 +107,76 @@ public class POJOTableAdapter<T> implements Serializable {
 		}
 	}
 
-	private class ColumnDefinition {
-		String getterName;
-		String headerText;
+	public void setColumns(List<String> propIdsToShow) {
+//		this.columnDefinitions = columns;
 
-		Method getter;
-		Class<?> clazz;
-	}
-
-	public void addColumn(String getterName, String headerText) {
-		ColumnDefinition def = createColumnDefinition(getterName, headerText);
-
-		addColumnToTableProperties(def);
-	}
-
-	private ColumnDefinition createColumnDefinition(String getterName, String headerText) {
-		ColumnDefinition def = new ColumnDefinition();
-		def.getterName = getterName;
-		def.headerText = headerText;
-
-		try {
-			def.getter = pojoClass.getMethod(getterName);
-			def.clazz = def.getter.getReturnType();
+		List<String> existingPropIds = new ArrayList<String>();
+		existingPropIds.addAll(this.container.getContainerPropertyIds());
+		
+		Set<String> union = new HashSet<String>(propIdsToShow);
+		union.addAll(existingPropIds);
+		
+		for (String propId : union) {
+			boolean inExisting = existingPropIds.contains(propId);
+			boolean toShow = propIdsToShow.contains(propId);
 			
-			handlePrimitiveTypes(def);
-			
-		} catch (NoSuchMethodException | SecurityException e) {
-			throw new POJOTableAdapterException("Problem in finding no-argument method " + getterName + " on class " + pojoClass.getName());
+			if (inExisting && toShow) {
+				// Do nothing
+				// Possibly set header
+			} else if (inExisting && !toShow) {
+				this.container.removeContainerProperty(propId);
+			} else if (!inExisting && toShow) {
+				this.container.addNestedContainerProperty(propId);
+				// Possibly set header
+			}
 		}
-
-		columnDefinitions.add(def);
-		return def;
 	}
-
-	private void handlePrimitiveTypes(POJOTableAdapter<T>.ColumnDefinition def) {
-		if (def.clazz.equals(byte.class)) 	def.clazz = Byte.class;
-		if (def.clazz.equals(short.class)) 	def.clazz = Short.class;
-		if (def.clazz.equals(int.class)) 	def.clazz = Integer.class;
-		if (def.clazz.equals(long.class)) 	def.clazz = Long.class;
-		if (def.clazz.equals(float.class)) 	def.clazz = Float.class;
-		if (def.clazz.equals(double.class)) def.clazz = Double.class;
-		if (def.clazz.equals(boolean.class)) def.clazz = Boolean.class;
-		if (def.clazz.equals(char.class)) def.clazz = Character.class;
-	}
-
-	private void addColumnToTableProperties(POJOTableAdapter<T>.ColumnDefinition def) {
-		// Assumption that name of property is same as name of getter
-		Object propId = def.getterName;
-		table.addContainerProperty(propId, def.clazz, null);
-		table.setColumnHeader(propId, def.headerText);
-	}
+//	public void addColumn(String propertyName, String headerText) {
+//		ColumnDefinition def = createColumnDefinition(getterName, headerText);
+//
+//		addColumnToTableProperties(def);
+//	}
+//
+//	private ColumnDefinition createColumnDefinition(String getterName, String headerText) {
+//		ColumnDefinition def = new ColumnDefinition();
+//		def.getterName = getterName;
+//		def.headerText = headerText;
+//
+//		try {
+//			def.getter = pojoClass.getMethod(getterName);
+//			def.clazz = def.getter.getReturnType();
+//			
+//			handlePrimitiveTypes(def);
+//			
+//		} catch (NoSuchMethodException | SecurityException e) {
+//			throw new POJOTableAdapterException("Problem in finding no-argument method " + getterName + " on class " + pojoClass.getName());
+//		}
+//
+//		columnDefinitions.add(def);
+//		return def;
+//	}
+//
+//	private void handlePrimitiveTypes(POJOTableAdapter<T>.ColumnDefinition def) {
+//		if (def.clazz.equals(byte.class)) 	def.clazz = Byte.class;
+//		if (def.clazz.equals(short.class)) 	def.clazz = Short.class;
+//		if (def.clazz.equals(int.class)) 	def.clazz = Integer.class;
+//		if (def.clazz.equals(long.class)) 	def.clazz = Long.class;
+//		if (def.clazz.equals(float.class)) 	def.clazz = Float.class;
+//		if (def.clazz.equals(double.class)) def.clazz = Double.class;
+//		if (def.clazz.equals(boolean.class)) def.clazz = Boolean.class;
+//		if (def.clazz.equals(char.class)) def.clazz = Character.class;
+//	}
+//
+//	private void addColumnToTableProperties(POJOTableAdapter<T>.ColumnDefinition def) {
+//		String propId = def.getterName;
+//		container.addNestedContainerProperty(propId);
+////		container.addContainerProperty(propId, def.clazz, null);
+////		table.addContainerProperty(propId, def.clazz, null);
+////		table.setColumnHeader(propId, def.headerText);
+//	}
+//
+//	public void addProperty(String string) {
+//		container.getc
+//		container.addNestedContainerProperty(string);
+//	}
 }

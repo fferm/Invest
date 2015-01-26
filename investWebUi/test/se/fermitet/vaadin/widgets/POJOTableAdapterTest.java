@@ -58,35 +58,35 @@ public class POJOTableAdapterTest {
 		tableAdapter.setdData(getTestData());
 	}
 
-	@Test(expected=POJOTableAdapterException.class)
-	public void testExceptionWhenGetterNameDoesNotCorrespondToRealMethod() {
-		tableAdapter.addColumn("test", "test");
-	}
-
-	@Test(expected=POJOTableAdapterException.class)
-	public void testTwoEqualDataObjectsAreNotAllowed() {
-		setColumnDefinitions();
-		List<TestPOJO> data = new ArrayList<TestPOJO>();
-
-		TestPOJO d1 = new TestPOJO().setIntAttribute(1).setStrAttribute("STR");
-		TestPOJO d2 = new TestPOJO().setIntAttribute(1).setStrAttribute("STR");
-
-		assertEquals("d1 and d2 must be equal for the test to pass", d1, d2);
-
-		data.add(d1);
-		data.add(d2);
-
-		tableAdapter.setdData(data);
-	}
+//	@Test(expected=POJOTableAdapterException.class)
+//	public void testExceptionWhenGetterNameDoesNotCorrespondToRealMethod() {
+//		tableAdapter.addColumn("test", "test");
+//	}
+//
+//	@Test(expected=POJOTableAdapterException.class)
+//	public void testTwoEqualDataObjectsAreNotAllowed() {
+//		setColumnDefinitions();
+//		List<TestPOJO> data = new ArrayList<TestPOJO>();
+//
+//		TestPOJO d1 = new TestPOJO().setIntAttribute(1).setStrAttribute("STR");
+//		TestPOJO d2 = new TestPOJO().setIntAttribute(1).setStrAttribute("STR");
+//
+//		assertEquals("d1 and d2 must be equal for the test to pass", d1, d2);
+//
+//		data.add(d1);
+//		data.add(d2);
+//
+//		tableAdapter.setdData(data);
+//	}
 	
-	@Test(expected=POJOTableAdapterException.class)
-	public void testNullDataObjectsAreNotAllowed() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> data = getTestData();
-		data.add(null);
-		
-		tableAdapter.setdData(data);
-	}
+//	@Test(expected=POJOTableAdapterException.class)
+//	public void testNullDataObjectsAreNotAllowed() throws Exception {
+//		setColumnDefinitions();
+//		List<TestPOJO> data = getTestData();
+//		data.add(null);
+//		
+//		tableAdapter.setdData(data);
+//	}
 
 	@Test
 	public void testTableSize() throws Exception {
@@ -151,9 +151,9 @@ public class POJOTableAdapterTest {
 	}
 
 	private void setColumnDefinitions() {
-		tableAdapter.addColumn("getStrAttribute", "String attribute");
-		tableAdapter.addColumn("getIntAttribute", "Int attribute");
-		tableAdapter.addColumn("getObjAttribute", "Object attribute");
+//		tableAdapter.addColumn("getStrAttribute", "String attribute");
+//		tableAdapter.addColumn("getIntAttribute", "Int attribute");
+//		tableAdapter.addColumn("getObjAttribute", "Object attribute");
 	}
 
 	@Test
