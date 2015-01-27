@@ -5,6 +5,7 @@ import java.util.List;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.StockListPresenter.StockListView;
+import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
 import com.vaadin.shared.ui.MarginInfo;
@@ -45,8 +46,9 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		stockTableAdapter = new POJOTableAdapter<Stock>(Stock.class, "Aktier");
 		stockTable = stockTableAdapter.getTable();
 		
-		List<String> cols = new ArrayList<String>();
-		cols.add("name");
+		List<ColumnDefinition> cols = new ArrayList<ColumnDefinition>();
+		cols.add(new ColumnDefinition("symbol", "Ticker"));
+		cols.add(new ColumnDefinition("name", "Namn"));
 
 		stockTableAdapter.setColumns(cols);
 //		stockTableAdapter.addColumn("getSymbol", "Symbol");

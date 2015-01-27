@@ -47,47 +47,30 @@ public class POJOTableAdapterTest {
 		assertNotNull(table);
 	}
 
-	@Test(expected=POJOTableAdapterException.class)
-	public void testSetDataBeforeColumnDefinitionShouldGiveRuntimeException() throws Exception {
-		tableAdapter.setdData(getTestData());
-	}
-
 	@Test
 	public void testSetDataAfterColumnDefinitionShouldNotGiveRuntimeException () throws Exception {
 		setColumnDefinitions();
 		tableAdapter.setdData(getTestData());
 	}
 
-//	@Test(expected=POJOTableAdapterException.class)
-//	public void testExceptionWhenGetterNameDoesNotCorrespondToRealMethod() {
-//		tableAdapter.addColumn("test", "test");
-//	}
-//
-//	@Test(expected=POJOTableAdapterException.class)
-//	public void testTwoEqualDataObjectsAreNotAllowed() {
-//		setColumnDefinitions();
-//		List<TestPOJO> data = new ArrayList<TestPOJO>();
-//
-//		TestPOJO d1 = new TestPOJO().setIntAttribute(1).setStrAttribute("STR");
-//		TestPOJO d2 = new TestPOJO().setIntAttribute(1).setStrAttribute("STR");
-//
-//		assertEquals("d1 and d2 must be equal for the test to pass", d1, d2);
-//
-//		data.add(d1);
-//		data.add(d2);
-//
-//		tableAdapter.setdData(data);
-//	}
-	
-//	@Test(expected=POJOTableAdapterException.class)
-//	public void testNullDataObjectsAreNotAllowed() throws Exception {
-//		setColumnDefinitions();
-//		List<TestPOJO> data = getTestData();
-//		data.add(null);
-//		
-//		tableAdapter.setdData(data);
-//	}
+	@Test(expected=POJOTableAdapterException.class)
+	public void testExceptionWhenGetterNameDoesNotCorrespondToRealMethod() {
+		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
+		colDefs.add(new ColumnDefinition("test", null));
+		
+		tableAdapter.setColumns(colDefs);
+	}
 
+	@Test
+	public void testNullObjectHandling() throws Exception {
+		fail("unimplemented");
+	}
+	
+	@Test
+	public void testNullHeaderHandling() throws Exception {
+		fail("unimplemented");
+	}
+	
 	@Test
 	public void testTableSize() throws Exception {
 		setColumnDefinitions();
@@ -151,9 +134,14 @@ public class POJOTableAdapterTest {
 	}
 
 	private void setColumnDefinitions() {
-//		tableAdapter.addColumn("getStrAttribute", "String attribute");
-//		tableAdapter.addColumn("getIntAttribute", "Int attribute");
-//		tableAdapter.addColumn("getObjAttribute", "Object attribute");
+		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
+		colDefs.add(new ColumnDefinition("strAttribute", "String attribute"));
+		colDefs.add(new ColumnDefinition("intAttribute", "Int attribute"));
+		
+		// TODO remove this comment out, test linked attribute
+//		colDefs.add(new ColumnDefinition("objAttribute.string", "Linked attribute"));
+		
+		tableAdapter.setColumns(colDefs);
 	}
 
 	@Test
@@ -194,10 +182,10 @@ public class POJOTableAdapterTest {
 	private List<TestPOJO> getTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
-		ret.add(new TestPOJO().setStrAttribute("Str 1").setIntAttribute(1).setObjAttribute(new TestPOJO_Linked("Linked 1")));
-		ret.add(new TestPOJO().setStrAttribute("Str 2").setIntAttribute(2).setObjAttribute(new TestPOJO_Linked("Linked 2")));
-		ret.add(new TestPOJO().setStrAttribute( null  ).setIntAttribute(3).setObjAttribute(new TestPOJO_Linked("Linked 3")));
-		ret.add(new TestPOJO().setStrAttribute("Str 4").setIntAttribute(4).setObjAttribute(null                           ));
+		ret.add(new TestPOJO().setStrAttribute("Str 1").setIntAttribute(1).setLinkedAttribute(new TestPOJO_Linked("Linked 1")));
+		ret.add(new TestPOJO().setStrAttribute("Str 2").setIntAttribute(2).setLinkedAttribute(new TestPOJO_Linked("Linked 2")));
+		ret.add(new TestPOJO().setStrAttribute( null  ).setIntAttribute(3).setLinkedAttribute(new TestPOJO_Linked("Linked 3")));
+		ret.add(new TestPOJO().setStrAttribute("Str 4").setIntAttribute(4).setLinkedAttribute(null                           ));
 
 		return ret;
 	}
@@ -205,7 +193,7 @@ public class POJOTableAdapterTest {
 	private List<TestPOJO> getTestDataSecond() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
-		ret.add(new TestPOJO().setStrAttribute("Second 1").setIntAttribute(100).setObjAttribute(new TestPOJO_Linked("Second linked 1")));
+		ret.add(new TestPOJO().setStrAttribute("Second 1").setIntAttribute(100).setLinkedAttribute(new TestPOJO_Linked("Second linked 1")));
 
 		return ret;
 
@@ -216,16 +204,9 @@ public class POJOTableAdapterTest {
 class TestPOJO {
 	private String strAttribute;
 	private int intAttribute;
-	private Object objAttribute;
+	private TestPOJO_Linked linkedAttribute;
 
-	public String getStrAttribute() {
-		return strAttribute;
-	}
-
-	public TestPOJO setStrAttribute(String strAttribute) {
-		this.strAttribute = strAttribute;
-		return this;
-	}
+	
 	public int getIntAttribute() {
 		return intAttribute;
 	}
@@ -233,58 +214,30 @@ class TestPOJO {
 		this.intAttribute = intAttribute;
 		return this;
 	}
-	public Object getObjAttribute() {
-		return objAttribute;
+	public String getStrAttribute() {
+		return strAttribute;
 	}
-	public TestPOJO setObjAttribute(Object objAttribute) {
-		this.objAttribute = objAttribute;
+	public TestPOJO setStrAttribute(String strAttribute) {
+		this.strAttribute = strAttribute;
 		return this;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + intAttribute;
-		result = prime * result
-				+ ((objAttribute == null) ? 0 : objAttribute.hashCode());
-		result = prime * result
-				+ ((strAttribute == null) ? 0 : strAttribute.hashCode());
-		return result;
+	public TestPOJO_Linked getLinkedAttribute() {
+		return linkedAttribute;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TestPOJO other = (TestPOJO) obj;
-		if (intAttribute != other.intAttribute)
-			return false;
-		if (objAttribute == null) {
-			if (other.objAttribute != null)
-				return false;
-		} else if (!objAttribute.equals(other.objAttribute))
-			return false;
-		if (strAttribute == null) {
-			if (other.strAttribute != null)
-				return false;
-		} else if (!strAttribute.equals(other.strAttribute))
-			return false;
-		return true;
+	public TestPOJO setLinkedAttribute(TestPOJO_Linked linkedAttribute) {
+		this.linkedAttribute = linkedAttribute;
+		return this;
 	}
-
-
 }
 
 class TestPOJO_Linked {
-	@SuppressWarnings("unused")
 	private String string;
 
 	public TestPOJO_Linked(String string) {
 		this.string = string;
+	}
+	
+	public String getString() {
+		return string;
 	}
 }
