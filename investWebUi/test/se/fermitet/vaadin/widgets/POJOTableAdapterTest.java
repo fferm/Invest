@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class POJOTableAdapterTest {
 	@Test
 	public void testSetDataAfterColumnDefinitionShouldNotGiveRuntimeException () throws Exception {
 		setColumnDefinitions();
-		tableAdapter.setdData(getTestData());
+		tableAdapter.setData(getTestData());
 	}
 
 	@Test(expected=POJOTableAdapterException.class)
@@ -62,13 +63,15 @@ public class POJOTableAdapterTest {
 	}
 
 	@Test
-	public void testNullObjectHandling() throws Exception {
-		fail("unimplemented");
-	}
-	
-	@Test
-	public void testNullHeaderHandling() throws Exception {
-		fail("unimplemented");
+	public void testHeaderHandling() throws Exception {
+		List<ColumnDefinition> defs = new ArrayList<ColumnDefinition>();
+		defs.add(new ColumnDefinition("intAttribute", "Normal text"));
+		defs.add(new ColumnDefinition("strAttribute", null));
+		tableAdapter.setColumns(defs);
+		tableAdapter.setData(getTestData());
+		
+		assertEquals("normal text", "Normal text", tableAdapter.getTable().getColumnHeader("intAttribute"));
+		assertNull("null", tableAdapter.getTable().getColumnHeader("strAttribute"));
 	}
 	
 	@Test
@@ -77,14 +80,14 @@ public class POJOTableAdapterTest {
 
 		assertEquals("Empty before", 0, tableAdapter.getTable().size());
 
-		List<TestPOJO> testData= getTestData();
-		tableAdapter.setdData(testData);
+		List<TestPOJO> testData = getTestData();
+		tableAdapter.setData(testData);
 
 		assertEquals("Size after", testData.size(), tableAdapter.getTable().size());
 
 		// Call again and check size
 		List<TestPOJO> testDataSecond = getTestDataSecond();
-		tableAdapter.setdData(testDataSecond);
+		tableAdapter.setData(testDataSecond);
 		assertEquals("Size after second", testDataSecond.size(), tableAdapter.getTable().size());
 	}
 
@@ -92,7 +95,7 @@ public class POJOTableAdapterTest {
 	public void testDisplayedData() throws Exception {
 		setColumnDefinitions();
 		List<TestPOJO> testData = getTestData();
-		tableAdapter.setdData(testData);
+		tableAdapter.setData(testData);
 
 		int i = 0;
 		for (Object itemId : tableAdapter.getTable().getItemIds()) {
@@ -100,13 +103,23 @@ public class POJOTableAdapterTest {
 			TestPOJO pojo = testData.get(i);
 
 			for (Object propId : item.getItemPropertyIds()) {
-				Method getter = TestPOJO.class.getMethod(propId.toString());
-				Object pojoValue = getter.invoke(pojo);
+				Object intermediateObject = pojo;
+				for (StringTokenizer tokenizer = new StringTokenizer(propId.toString(), "."); tokenizer.hasMoreTokens(); ) {
+					String propName = tokenizer.nextToken();
+					
+					String getterName = "get" + propName.substring(0, 1).toUpperCase() + propName.substring(1, propName.length());
+					Method getter = intermediateObject.getClass().getMethod(getterName);
+					intermediateObject = getter.invoke(intermediateObject);
+					
+					if (intermediateObject == null) break;
+				}
+				
+				Object pojoValue = intermediateObject;
 
 				Property<?> prop = item.getItemProperty(propId);
 				Object tableValue = prop.getValue();
 
-				assertEquals(pojoValue, tableValue);
+				assertEquals("propertyId: " + propId, pojoValue, tableValue);
 			}
 			i++;
 		}
@@ -116,7 +129,7 @@ public class POJOTableAdapterTest {
 	public void testGetData() throws Exception {
 		setColumnDefinitions();
 		List<TestPOJO> testData = getTestData();
-		tableAdapter.setdData(testData);
+		tableAdapter.setData(testData);
 
 		List<TestPOJO> dataFromTable = tableAdapter.getData();
 		assertArrayEquals(testData.toArray(), dataFromTable.toArray());
@@ -137,9 +150,7 @@ public class POJOTableAdapterTest {
 		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
 		colDefs.add(new ColumnDefinition("strAttribute", "String attribute"));
 		colDefs.add(new ColumnDefinition("intAttribute", "Int attribute"));
-		
-		// TODO remove this comment out, test linked attribute
-//		colDefs.add(new ColumnDefinition("objAttribute.string", "Linked attribute"));
+		colDefs.add(new ColumnDefinition("linkedAttribute.stringAttribute", "Linked attribute"));
 		
 		tableAdapter.setColumns(colDefs);
 	}
@@ -148,7 +159,7 @@ public class POJOTableAdapterTest {
 	public void testSelection() throws Exception {
 		setColumnDefinitions();
 		List<TestPOJO> testData = getTestData();
-		tableAdapter.setdData(testData);
+		tableAdapter.setData(testData);
 
 		assertNull("Null selection before", tableAdapter.getSelectedData());
 
@@ -199,45 +210,4 @@ public class POJOTableAdapterTest {
 
 	}
 
-}
-
-class TestPOJO {
-	private String strAttribute;
-	private int intAttribute;
-	private TestPOJO_Linked linkedAttribute;
-
-	
-	public int getIntAttribute() {
-		return intAttribute;
-	}
-	public TestPOJO setIntAttribute(int intAttribute) {
-		this.intAttribute = intAttribute;
-		return this;
-	}
-	public String getStrAttribute() {
-		return strAttribute;
-	}
-	public TestPOJO setStrAttribute(String strAttribute) {
-		this.strAttribute = strAttribute;
-		return this;
-	}
-	public TestPOJO_Linked getLinkedAttribute() {
-		return linkedAttribute;
-	}
-	public TestPOJO setLinkedAttribute(TestPOJO_Linked linkedAttribute) {
-		this.linkedAttribute = linkedAttribute;
-		return this;
-	}
-}
-
-class TestPOJO_Linked {
-	private String string;
-
-	public TestPOJO_Linked(String string) {
-		this.string = string;
-	}
-	
-	public String getString() {
-		return string;
-	}
 }

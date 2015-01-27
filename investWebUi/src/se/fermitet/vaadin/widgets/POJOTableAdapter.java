@@ -32,17 +32,42 @@ public class POJOTableAdapter<T> implements Serializable {
 		return table;
 	}
 
+	public void setColumns(List<ColumnDefinition> columnDefinitionsToShow) {
+		List<String> existingPropIds = new ArrayList<String>(this.container.getContainerPropertyIds());
 
-	public void setdData(List<T> allData) {
+		List<String> propIdsToShow = new ArrayList<String>();
+		for (ColumnDefinition def : columnDefinitionsToShow) {
+			String propId = def.propertyName;
+			propIdsToShow.add(propId);
+			
+			if (!existingPropIds.contains(propId)) {
+				this.container.addNestedContainerProperty(propId);
+			}
+			
+			this.table.setColumnHeader(propId, def.headerText);
+		}
+		
+		this.table.setVisibleColumns(propIdsToShow.toArray());
+	}
+
+	public void setData(List<T> allData) {
 		this.data = allData;
 		
-		syncData(allData);
+		table.removeAllItems();
+		
+		int i = 0;
+		// itemId is the index of the pojo in the data
+		for (T data : allData) {
+			container.addItem(i, data);
+			i++;
+		}
 	}
 
 	protected void syncData(List<T> allData) {
 		table.removeAllItems();
 		
 		int i = 0;
+		// itemId is the index of the pojo in the data
 		for (T data : allData) {
 			container.addItem(i, data);
 			i++;
@@ -54,39 +79,25 @@ public class POJOTableAdapter<T> implements Serializable {
 	}
 	
 	public void select(T toSelect) {
-//		table.select(this.itemIdPerPOJO.get(toSelect));
+		if (toSelect == null) {
+			table.select(null);
+		} else {
+			table.select(this.data.indexOf(toSelect));
+		}
 	}
 
 	public void unselect() {
-//		select(null);
+		select(null);
 	}
 
 	public T getSelectedData() {
-//		UUID selectedItemId = (UUID) table.getValue();
-//		
-//		if (selectedItemId != null) {
-//			return POJOPerItemId.get(selectedItemId);
-//		} else {
-//			return null;
-//		}
-		return null;
+		Integer selectedIdx = (Integer) table.getValue();
+
+		if (selectedIdx != null) {
+			return data.get(selectedIdx);
+		} else {
+			return null;
+		}
 	}
 	
-	public void setColumns(List<ColumnDefinition> columnDefinitionsToShow) {
-		List<String> existingPropIds = new ArrayList<String>(this.container.getContainerPropertyIds());
-
-		List<String> propIdsToShow = new ArrayList<String>();
-		for (ColumnDefinition def : columnDefinitionsToShow) {
-			String propId = def.propertyName;
-			propIdsToShow.add(propId);
-			
-			if (!existingPropIds.contains(propId)) {
-				this.container.addNestedContainerBean(propId);
-			}
-			
-			this.table.setColumnHeader(propId, def.headerText);
-		}
-		
-		this.table.setVisibleColumns(propIdsToShow.toArray());
-	}
 }

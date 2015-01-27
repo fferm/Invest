@@ -77,14 +77,16 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		this.deleteButton = new Button("Ta bort");
 		deleteButton.setEnabled(false);
 		
-//		deleteButton.addClickListener((Button.ClickListener) l -> {System.out.println("!!!! hallŒ");});
+//		deleteButton.addClickListener((Button.ClickListener) l -> {
+//			this.stockTable.select(null);
+//		});
 		
 		buttonPanel.addComponent(deleteButton);
 	}
 
 	@Override
 	public void displayStocks(List<Stock> stocks) {
-		stockTableAdapter.setdData(stocks);
+		stockTableAdapter.setData(stocks);
 	}
 
 }
