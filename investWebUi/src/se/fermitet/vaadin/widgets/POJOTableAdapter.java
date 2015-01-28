@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Table;
 
@@ -15,6 +17,7 @@ public class POJOTableAdapter<T> implements Serializable {
 	private List<T> data;
 	private Table table;
 	private BeanContainer<Integer, T> container;
+	private List<SelectionListener<T>> listeners;
 
 	public POJOTableAdapter(Class<T> pojoClass) {
 		this(pojoClass, null);
@@ -25,7 +28,13 @@ public class POJOTableAdapter<T> implements Serializable {
 		
 		this.table = new Table(myCaption);
 		this.container = new BeanContainer<Integer, T>(pojoClass);
+		this.listeners = new ArrayList<POJOTableAdapter.SelectionListener<T>>();
+
 		this.table.setContainerDataSource(this.container);
+		
+		this.table.addValueChangeListener((Property.ValueChangeEvent event) -> {
+			selectionMadeInTable(event);
+		});
 	}
 	
 	public Table getTable() {
@@ -44,7 +53,11 @@ public class POJOTableAdapter<T> implements Serializable {
 				this.container.addNestedContainerProperty(propId);
 			}
 			
-			this.table.setColumnHeader(propId, def.headerText);
+			if (def.headerText == null) {
+				this.table.setColumnHeader(propId, "");
+			} else {
+				this.table.setColumnHeader(propId, def.headerText);
+			}
 		}
 		
 		this.table.setVisibleColumns(propIdsToShow.toArray());
@@ -78,6 +91,18 @@ public class POJOTableAdapter<T> implements Serializable {
 		return Collections.unmodifiableList(this.data);
 	}
 	
+	public interface SelectionListener<T> {
+		public void onSelect(Integer selectedIdx, T selectedPOJO);
+	}
+	
+	public void addSelectionListener(SelectionListener<T> listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeSelectionListener(SelectionListener<T> listener) {
+		listeners.remove(listener);
+	}
+
 	public void select(T toSelect) {
 		if (toSelect == null) {
 			table.select(null);
@@ -99,5 +124,17 @@ public class POJOTableAdapter<T> implements Serializable {
 			return null;
 		}
 	}
+	
+	private void selectionMadeInTable(ValueChangeEvent event) {
+		Integer selectedIdx = (Integer) event.getProperty().getValue();
+
+		T selectedPOJO = selectedIdx == null ? null : this.data.get(selectedIdx);
+		
+		for (SelectionListener<T> listener : listeners) {
+			listener.onSelect(selectedIdx, selectedPOJO);
+		}
+	}
+
+
 	
 }

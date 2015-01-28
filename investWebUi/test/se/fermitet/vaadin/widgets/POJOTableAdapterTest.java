@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.StringTokenizer;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import se.fermitet.vaadin.widgets.POJOTableAdapter.SelectionListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -54,24 +58,20 @@ public class POJOTableAdapterTest {
 		tableAdapter.setData(getTestData());
 	}
 
-	@Test(expected=POJOTableAdapterException.class)
-	public void testExceptionWhenGetterNameDoesNotCorrespondToRealMethod() {
-		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
-		colDefs.add(new ColumnDefinition("test", null));
-		
-		tableAdapter.setColumns(colDefs);
-	}
-
 	@Test
 	public void testHeaderHandling() throws Exception {
+		String propWithText = "intAttribute";
+		String propText = "Normal text";
+		String propWithoutText = "strAttribute";
+		
 		List<ColumnDefinition> defs = new ArrayList<ColumnDefinition>();
-		defs.add(new ColumnDefinition("intAttribute", "Normal text"));
-		defs.add(new ColumnDefinition("strAttribute", null));
+		defs.add(new ColumnDefinition(propWithText, propText));
+		defs.add(new ColumnDefinition(propWithoutText, null));
 		tableAdapter.setColumns(defs);
 		tableAdapter.setData(getTestData());
 		
-		assertEquals("normal text", "Normal text", tableAdapter.getTable().getColumnHeader("intAttribute"));
-		assertNull("null", tableAdapter.getTable().getColumnHeader("strAttribute"));
+		assertEquals("normal text", propText, tableAdapter.getTable().getColumnHeader(propWithText));
+		assertEquals("empty", "", tableAdapter.getTable().getColumnHeader(propWithoutText));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public class POJOTableAdapterTest {
 
 		assertEquals("Size after", testData.size(), tableAdapter.getTable().size());
 
-		// Call again and check size
+		// Call again and check size 
 		List<TestPOJO> testDataSecond = getTestDataSecond();
 		tableAdapter.setData(testDataSecond);
 		assertEquals("Size after second", testDataSecond.size(), tableAdapter.getTable().size());
@@ -177,18 +177,40 @@ public class POJOTableAdapterTest {
 		assertNull("Null selection when unselect is called", tableAdapter.getSelectedData());
 	}
 
-	//	@Test
-	//	public void testSelectionFiresSelectionEvent() throws Exception {
-	//		setColumnDefinitions();
-	//		List<TestPOJO> testData = getTestData();
-	//		tableAdapter.setdData(testData);
-	//
-	//		tableAdapter.addSelectionListener((POJOTableAdapter.SelectionListener) l -> {
-	//			// Do something
-	//		});
-	//		
-	//		tableAdapter.getTable().select(itemId);
-	//	}
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelectionFiresSelectionEvent() throws Exception {
+		setColumnDefinitions();
+		List<TestPOJO> testData = getTestData();
+		tableAdapter.setData(testData);
+		
+		Integer idxOfItemToSelect = 1;
+		TestPOJO selectedPOJO = testData.get(idxOfItemToSelect);
+
+		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
+		tableAdapter.addSelectionListener(listener);
+
+		tableAdapter.getTable().select(idxOfItemToSelect);
+		verify(listener).onSelect(1, selectedPOJO);
+	}
+	
+	@Test
+	public void testUnselectionFiresSelectionEventWithNullParameters() throws Exception {
+		setColumnDefinitions();
+		List<TestPOJO> testData = getTestData();
+		tableAdapter.setData(testData);
+		
+		Integer idxOfItemToSelect = 1;
+
+		tableAdapter.getTable().select(idxOfItemToSelect);
+
+		@SuppressWarnings("unchecked")
+		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
+		tableAdapter.addSelectionListener(listener);
+
+		tableAdapter.getTable().unselect(idxOfItemToSelect);
+		verify(listener).onSelect(null,  null);
+	}
 
 	private List<TestPOJO> getTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
