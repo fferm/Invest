@@ -11,11 +11,11 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StocksModel;
-import se.fermitet.invest.presenter.StockListPresenter.StockListView;
+import se.fermitet.invest.viewinterface.StockListView;
 
 public class StockListPresenterTest {
 	@Test
-	public void testConstructorCreatesModelAndFillsView() throws Exception {
+	public void testConstructorCreatesModelFillsViewAndSetsPresenterAsViewListener() throws Exception {
 		StockListView mockedView = mock(StockListView.class);
 		StocksModel mockedModel = mock(StocksModel.class);
 		
@@ -23,9 +23,10 @@ public class StockListPresenterTest {
 		
 		when(mockedModel.getAllStocks()).thenReturn(list);
 		
-		new StockListPresenter(mockedView, mockedModel);
+		StockListPresenter presenter = new StockListPresenter(mockedView, mockedModel);
 		
 		verify(mockedModel).getAllStocks();
 		verify(mockedView).displayStocks(list);
+		verify(mockedView).addListener(presenter);
 	}
 }

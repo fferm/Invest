@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.presenter.StockListPresenter.StockListView;
+import se.fermitet.invest.viewinterface.StockListView;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
@@ -24,10 +24,14 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 	Table stockTable;
 	private VerticalLayout mainLayout;
 
-	private Button deleteButton;
+	Button deleteButton;
+
+	private List<StockListViewListener> listeners;
 
 	public StockListViewImpl() {
 		super();
+
+		this.listeners = new ArrayList<StockListView.StockListViewListener>();
 		
 		init();
 	}
@@ -51,10 +55,7 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		cols.add(new ColumnDefinition("name", "Namn"));
 
 		stockTableAdapter.setColumns(cols);
-//		stockTableAdapter.addColumn("getSymbol", "Symbol");
-//		stockTableAdapter.addColumn("getName", "Namn");
-		
-//		stockTableAdapter.addProperty("symbol");
+		stockTableAdapter.addSelectionListener((Integer idx, Stock selectedStock) -> handleSelectionEvent(idx, selectedStock));
 		
 		stockTable.setSelectable(true);
 		stockTable.setImmediate(true);
@@ -77,9 +78,9 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		this.deleteButton = new Button("Ta bort");
 		deleteButton.setEnabled(false);
 		
-//		deleteButton.addClickListener((Button.ClickListener) l -> {
-//			this.stockTable.select(null);
-//		});
+		deleteButton.addClickListener((Button.ClickListener) l -> {
+			fireButtonClickedEvent();
+		});
 		
 		buttonPanel.addComponent(deleteButton);
 	}
@@ -88,5 +89,29 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 	public void displayStocks(List<Stock> stocks) {
 		stockTableAdapter.setData(stocks);
 	}
+	
+	private void handleSelectionEvent(Integer idx, Stock selectedStock) {
+		deleteButton.setEnabled(idx != null);
+	}
+
+	@Override
+	public void addListener(StockListViewListener listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeListener(StockListViewListener listener) {
+		listeners.remove(listener);
+	}
+
+	private void fireButtonClickedEvent() {
+		Stock selectedStock = this.stockTableAdapter.getSelectedData();
+		
+		for (StockListViewListener listener : listeners) {
+			listener.onDeleteButtonClick(selectedStock);
+		}
+	}
+
+
 
 }
