@@ -60,7 +60,7 @@ public class MongoStorageTest {
 		objUnderTest.saveStock(s1);
 		objUnderTest.saveStock(s2);
 		
-		objUnderTest.removeStock(s1);
+		objUnderTest.delete(s1);
 		
 		List<Stock> allLeft = objUnderTest.getAllStocks();
 		

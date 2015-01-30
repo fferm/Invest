@@ -8,12 +8,22 @@ import se.fermitet.invest.storage.StorageFactory;
 
 public class StocksModel {
 	
-	public List<Stock> getAllStocks() {
-		Storage storage = createStorageFactory().getStorage();
-		return storage.getAllStocks();
+	Storage storage;
+
+	public StocksModel() {
+		super();
+		storage = createStorageFactory().getStorage();
 	}
 
 	protected StorageFactory createStorageFactory() {
 		return new StorageFactory();
+	}
+	
+	public List<Stock> getAllStocks() {
+		return storage.getAllStocks();
+	}
+
+	public void deleteStock(Stock toDelete) {
+		storage.delete(toDelete);
 	}
 }

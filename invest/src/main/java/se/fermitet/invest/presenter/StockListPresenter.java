@@ -8,20 +8,24 @@ import se.fermitet.invest.viewinterface.StockListView.StockListViewListener;
 public class StockListPresenter implements StockListViewListener {
 
 	private StockListView view;
-	private StocksModel model;
+	StocksModel model;
 	
-	public StockListPresenter(StockListView view, StocksModel model) {
+	public StockListPresenter(StockListView view) {
 		super();
 		this.view = view;
-		this.model = model;
+		this.model = createStocksModel();
 		
-		view.addListener(this);
-		
-		view.displayStocks(model.getAllStocks());
+		this.view.addListener(this);
+		this.view.displayStocks(model.getAllStocks());
 	}
 
 	public void onDeleteButtonClick(Stock toDelete) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		model.deleteStock(toDelete);
+		view.displayStocks(model.getAllStocks());
+	}
+	
+	protected StocksModel createStocksModel() {
+		return new StocksModel();
 	}
 
 }
