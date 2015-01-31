@@ -21,12 +21,15 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 	private static final long serialVersionUID = 1037623075906362499L;
 	
 	POJOTableAdapter<Stock> stockTableAdapter;
-	Table stockTable;
-	private VerticalLayout mainLayout;
 
 	Button deleteButton;
+	Button newButton;
+	StockForm stockForm;
+	Table stockTable;
 
 	private List<StockListViewListener> listeners;
+
+
 
 	public StockListViewImpl() {
 		super();
@@ -37,16 +40,25 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 	}
 	
 	private void init() {
-		this.mainLayout = new VerticalLayout();
-		this.mainLayout.setMargin(true);
+		VerticalLayout mainLayout = new VerticalLayout();
+		mainLayout.setMargin(true);
 
-		initStockTable(mainLayout);
+		initMainPanel(mainLayout);
 		initButtonPanel(mainLayout);
 		
 		setCompositionRoot(mainLayout);
 	}
+	
+	private void initMainPanel(Layout parent) {
+		HorizontalLayout horiz = new HorizontalLayout();
+		
+		initStockTable(horiz);
+		initForm(horiz);
+		
+		parent.addComponent(horiz);
+	}
 
-	private void initStockTable(Layout mainLayout) {
+	private void initStockTable(Layout parent) {
 		stockTableAdapter = new POJOTableAdapter<Stock>(Stock.class, "Aktier");
 		stockTable = stockTableAdapter.getTable();
 		
@@ -61,34 +73,55 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		stockTable.setImmediate(true);
 		stockTable.setPageLength(10);
 		
-		mainLayout.addComponent(stockTable);
+		parent.addComponent(stockTable);
 	}
 	
-	private void initButtonPanel(Layout mainLayout) {
+	private void initForm(Layout parent) {
+		stockForm = new StockForm();
+		stockForm.setVisible(false);
+		parent.addComponent(stockForm);
+	}
+	
+	private void initButtonPanel(Layout parent) {
 		HorizontalLayout buttonPanel = new HorizontalLayout();
 		buttonPanel.setMargin(new MarginInfo(true, false, true, false));
 		
+		initNewButton(buttonPanel);
 		initDeleteButton(buttonPanel);
 
-		mainLayout.addComponent(buttonPanel);
+		parent.addComponent(buttonPanel);
 	}
 
+	private void initNewButton(Layout parent) {
+		this.newButton = new Button("LŠgg till");
+		
+		newButton.addClickListener((Button.ClickListener) l -> {
+			fireNewButtonClickedEvent();
+		});
+		parent.addComponent(newButton);
+	}
 
-	private void initDeleteButton(Layout buttonPanel) {
+	private void initDeleteButton(Layout parent) {
 		this.deleteButton = new Button("Ta bort");
 		deleteButton.setEnabled(false);
 		
 		deleteButton.addClickListener((Button.ClickListener) l -> {
-			fireButtonClickedEvent();
+			fireDeleteButtonClickedEvent();
 		});
 		
-		buttonPanel.addComponent(deleteButton);
+		parent.addComponent(deleteButton);
 	}
 
 	@Override
 	public void displayStocks(List<Stock> stocks) {
 		stockTableAdapter.setData(stocks);
 	}
+	
+	@Override
+	public void showStockForm(Stock stockToWorkOn) {
+		stockForm.setVisible(true);
+	}
+
 	
 	private void handleSelectionEvent(Integer idx, Stock selectedStock) {
 		deleteButton.setEnabled(idx != null);
@@ -104,14 +137,18 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		listeners.remove(listener);
 	}
 
-	private void fireButtonClickedEvent() {
+	private void fireNewButtonClickedEvent() {
+		for (StockListViewListener listener : listeners) {
+			listener.onNewButtonClick();
+		}
+	}
+	private void fireDeleteButtonClickedEvent() {
 		Stock selectedStock = this.stockTableAdapter.getSelectedData();
 		
 		for (StockListViewListener listener : listeners) {
 			listener.onDeleteButtonClick(selectedStock);
 		}
 	}
-
 
 
 }

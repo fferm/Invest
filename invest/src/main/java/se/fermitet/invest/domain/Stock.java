@@ -12,7 +12,7 @@ public class Stock {
 	private String symbol;
 	private String name;
 
-	Stock() {
+	public Stock() {
 		super();
 	}
 	
@@ -21,17 +21,11 @@ public class Stock {
 		this.setSymbol(symbol);
 	}
 
-	private void validateSymbol(String symbol) {
-		if (symbol == null) throw new IllegalArgumentException("The symbol of a stock cannot be null");
-		if (symbol.length() == 0) throw new IllegalArgumentException("The symbol of a stock cannot be empty");
-	}
-
 	public String getSymbol() {
 		return symbol;
 	}
 
 	public Stock setSymbol(String symbol) {
-		validateSymbol(symbol);
 		this.symbol = symbol;
 		return this;
 	}

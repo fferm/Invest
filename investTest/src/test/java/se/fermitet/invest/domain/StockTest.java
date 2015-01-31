@@ -6,50 +6,24 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 
 import org.junit.Test;
 
 public class StockTest {
 
 	@Test
-	public void testConstructor() throws Exception {
-		Stock stock = new Stock("TST");
+	public void testDefaultConstructor() throws Exception {
+		Stock stock = new Stock();
 		assertNotNull(stock);
+		assertNull(stock.getName());
+		assertNull(stock.getSymbol());
 	}
 	
 	@Test
-	public void testDefaultConstructorNotPublic() throws Exception {
-		Class<Stock> clz = Stock.class;
-		Constructor<?>[] constructors = clz.getDeclaredConstructors();
-		
-		boolean foundDefault = false;
-		for (int i = 0; i < constructors.length; i++) {
-			Constructor<?> constructor = constructors[i];
-			
-			if (constructor.getParameterCount() == 0) {
-				if ((constructor.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC) {
-					fail("Found a public default constructor");
-				}
-				foundDefault = true;
-				break;
-			}
-		}
-		
-		assertTrue("Did not find a default constructor", foundDefault);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorSymbolCannotBeNull() throws Exception {
-		new Stock(null);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorSymbolCannotBeEmpty() throws Exception {
-		new Stock("");
+	public void testSymbolConstructor() throws Exception {
+		Stock stock = new Stock("TST");
+		assertNotNull(stock);
+		assertEquals("TST", stock.getSymbol());
 	}
 	
 	@Test
@@ -63,18 +37,6 @@ public class StockTest {
 		Stock newStock = stock.setSymbol(NEWSYMBOL);
 		assertEquals("getter after setter", NEWSYMBOL, stock.getSymbol());
 		assertSame("same", stock, newStock);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetterSymbolCannotBeNull() throws Exception {
-		Stock stock = new Stock("TST");
-		stock.setSymbol(null);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetterSymbolCannotBeEmpty() throws Exception {
-		Stock stock = new Stock("TST");
-		stock.setSymbol("");
 	}
 	
 	@Test

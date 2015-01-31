@@ -1,5 +1,6 @@
 package se.fermitet.invest.presenter;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -25,12 +26,18 @@ public class StockListPresenterTest {
 		mockedView = mock(StockListView.class);
 		presenter = new TestStockListPresenter(mockedView);
 		mockedModel = presenter.model;
+		
+		reset(mockedView);
+		reset(mockedModel);
 	}
 
 	@Test
-	public void testConstructorCreatesModelFillsViewAndSetsPresenterAsViewListener() throws Exception {
+	public void testConstructorFillsViewAndSetsPresenterAsViewListener() throws Exception {
 		List<Stock> list = new ArrayList<Stock>();
 		when(mockedModel.getAllStocks()).thenReturn(list);
+		
+		presenter = new TestStockListPresenter(mockedView);
+		mockedModel = presenter.model;
 		
 		verify(mockedModel).getAllStocks();
 		verify(mockedView).displayStocks(list);
@@ -43,13 +50,19 @@ public class StockListPresenterTest {
 		List<Stock> list = new ArrayList<Stock>();
 		when(mockedModel.getAllStocks()).thenReturn(list);
 		
-		reset(mockedView);
-		
 		presenter.onDeleteButtonClick(toDelete);
 		
 		verify(mockedModel).deleteStock(toDelete);
 		verify(mockedView).displayStocks(list);
+	}
+	
+	@Test
+	public void testNewButtonClickCallsViewShowStockFormWithEmptyStock() throws Exception {
+		Stock emptyStock = new Stock();
 		
+		presenter.onNewButtonClick();
+		
+		verify(mockedView).showStockForm(eq(emptyStock));
 	}
 }
 

@@ -6,8 +6,10 @@ import se.fermitet.invest.domain.Stock;
 
 public interface StockListView {
 	public void displayStocks(List<Stock> stocks);
+	public void showStockForm(Stock stockToWorkOn);
 	
 	public interface StockListViewListener {
+		public void onNewButtonClick();
 		public void onDeleteButtonClick(Stock toDelete);
 	}
 	

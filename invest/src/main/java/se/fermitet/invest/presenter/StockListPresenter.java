@@ -19,6 +19,10 @@ public class StockListPresenter implements StockListViewListener {
 		this.view.displayStocks(model.getAllStocks());
 	}
 
+	public void onNewButtonClick() {
+		view.showStockForm(new Stock());
+	}
+
 	public void onDeleteButtonClick(Stock toDelete) {
 		model.deleteStock(toDelete);
 		view.displayStocks(model.getAllStocks());
@@ -27,5 +31,6 @@ public class StockListPresenter implements StockListViewListener {
 	protected StocksModel createStocksModel() {
 		return new StocksModel();
 	}
+
 
 }

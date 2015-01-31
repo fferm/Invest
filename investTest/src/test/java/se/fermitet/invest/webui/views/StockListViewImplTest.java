@@ -2,6 +2,7 @@ package se.fermitet.invest.webui.views;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -69,6 +70,34 @@ public class StockListViewImplTest {
 		verify(listener).onDeleteButtonClick(toDelete);
 		
 		view.removeListener(listener);
+	}
+	
+	@Test
+	public void testNewButtonProperties() throws Exception {
+		Button newButton = view.newButton;
+		
+		assertNotNull("not null", newButton);
+		assertTrue("Enabled", newButton.isEnabled());
+		assertTrue("Visible", newButton.isVisible());
+		
+		StockListViewListener listener = mock(StockListViewListener.class);
+		view.addListener(listener);
+		
+		newButton.click();
+		
+		verify(listener).onNewButtonClick();
+		
+		view.removeListener(listener);
+	}
+	
+	@Test
+	public void testShowStockFormMakesItVisible() throws Exception {
+		assertFalse("Before", view.stockForm.isVisible());
+		
+		view.showStockForm(new Stock());
+		
+		assertTrue("After", view.stockForm.isVisible());
+		
 	}
 
 	
