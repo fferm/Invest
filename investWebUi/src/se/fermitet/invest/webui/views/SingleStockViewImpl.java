@@ -4,15 +4,14 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.SingleStockPresenter;
 import se.fermitet.invest.viewinterface.SingleStockView;
 
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 
-public class SingleStockViewImpl extends CustomComponent implements SingleStockView, View {
+public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implements SingleStockView {
 	/**
 	 * 
 	 */
@@ -26,12 +25,8 @@ public class SingleStockViewImpl extends CustomComponent implements SingleStockV
 
 	private Stock stock;
 	
-	SingleStockPresenter presenter;
-
-	
-	public SingleStockViewImpl() {
-		this.presenter = createPresenter();
-
+	@Override
+	protected Component createMainLayout() {
 		FormLayout layout = new FormLayout();
 		
 		initFields();
@@ -46,9 +41,9 @@ public class SingleStockViewImpl extends CustomComponent implements SingleStockV
 		
 		layout.addComponent(buttonPanel);
 		
-		setCompositionRoot(layout);
+		return layout;
 	}
-	
+
 	private void initFields() {
 		symbolField = new TextField("Ticker");
 		nameField = new TextField("Namn");
@@ -72,7 +67,7 @@ public class SingleStockViewImpl extends CustomComponent implements SingleStockV
 	}
 
 	protected SingleStockPresenter createPresenter() {
-		return new SingleStockPresenter();
+		return new SingleStockPresenter(this);
 	}
 
 	
@@ -93,4 +88,5 @@ public class SingleStockViewImpl extends CustomComponent implements SingleStockV
 	private void onCancelClick() {
 		
 	}
+
 }

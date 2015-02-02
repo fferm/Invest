@@ -10,22 +10,19 @@ import se.fermitet.invest.webui.IvestWebUI;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-public class StockListViewImpl extends CustomComponent implements StockListView, View {
+public class StockListViewImpl extends ViewImpl<StockListPresenter> implements StockListView {
 
 	private static final long serialVersionUID = 1037623075906362499L;
 	
-	StockListPresenter presenter;
-
 	POJOTableAdapter<Stock> stockTableAdapter;
 	Button deleteButton;
 	Button editButton;
@@ -35,16 +32,17 @@ public class StockListViewImpl extends CustomComponent implements StockListView,
 
 	public StockListViewImpl() {
 		super();
-
-		this.presenter = createPresenter();
-		
+	}
+	
+	@Override
+	protected Component createMainLayout() {
 		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.setMargin(true);
 
 		initStockTable(mainLayout);
 		initButtonPanel(mainLayout);
-		
-		setCompositionRoot(mainLayout);
+
+		return mainLayout;
 	}
 	
 	@Override
@@ -138,6 +136,7 @@ public class StockListViewImpl extends CustomComponent implements StockListView,
 		deleteButton.setEnabled(idx != null);
 		editButton.setEnabled(idx != null);
 	}
+
 
 
 }

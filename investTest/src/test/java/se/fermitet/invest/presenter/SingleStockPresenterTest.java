@@ -10,14 +10,17 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.viewinterface.SingleStockView;
 
 public class SingleStockPresenterTest {
 	private SingleStockPresenter presenter;
 	private StocksModel mockedModel;
+	private SingleStockView mockedView;
 	
 	@Before
 	public void setUp() throws Exception {
-		this.presenter = new TestSingleStockPresenter();
+		this.mockedView = mock(SingleStockView.class);
+		this.presenter = new TestSingleStockPresenter(mockedView);
 		this.mockedModel = presenter.model;
 	}
 	
@@ -55,6 +58,10 @@ public class SingleStockPresenterTest {
 }
 
 class TestSingleStockPresenter extends SingleStockPresenter {
+	public TestSingleStockPresenter(SingleStockView view) {
+		super(view);
+	}
+
 	@Override
 	protected StocksModel createModel() {
 		return mock(StocksModel.class);

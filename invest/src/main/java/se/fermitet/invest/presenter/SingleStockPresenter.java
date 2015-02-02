@@ -4,14 +4,11 @@ import java.util.UUID;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.viewinterface.SingleStockView;
 
-public class SingleStockPresenter {
-	StocksModel model;
-
-	public SingleStockPresenter() {
-		super();
-		
-		this.model = createModel();
+public class SingleStockPresenter extends Presenter<SingleStockView, StocksModel>{
+	public SingleStockPresenter(SingleStockView view) {
+		super(view);
 	}
 	
 	public Stock getStockBasedOnIdString(String idString) {
