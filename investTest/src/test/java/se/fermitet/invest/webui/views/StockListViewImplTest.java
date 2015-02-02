@@ -1,11 +1,7 @@
 package se.fermitet.invest.webui.views;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,18 +10,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.viewinterface.StockListView.StockListViewListener;
+import se.fermitet.invest.presenter.StockListPresenter;
 
 import com.vaadin.ui.Button;
-
+ 
 public class StockListViewImplTest {
 	private StockListViewImpl view;
 	private ArrayList<Stock> testStocks;
+	private StockListPresenter mockedPresenter;
 
 	@Before
 	public void setUp() {
-		view = new StockListViewImpl();
+		view = new TestStockListViewImpl();
+		mockedPresenter = view.presenter;
+
 		initTestStocks();
+		
 		view.displayStocks(testStocks);
 	}
 	
@@ -38,38 +38,33 @@ public class StockListViewImplTest {
 	}
 
 	@Test
+	public void testEnterCallsFillStocks() throws Exception {
+		view.enter(null);
+	
+		verify(mockedPresenter).fillStockListWithAllStocks();
+	}
+	
+	@Test
 	public void testCallingDisplayStocksDisplaysStocks() throws Exception {
 		List<Stock> displayedData = view.stockTableAdapter.getData();
 		assertArrayEquals(testStocks.toArray(), displayedData.toArray());
 	}
 	
 	@Test
-	public void testSelectionAffectsDeleteButtonEnabledStatus() throws Exception {
+	public void testSelectionAffectstButtonsEnabledStatus() throws Exception {
 		Button deleteButton = view.deleteButton;
+		Button editButton = view.editButton;
 		
-		assertFalse("Before", deleteButton.isEnabled());
+		assertFalse("Before - delete", deleteButton.isEnabled());
+		assertFalse("Before - edit", editButton.isEnabled());
 		
 		view.stockTable.select(1);
-		assertTrue("After select", deleteButton.isEnabled());
+		assertTrue("After select - delete", deleteButton.isEnabled());
+		assertTrue("After select - edit", editButton.isEnabled());
 
 		view.stockTable.select(null);
-		assertFalse("After unselect", deleteButton.isEnabled());
-	}
-	
-	@Test
-	public void testClickingDeleteButtonFiresDeleteEventWithRightData() throws Exception {
-		int idx = 1;
-		Stock toDelete = testStocks.get(idx);
-		
-		StockListViewListener listener = mock(StockListViewListener.class);
-		view.addListener(listener);
-		
-		view.stockTable.select(idx);
-		view.deleteButton.click();
-		
-		verify(listener).onDeleteButtonClick(toDelete);
-		
-		view.removeListener(listener);
+		assertFalse("After unselect - delete", deleteButton.isEnabled());
+		assertFalse("After unselect - edit", editButton.isEnabled());
 	}
 	
 	@Test
@@ -80,25 +75,42 @@ public class StockListViewImplTest {
 		assertTrue("Enabled", newButton.isEnabled());
 		assertTrue("Visible", newButton.isVisible());
 		
-		StockListViewListener listener = mock(StockListViewListener.class);
-		view.addListener(listener);
-		
 		newButton.click();
 		
-		verify(listener).onNewButtonClick();
-		
-		view.removeListener(listener);
+		verify(mockedPresenter).onNewButtonClick();
 	}
 	
 	@Test
-	public void testShowStockFormMakesItVisible() throws Exception {
-		assertFalse("Before", view.stockForm.isVisible());
+	public void testEditButton() throws Exception {
+		Button editButton = view.editButton;
 		
-		view.showStockForm(new Stock());
+		assertNotNull("not null", editButton);
 		
-		assertTrue("After", view.stockForm.isVisible());
+		view.stockTable.select(0);
+		Stock selectedStock = testStocks.get(0);
 		
+		editButton.click();
+		
+		verify(mockedPresenter).onEditButtonClick(selectedStock);
 	}
-
 	
+	@Test
+	public void testDeleteButton() throws Exception {
+		int idx = 1;
+		Stock toDelete = testStocks.get(idx);
+		
+		view.stockTable.select(idx);
+		view.deleteButton.click();
+		
+		verify(mockedPresenter).onDeleteButtonClick(toDelete);
+	}
+}
+
+@SuppressWarnings("serial")
+class TestStockListViewImpl extends StockListViewImpl {
+
+	@Override
+	protected StockListPresenter createPresenter() {
+		return mock(StockListPresenter.class);
+	}
 }

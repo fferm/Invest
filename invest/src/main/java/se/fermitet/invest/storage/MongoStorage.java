@@ -2,6 +2,7 @@ package se.fermitet.invest.storage;
 
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.UUID;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
@@ -20,6 +21,12 @@ class MongoStorage implements Storage {
 		Datastore ds = getDatastore();
 
 		return ds.createQuery(Stock.class).asList();
+	}
+	
+	public Stock getStockById(UUID id) {
+		Datastore ds = getDatastore();
+		
+		return ds.get(Stock.class, id);
 	}
 
 	public void saveStock(Stock stock) {
@@ -72,4 +79,5 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
+
 }

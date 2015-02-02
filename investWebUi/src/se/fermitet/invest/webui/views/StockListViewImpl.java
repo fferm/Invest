@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.fermitet.invest.domain.Stock;
+import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.viewinterface.StockListView;
+import se.fermitet.invest.webui.IvestWebUI;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
@@ -16,46 +20,40 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-public class StockListViewImpl extends CustomComponent implements StockListView {
+public class StockListViewImpl extends CustomComponent implements StockListView, View {
 
 	private static final long serialVersionUID = 1037623075906362499L;
 	
+	StockListPresenter presenter;
+
 	POJOTableAdapter<Stock> stockTableAdapter;
-
 	Button deleteButton;
+	Button editButton;
 	Button newButton;
-	StockForm stockForm;
 	Table stockTable;
-
-	private List<StockListViewListener> listeners;
-
 
 
 	public StockListViewImpl() {
 		super();
 
-		this.listeners = new ArrayList<StockListView.StockListViewListener>();
+		this.presenter = createPresenter();
 		
-		init();
-	}
-	
-	private void init() {
 		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.setMargin(true);
 
-		initMainPanel(mainLayout);
+		initStockTable(mainLayout);
 		initButtonPanel(mainLayout);
 		
 		setCompositionRoot(mainLayout);
 	}
 	
-	private void initMainPanel(Layout parent) {
-		HorizontalLayout horiz = new HorizontalLayout();
-		
-		initStockTable(horiz);
-		initForm(horiz);
-		
-		parent.addComponent(horiz);
+	@Override
+	public void enter(ViewChangeEvent event) {
+		this.presenter.fillStockListWithAllStocks();
+	}
+	
+	protected StockListPresenter createPresenter() {
+		return new StockListPresenter(this);
 	}
 
 	private void initStockTable(Layout parent) {
@@ -76,17 +74,13 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		parent.addComponent(stockTable);
 	}
 	
-	private void initForm(Layout parent) {
-		stockForm = new StockForm();
-		stockForm.setVisible(false);
-		parent.addComponent(stockForm);
-	}
-	
 	private void initButtonPanel(Layout parent) {
 		HorizontalLayout buttonPanel = new HorizontalLayout();
+		buttonPanel.setSpacing(true);
 		buttonPanel.setMargin(new MarginInfo(true, false, true, false));
 		
 		initNewButton(buttonPanel);
+		initEditButton(buttonPanel);
 		initDeleteButton(buttonPanel);
 
 		parent.addComponent(buttonPanel);
@@ -95,10 +89,20 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 	private void initNewButton(Layout parent) {
 		this.newButton = new Button("LŠgg till");
 		
-		newButton.addClickListener((Button.ClickListener) l -> {
-			fireNewButtonClickedEvent();
-		});
+		newButton.addClickListener((Button.ClickListener) l -> this.presenter.onNewButtonClick());
 		parent.addComponent(newButton);
+	}
+
+	private void initEditButton(Layout parent) {
+		this.editButton = new Button("€ndra");
+		editButton.setEnabled(false);
+		
+		editButton.addClickListener((Button.ClickListener) l -> {
+			Stock selectedStock = this.stockTableAdapter.getSelectedData();
+			this.presenter.onEditButtonClick(selectedStock);
+		});
+		
+		parent.addComponent(editButton);
 	}
 
 	private void initDeleteButton(Layout parent) {
@@ -106,7 +110,8 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 		deleteButton.setEnabled(false);
 		
 		deleteButton.addClickListener((Button.ClickListener) l -> {
-			fireDeleteButtonClickedEvent();
+			Stock selectedStock = this.stockTableAdapter.getSelectedData();
+			this.presenter.onDeleteButtonClick(selectedStock);
 		});
 		
 		parent.addComponent(deleteButton);
@@ -118,36 +123,20 @@ public class StockListViewImpl extends CustomComponent implements StockListView 
 	}
 	
 	@Override
-	public void showStockForm(Stock stockToWorkOn) {
-		stockForm.setVisible(true);
+	public void editSingleStock(Stock stock) {
+		IvestWebUI ui = (IvestWebUI) getUI();
+		
+		String withParameters = ui.SINGLESTOCKVIEW;
+		
+		if (stock != null) {
+			withParameters += "/" + stock.getId().toString();
+		}
+		ui.navigateTo(withParameters);
 	}
-
 	
 	private void handleSelectionEvent(Integer idx, Stock selectedStock) {
 		deleteButton.setEnabled(idx != null);
-	}
-
-	@Override
-	public void addListener(StockListViewListener listener) {
-		listeners.add(listener);
-	}
-
-	@Override
-	public void removeListener(StockListViewListener listener) {
-		listeners.remove(listener);
-	}
-
-	private void fireNewButtonClickedEvent() {
-		for (StockListViewListener listener : listeners) {
-			listener.onNewButtonClick();
-		}
-	}
-	private void fireDeleteButtonClickedEvent() {
-		Stock selectedStock = this.stockTableAdapter.getSelectedData();
-		
-		for (StockListViewListener listener : listeners) {
-			listener.onDeleteButtonClick(selectedStock);
-		}
+		editButton.setEnabled(idx != null);
 	}
 
 

@@ -3,6 +3,8 @@ package se.fermitet.invest.model;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.UUID;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +26,14 @@ public class StocksModelTest {
 	public void testGetAllStocks() throws Exception {
 		stocksModelWithTestStorageFactory.getAllStocks();
 		verify(mockedStorage).getAllStocks();
+	}
+	
+	@Test
+	public void testGetStockById() throws Exception {
+		UUID id = UUID.randomUUID();
+		stocksModelWithTestStorageFactory.getStockById(id);
+		verify(mockedStorage).getStockById(id);
+		
 	}
 	
 	@Test

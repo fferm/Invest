@@ -1,10 +1,6 @@
 package se.fermitet.invest.presenter;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +26,16 @@ public class StockListPresenterTest {
 		reset(mockedView);
 		reset(mockedModel);
 	}
-
+	
 	@Test
-	public void testConstructorFillsViewAndSetsPresenterAsViewListener() throws Exception {
+	public void testFillStockListWithAllStock() throws Exception {
 		List<Stock> list = new ArrayList<Stock>();
 		when(mockedModel.getAllStocks()).thenReturn(list);
-		
-		presenter = new TestStockListPresenter(mockedView);
-		mockedModel = presenter.model;
+	
+		presenter.fillStockListWithAllStocks();
 		
 		verify(mockedModel).getAllStocks();
 		verify(mockedView).displayStocks(list);
-		verify(mockedView).addListener(presenter);
 	}
 	
 	@Test
@@ -57,12 +51,19 @@ public class StockListPresenterTest {
 	}
 	
 	@Test
-	public void testNewButtonClickCallsViewShowStockFormWithEmptyStock() throws Exception {
-		Stock emptyStock = new Stock();
-		
+	public void testNewButtonClickCallsEditSingleStock() throws Exception {
 		presenter.onNewButtonClick();
 		
-		verify(mockedView).showStockForm(eq(emptyStock));
+		verify(mockedView).editSingleStock(null);
+	}
+	
+	@Test
+	public void testEditButtonClickCallsEditSingleStock() throws Exception {
+		Stock editStock = new Stock("TST").setName("TST");
+		
+		presenter.onEditButtonClick(editStock);
+
+		verify(mockedView).editSingleStock(editStock);
 	}
 }
 
@@ -72,7 +73,7 @@ class TestStockListPresenter extends StockListPresenter {
 	}
 	
 	@Override
-	protected StocksModel createStocksModel() {
+	protected StocksModel createModel() {
 		return mock(StocksModel.class);
 	}
 }
