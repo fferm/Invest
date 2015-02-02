@@ -1,8 +1,10 @@
 package se.fermitet.invest.model;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -20,6 +22,14 @@ public class StocksModelTest {
 	public void setUp() throws Exception {
 		this.stocksModelWithTestStorageFactory = new StocksModelWithTestStorageFactory();
 		mockedStorage = stocksModelWithTestStorageFactory.storage;
+	}
+	
+	@Test
+	public void testNoPublicConstructor() throws Exception {
+		Constructor<?>[] constructors = StocksModel.class.getConstructors();
+		for (@SuppressWarnings("rawtypes") Constructor constructor : constructors) {
+			assertTrue("Found a public constructor: " + constructor, (constructor.getModifiers() & Modifier.PUBLIC) == 0);
+		}
 	}
 	
 	@Test

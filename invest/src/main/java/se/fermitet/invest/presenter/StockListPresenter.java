@@ -7,7 +7,7 @@ import se.fermitet.invest.viewinterface.StockListView;
 public class StockListPresenter extends Presenter<StockListView, StocksModel>{
 
 	public StockListPresenter(StockListView view) {
-		super(view);
+		super(view, StocksModel.class);
 	}
 
 	public void fillStockListWithAllStocks() {
@@ -27,11 +27,6 @@ public class StockListPresenter extends Presenter<StockListView, StocksModel>{
 		view.displayStocks(model.getAllStocks());
 	}
 	
-	protected StocksModel createModel() {
-		return new StocksModel();
-	}
-
-
 
 
 }

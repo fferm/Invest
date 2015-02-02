@@ -8,7 +8,7 @@ import se.fermitet.invest.viewinterface.SingleStockView;
 
 public class SingleStockPresenter extends Presenter<SingleStockView, StocksModel>{
 	public SingleStockPresenter(SingleStockView view) {
-		super(view);
+		super(view, StocksModel.class);
 	}
 	
 	public Stock getStockBasedOnIdString(String idString) {
@@ -19,9 +19,5 @@ public class SingleStockPresenter extends Presenter<SingleStockView, StocksModel
 			
 			return model.getStockById(id);
 		}
-	}
-
-	protected StocksModel createModel() {
-		return new StocksModel();
 	}
 }

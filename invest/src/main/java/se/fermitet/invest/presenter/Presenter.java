@@ -1,16 +1,24 @@
 package se.fermitet.invest.presenter;
 
-public abstract class Presenter<VIEWINTERFACE, MODEL> {
+import se.fermitet.invest.model.Model;
+import se.fermitet.invest.model.Models;
+
+public abstract class Presenter<VIEWINTERFACE, MODEL extends Model> {
 
 	protected VIEWINTERFACE view;
 	protected MODEL model;
+	private Class<? extends Model> modelClass;
 
-	public Presenter(VIEWINTERFACE view) {
+	public Presenter(VIEWINTERFACE view, Class<? extends Model> modelClass) {
 		super();
 		
 		this.view = view;
+		this.modelClass = modelClass;
 		this.model = createModel();
 	}
 
-	protected abstract MODEL createModel();
+	@SuppressWarnings("unchecked")
+	protected MODEL createModel() {
+		return (MODEL) Models.fromClass(modelClass);
+	}
 }

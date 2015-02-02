@@ -7,11 +7,11 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.storage.Storage;
 import se.fermitet.invest.storage.StorageFactory;
 
-public class StocksModel {
+public class StocksModel extends Model {
 	
 	Storage storage;
 
-	public StocksModel() {
+	StocksModel() {
 		super();
 		storage = createStorageFactory().getStorage();
 	}
