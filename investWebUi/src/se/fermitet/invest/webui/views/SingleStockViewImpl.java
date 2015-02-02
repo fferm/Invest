@@ -86,7 +86,7 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	}
 	
 	private void onCancelClick() {
-		
+		this.presenter.onCancelButtonClick();
 	}
 
 }

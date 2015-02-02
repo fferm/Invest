@@ -48,6 +48,22 @@ public class SingleStockViewImplTest {
 		assertEquals("", view.nameField.getValue());
 		assertEquals("", view.symbolField.getValue());
 	}
+	
+	@Test
+	public void testCancelButtonCallsPresenter() throws Exception {
+		String nameValue = "my name";
+		String symbolValue = "my symbol";
+		
+		Stock testStock = new Stock(symbolValue).setName(nameValue);
+		
+		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		view.cancelButton.click();
+		
+		verify(mockedPresenter).onCancelButtonClick();
+	}
 }
 
 @SuppressWarnings("serial")
