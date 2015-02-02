@@ -1,6 +1,6 @@
 package se.fermitet.invest.presenter;
 
-abstract class Presenter<VIEWINTERFACE, MODEL> {
+public abstract class Presenter<VIEWINTERFACE, MODEL> {
 
 	protected VIEWINTERFACE view;
 	protected MODEL model;
