@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.StockListPresenter;
+import se.fermitet.invest.webui.InvestWebUI;
+import se.fermitet.vaadin.navigation.DirectionalNavigator;
+import se.fermitet.vaadin.navigation.URIParameter;
 
 import com.vaadin.ui.Button;
  
@@ -18,11 +21,13 @@ public class StockListViewImplTest {
 	private StockListViewImpl view;
 	private ArrayList<Stock> testStocks;
 	private StockListPresenter mockedPresenter;
+	private DirectionalNavigator mockedNavigator;
 
 	@Before
 	public void setUp() {
 		view = new TestStockListViewImpl();
 		mockedPresenter = view.presenter;
+		mockedNavigator = view.navigator;
 
 		initTestStocks();
 		
@@ -104,13 +109,33 @@ public class StockListViewImplTest {
 		
 		verify(mockedPresenter).onDeleteButtonClick(toDelete);
 	}
+	
+	@Test
+	public void testEditSingleStock_nullValue() throws Exception {
+		view.editSingleStock(null);
+		
+		verify(mockedNavigator).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
+	}
+
+	@Test
+	public void testEditSingleStock_notNullValue() throws Exception {
+		Stock testStock = new Stock("TST").setName("Test");
+		
+		view.editSingleStock(testStock);
+		// TODO
+		verify(mockedNavigator).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
+	}
 }
 
 @SuppressWarnings("serial")
 class TestStockListViewImpl extends StockListViewImpl {
-
 	@Override
 	protected StockListPresenter createPresenter() {
 		return mock(StockListPresenter.class);
+	}
+
+	@Override
+	protected DirectionalNavigator ensureNavigatorAvailable() {
+		return mock(DirectionalNavigator.class);
 	}
 }

@@ -4,40 +4,40 @@ import javax.servlet.annotation.WebServlet;
 
 import se.fermitet.invest.webui.views.SingleStockViewImpl;
 import se.fermitet.invest.webui.views.StockListViewImpl;
+import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
 @Theme("investwebui")
-public class IvestWebUI extends UI {
+public class InvestWebUI extends UI {
 
-	public final String STOCKLISTVIEW = "stockListView";
-	public final String SINGLESTOCKVIEW = "singleStock";
+	public final static String STOCKLISTVIEW = "stockListView";
+	public final static String SINGLESTOCKVIEW = "singleStock";
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = IvestWebUI.class)
+	@VaadinServletConfiguration(productionMode = false, ui = InvestWebUI.class)
 	public static class Servlet extends VaadinServlet {
 	}
 
-	private Navigator navigator; 
+	private DirectionalNavigator navigator; 
 
 	@Override
 	protected void init(VaadinRequest request) {
-		navigator = new Navigator(this, this);
+		navigator = new DirectionalNavigator(this, this);
 		
 		navigator.addView(STOCKLISTVIEW, StockListViewImpl.class);
 		navigator.addView(SINGLESTOCKVIEW, SingleStockViewImpl.class);
 
-		navigateTo(STOCKLISTVIEW);
+		getNavigator().navigateTo(STOCKLISTVIEW);
 	}
 	
-	public void navigateTo(String screenName) {
-		navigator.navigateTo(screenName);
+	public DirectionalNavigator getDirectionalNavigator() {
+		return this.navigator;
 	}
 
 }
