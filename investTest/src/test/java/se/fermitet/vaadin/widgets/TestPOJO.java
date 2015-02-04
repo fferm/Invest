@@ -27,6 +27,11 @@ public class TestPOJO {
 		this.linkedAttribute = linkedAttribute;
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return "TestPOJO: strAttribute: " + getStrAttribute() + "    intAttribute: " + getIntAttribute() + "   linkedAttribute: " + getLinkedAttribute();
+	}
 }
 
 

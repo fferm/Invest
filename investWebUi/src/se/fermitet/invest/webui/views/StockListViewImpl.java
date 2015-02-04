@@ -65,7 +65,8 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 
 		stockTableAdapter.setColumns(cols);
 		stockTableAdapter.addSelectionListener((Integer idx, Stock selectedStock) -> handleSelectionEvent(idx, selectedStock));
-
+		stockTableAdapter.setSortOrder("symbol");
+		
 		stockTable.setSelectable(true);
 		stockTable.setImmediate(true);
 		stockTable.setPageLength(10);

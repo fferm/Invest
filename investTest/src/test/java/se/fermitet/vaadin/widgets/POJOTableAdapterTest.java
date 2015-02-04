@@ -1,12 +1,7 @@
 package se.fermitet.vaadin.widgets;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -211,7 +206,60 @@ public class POJOTableAdapterTest {
 		tableAdapter.getTable().unselect(idxOfItemToSelect);
 		verify(listener).onSelect(null,  null);
 	}
+	
+	@Test
+	public void testSorting_sortOrderAfterSetData() throws Exception {
+		setColumnDefinitions();
+		List<TestPOJO> testData = getUnsortedTestData();
+		
+		tableAdapter.setData(testData);
+		tableAdapter.setSortOrder("strAttribute");
 
+		assessSortOrder();
+	}
+
+	@Test
+	public void testSorting_sortOrderBeforeSetData() throws Exception {
+		setColumnDefinitions();
+		List<TestPOJO> testData = getUnsortedTestData();
+		
+		tableAdapter.setSortOrder("strAttribute");
+		tableAdapter.setData(testData);
+
+		assessSortOrder();
+	}
+
+	private void assessSortOrder() {
+		List<TestPOJO> dataFromTable = tableAdapter.getData();
+		
+		String prev = null;
+		boolean onFirst = false;
+		for (TestPOJO testPOJO : dataFromTable) {
+			String current = testPOJO.getStrAttribute();
+			
+			if (!onFirst) assertNotNull("Shouldn't start with a null value", current);
+			else if (prev != null && current != null) assertTrue(current.compareTo(prev) >= 1);
+			else if (prev != null && current == null) {} // do nothing
+			else if (prev == null && current != null) fail("a value cannot be after null.  Value = " + current);
+				
+			onFirst = true;
+			prev = current;
+		}
+	}
+
+	private List<TestPOJO> getUnsortedTestData() {
+		List<TestPOJO> ret = new ArrayList<TestPOJO>();
+
+		ret.add(new TestPOJO().setStrAttribute(null));
+		ret.add(new TestPOJO().setStrAttribute("E"));
+		ret.add(new TestPOJO().setStrAttribute("C"));
+		ret.add(new TestPOJO().setStrAttribute("A"));
+		ret.add(new TestPOJO().setStrAttribute(null));
+		ret.add(new TestPOJO().setStrAttribute("D"));
+		ret.add(new TestPOJO().setStrAttribute("B"));
+		
+		return ret;
+	}
 	private List<TestPOJO> getTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
