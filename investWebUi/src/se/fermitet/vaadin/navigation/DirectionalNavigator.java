@@ -13,11 +13,18 @@ public class DirectionalNavigator {
 
 	Navigator navigator;
 	private List<String> addedViews;
+	private List<String> navStringsInOrder;
+	private int currentIdx = -1;
+
+	public static final String PARAMETERS_START = "/";
+	public static final String PARAMETERS_SEPARATOR = "&";
 
 	public DirectionalNavigator(UI ui, SingleComponentContainer container) {
 		super();
 		
 		this.addedViews = new ArrayList<String>();
+		this.navStringsInOrder = new ArrayList<String>();
+		
 		this.navigator = createNavigator(ui, container);
 	}
 
@@ -45,7 +52,7 @@ public class DirectionalNavigator {
 			
 			parameterString += parameter.toString();
 			
-			if (iter.hasNext()) parameterString += "&";
+			if (iter.hasNext()) parameterString += PARAMETERS_SEPARATOR;
 		}
 		
 		this.navigateTo(viewName, parameterString);
@@ -55,11 +62,40 @@ public class DirectionalNavigator {
 		if (! addedViews.contains(viewName)) throw new DirectionalNavigatorException("A view with the name " + viewName + " is not added to this DirectionalNavigator");
 		
 		String navString = viewName;
-		if (parameterString != null) navString += "/" + parameterString;
+		if (parameterString != null) navString += PARAMETERS_START + parameterString;
+		
+		addCurrentNavString(navString);
 		
 		navigator.navigateTo(navString);
 	}
 
+	protected void addCurrentNavString(String navString) {
+		while (currentIdx < navStringsInOrder.size() - 1) {
+			navStringsInOrder.remove(currentIdx + 1);
+		}
+		navStringsInOrder.add(navString);
+		currentIdx++;
+	}
+
+	public void navigateBack() {
+		navigateToPosition(currentIdx - 1);
+	}
+
+	public void navigateForward() {
+		navigateToPosition(currentIdx + 1);
+	}
+	
+	private void navigateToPosition(int idx) {
+		if (idx < 0) throw new DirectionalNavigatorException("Cannot navigate back beyond the start point");
+		if (idx > navStringsInOrder.size() - 1) throw new DirectionalNavigatorException("Cannot navigate forward beyond the end point");
+		
+		String navString = navStringsInOrder.get(idx);
+		
+		navigator.navigateTo(navString);
+		
+		currentIdx = idx;
+		
+	}
 
 	public class DirectionalNavigatorException extends RuntimeException {
 		private static final long serialVersionUID = 6895818559360339693L;
@@ -68,4 +104,6 @@ public class DirectionalNavigator {
 			super(msg);
 		}
 	}
+
+	
 }
