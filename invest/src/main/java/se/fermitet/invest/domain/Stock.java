@@ -1,8 +1,13 @@
 package se.fermitet.invest.domain;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 public class Stock extends InvestDomainObject {
 
+	@NotNull	
+	@Size(min=1)
 	private String symbol;
 	private String name;
 

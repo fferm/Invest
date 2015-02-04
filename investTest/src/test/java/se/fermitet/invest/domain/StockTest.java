@@ -2,6 +2,13 @@ package se.fermitet.invest.domain;
 
 import static org.junit.Assert.*;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import org.junit.Test;
 
 public class StockTest {
@@ -56,6 +63,31 @@ public class StockTest {
 		Stock newStock = stock.setName(newName);
 		assertEquals("getter after set", newName, stock.getName());
 		assertSame("same", stock, newStock);
+	}
+	
+	@Test
+	public void testMustHaveSymbol() throws Exception {
+		// Null
+		Stock stock = new Stock(null);
+		
+		ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+		Validator validator = validatorFactory.getValidator();
+		Set<ConstraintViolation<Stock>> results = validator.validate(stock);
+		
+		assertEquals("size", 1, results.size());
+		
+		ConstraintViolation<Stock> violation = results.iterator().next();
+		assertEquals("propertyPath", "symbol", violation.getPropertyPath().toString());
+		
+		// empty
+		stock = new Stock("");
+		
+		results = validator.validate(stock);
+		assertEquals("size", 1, results.size());
+		
+		violation = results.iterator().next();
+		assertEquals("propertyPath", "symbol", violation.getPropertyPath().toString());
+		
 	}
 	
 	@Test
