@@ -15,7 +15,7 @@ import se.fermitet.invest.storage.Storage;
 import se.fermitet.invest.storage.StorageFactory;
 
 public class StocksModelTest {
-	private StocksModelWithTestStorageFactory stocksModelWithTestStorageFactory;
+	private StocksModel stocksModelWithTestStorageFactory;
 	private Storage mockedStorage;
 
 	@Before
@@ -52,6 +52,15 @@ public class StocksModelTest {
 		stocksModelWithTestStorageFactory.deleteStock(toDelete);
 		
 		verify(mockedStorage).delete(toDelete);
+	}
+	
+	@Test
+	public void testSave() throws Exception {
+		Stock stock = new Stock("name", "symbol");
+		stocksModelWithTestStorageFactory.save(stock);
+		
+		verify(mockedStorage).saveStock(stock);
+		
 	}
 }
 

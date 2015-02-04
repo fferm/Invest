@@ -1,11 +1,6 @@
 package se.fermitet.invest.domain;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -24,6 +19,18 @@ public class StockTest {
 		Stock stock = new Stock("TST");
 		assertNotNull(stock);
 		assertEquals("TST", stock.getSymbol());
+	}
+	
+	@Test
+	public void testDoubleConstructor() throws Exception {
+		String name = "name";
+		String symbol = "symbol";
+		
+		Stock stock = new Stock(name, symbol);
+		
+		assertNotNull(stock);
+		assertEquals("name", name, stock.getName());
+		assertEquals("symbol", symbol, stock.getSymbol());
 	}
 	
 	@Test

@@ -28,8 +28,12 @@ public class StocksModel extends Model {
 		return storage.getStockById(id);
 	}
 
+	public void save(Stock stock) {
+		storage.saveStock(stock);
+	}
 
 	public void deleteStock(Stock toDelete) {
 		storage.delete(toDelete);
 	}
+
 }

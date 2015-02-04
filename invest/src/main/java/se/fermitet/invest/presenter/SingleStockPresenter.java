@@ -24,4 +24,9 @@ public class SingleStockPresenter extends Presenter<SingleStockView, StocksModel
 	public void onCancelButtonClick() {
 		view.navigateBack();
 	}
+
+	public void onOkButtonClick(Stock stock) {
+		model.save(stock);
+		view.navigateBack();
+	}
 }

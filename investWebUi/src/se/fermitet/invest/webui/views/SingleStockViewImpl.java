@@ -61,9 +61,9 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		Stock desired = presenter.getStockBasedOnIdString(event.getParameters());
+		this.stock = presenter.getStockBasedOnIdString(event.getParameters());
 		
-		syncUiWithStock(desired);
+		syncUiWithStock();
 	}
 
 	protected SingleStockPresenter createPresenter() {
@@ -71,9 +71,7 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	}
 
 	
-	private void syncUiWithStock(Stock stock) {
-		this.stock = stock;
-
+	private void syncUiWithStock() {
 		String nameTxt = stock.getName() == null ? "" : stock.getName();
 		String symbolTxt = stock.getSymbol() == null ? "" : stock.getSymbol();
 
@@ -81,8 +79,14 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 		nameField.setValue(nameTxt);
 	}
 	
+	private void syncStockWithUi() {
+		stock.setName(nameField.getValue());
+		stock.setSymbol(symbolField.getValue());
+	}
+
 	private void onOkClick() {
-		System.out.println("Name: " + stock.getName() + "    Symbol: " + stock.getSymbol());
+		syncStockWithUi();
+		presenter.onOkButtonClick(this.stock);
 	}
 	
 	private void onCancelClick() {

@@ -1,10 +1,6 @@
 package se.fermitet.invest.storage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -55,6 +51,24 @@ public class MongoStorageTest {
 		
 		Stock fromDb = all.get(0);
 		assertEquals("id", stock.getId(), fromDb.getId());
+	}
+	
+	@Test
+	public void testUpdate() throws Exception {
+		Stock stock = new Stock("name", "symbol");
+		
+		objUnderTest.saveStock(stock);
+		assertEquals("Size", 1, objUnderTest.getAllStocks().size());
+		
+		stock.setName("new name");
+		stock.setSymbol("new symbol");
+		
+		objUnderTest.saveStock(stock);
+		
+		List<Stock> all = objUnderTest.getAllStocks();
+		
+		assertEquals("Size", 1, all.size());
+		assertTrue("Contains", all.contains(stock));
 	}
 	
 	@Test

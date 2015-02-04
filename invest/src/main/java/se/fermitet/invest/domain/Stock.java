@@ -7,12 +7,18 @@ public class Stock extends InvestDomainObject {
 	private String name;
 
 	public Stock() {
-		super();
+		this(null, null);
 	}
 	
 	public Stock(String symbol) {
+		this(null, symbol);
+	}
+
+	public Stock(String name, String symbol) {
 		super();
-		this.setSymbol(symbol);
+		
+		setName(name);
+		setSymbol(symbol);
 	}
 
 	public String getSymbol() {

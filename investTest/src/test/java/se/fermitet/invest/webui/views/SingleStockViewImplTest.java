@@ -74,6 +74,29 @@ public class SingleStockViewImplTest {
 		
 		verify(mockedNavigator).navigateBack();
 	}
+	
+	@Test
+	public void testOKButtonCallsPresenterWithUpdatedStock() throws Exception {
+		Stock initialStock = new Stock().setName("Name").setSymbol("Symbol");
+		
+		String newName = "new name";
+		String newSymbol = "new symbol";
+		
+		Stock updatedStock = new Stock().setName(newName).setSymbol(newSymbol);
+		
+		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		view.nameField.setValue(newName);
+		view.symbolField.setValue(newSymbol);
+		
+		reset(mockedPresenter);
+		
+		view.okButton.click();
+		
+		verify(mockedPresenter).onOkButtonClick(eq(updatedStock));
+	}
 }
 
 @SuppressWarnings("serial")

@@ -62,6 +62,16 @@ public class SingleStockPresenterTest {
 		
 		verify(mockedView).navigateBack();
 	}
+	
+	@Test
+	public void testOkSavesAndNavigatesBack() throws Exception {
+		Stock testStock = new Stock().setName("name").setSymbol("symbol");
+		
+		presenter.onOkButtonClick(testStock);
+		
+		verify(mockedModel).save(testStock);
+		verify(mockedView).navigateBack();
+	}
 }
 
 class TestSingleStockPresenter extends SingleStockPresenter {
