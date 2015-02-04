@@ -47,7 +47,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event) {
+	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
 		this.presenter.fillStockListWithAllStocks();
 	}
 

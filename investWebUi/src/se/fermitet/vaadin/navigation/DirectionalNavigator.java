@@ -96,6 +96,23 @@ public class DirectionalNavigator {
 		currentIdx = idx;
 		
 	}
+	
+	public static List<URIParameter> parse(String parameterString) {
+		List<URIParameter> ret = new ArrayList<URIParameter>();
+		
+		if (parameterString == null || parameterString.length() == 0) return ret;
+
+		String[] splitResult = parameterString.split(PARAMETERS_SEPARATOR);
+		
+		for (int i = 0; i < splitResult.length; i++) {
+			String singleParameterString = splitResult[i];
+			
+			ret.add(URIParameter.parse(singleParameterString));
+		}
+				
+		return ret;
+	}
+
 
 	public class DirectionalNavigatorException extends RuntimeException {
 		private static final long serialVersionUID = 6895818559360339693L;
@@ -104,6 +121,7 @@ public class DirectionalNavigator {
 			super(msg);
 		}
 	}
+
 
 	
 }

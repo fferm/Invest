@@ -204,6 +204,45 @@ public class DirectionalNavigatorTest {
 			fail("Other exception");
 		}
 	}
+	
+	@Test
+	public void testParse_single() throws Exception {
+		String testString = "singleValue";
+		
+		List<URIParameter> parameters = DirectionalNavigator.parse(testString);
+		
+		assertEquals("size", 1, parameters.size());
+		assertTrue("contains", parameters.contains(new URIParameter(testString)));
+	}
+
+	@Test
+	public void testParse_multiple() throws Exception {
+		String testString = "value1&value2";
+		
+		List<URIParameter> parameters = DirectionalNavigator.parse(testString);
+		
+		assertEquals("size", 2, parameters.size());
+		assertTrue("contains", parameters.contains(new URIParameter("value1")));
+		assertTrue("contains", parameters.contains(new URIParameter("value2")));
+	}
+
+	@Test
+	public void testParse_null() throws Exception {
+		String testString = null;
+		
+		List<URIParameter> parameters = DirectionalNavigator.parse(testString);
+		
+		assertEquals("size", 0, parameters.size());
+	}
+
+	@Test
+	public void testParse_empty() throws Exception {
+		String testString = "";
+		
+		List<URIParameter> parameters = DirectionalNavigator.parse(testString);
+		
+		assertEquals("size", 0, parameters.size());
+	}
 
 	@Test(expected = DirectionalNavigatorException.class)
 	public void testBackNavigationFromZero() throws Exception {

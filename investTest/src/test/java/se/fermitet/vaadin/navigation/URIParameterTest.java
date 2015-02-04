@@ -79,7 +79,22 @@ public class URIParameterTest {
 		
 		assertTrue("Hash code of both", hasBoth.hashCode() == new URIParameter("Name", "Value").hashCode());
 		assertTrue("Hash code of value", hasValue.hashCode() == new URIParameter("Value").hashCode());
-		// TODO HŠr
-		
 	}
+	
+	@Test
+	public void testParseString_nameAndValue() throws Exception {
+		String testString = "param=value";
+		
+		URIParameter param = URIParameter.parse(testString);
+		assertEquals("name and value", new URIParameter("param", "value"), param);
+	}
+	
+	@Test
+	public void testParseString_onlyValue() throws Exception {
+		String testString = "only value";
+		
+		URIParameter param = URIParameter.parse(testString);
+		assertEquals("name and value", new URIParameter(testString), param);
+	}
+
 }
