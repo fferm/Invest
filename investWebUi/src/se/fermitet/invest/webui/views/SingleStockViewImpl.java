@@ -88,5 +88,11 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	private void onCancelClick() {
 		this.presenter.onCancelButtonClick();
 	}
+	
+	@Override
+	public void navigateBack() {
+		this.getNavigator().navigateBack();
+	}
+
 
 }

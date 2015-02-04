@@ -54,7 +54,7 @@ public class StockListPresenterTest {
 	public void testNewButtonClickCallsEditSingleStock() throws Exception {
 		presenter.onNewButtonClick();
 		
-		verify(mockedView).editSingleStock(null);
+		verify(mockedView).navigateToSingleStockView(null);
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class StockListPresenterTest {
 		
 		presenter.onEditButtonClick(editStock);
 
-		verify(mockedView).editSingleStock(editStock);
+		verify(mockedView).navigateToSingleStockView(editStock);
 	}
 }
 

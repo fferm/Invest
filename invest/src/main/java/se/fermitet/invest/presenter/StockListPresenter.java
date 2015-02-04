@@ -15,11 +15,11 @@ public class StockListPresenter extends Presenter<StockListView, StocksModel>{
 	}
 
 	public void onNewButtonClick() {
-		view.editSingleStock(null);
+		view.navigateToSingleStockView(null);
 	}
 
 	public void onEditButtonClick(Stock selectedStock) {
-		view.editSingleStock(selectedStock);
+		view.navigateToSingleStockView(selectedStock);
 	}
 
 	public void onDeleteButtonClick(Stock toDelete) {

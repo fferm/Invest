@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.SingleStockPresenter;
+import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
@@ -64,6 +65,15 @@ public class SingleStockViewImplTest {
 		
 		verify(mockedPresenter).onCancelButtonClick();
 	}
+	
+	@Test
+	public void testNavigateBack() throws Exception {
+		DirectionalNavigator mockedNavigator = view.getNavigator();
+		
+		view.navigateBack();
+		
+		verify(mockedNavigator).navigateBack();
+	}
 }
 
 @SuppressWarnings("serial")
@@ -71,5 +81,10 @@ class TestSingleStockViewImpl extends SingleStockViewImpl {
 	@Override
 	protected SingleStockPresenter createPresenter() {
 		return mock(SingleStockPresenter.class);
+	}
+	
+	@Override
+	protected DirectionalNavigator createNavigator() {
+		return mock(DirectionalNavigator.class);
 	}
 }

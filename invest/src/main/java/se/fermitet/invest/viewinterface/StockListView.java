@@ -7,5 +7,5 @@ import se.fermitet.invest.domain.Stock;
 public interface StockListView {
 	public void displayStocks(List<Stock> stocks);
 
-	public void editSingleStock(Stock stock);
+	public void navigateToSingleStockView(Stock stock);
 }

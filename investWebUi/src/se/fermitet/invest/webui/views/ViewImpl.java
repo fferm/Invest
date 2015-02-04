@@ -13,25 +13,32 @@ abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent imp
 	private static final long serialVersionUID = 1L;
 	
 	PRESENTER presenter;
-	DirectionalNavigator navigator;
+	private DirectionalNavigator navigator;
 	
 	public ViewImpl() {
 		super();
 		
 		this.presenter = createPresenter();
-		this.navigator = findNavigator();
 		
 		setCompositionRoot(createMainLayout());
 	}
-
+	
 	protected abstract Component createMainLayout();
 	protected abstract PRESENTER createPresenter();
 
-	protected DirectionalNavigator findNavigator() {
+	public DirectionalNavigator getNavigator() {
+		if (navigator == null) {
+			navigator = createNavigator();
+		}
+		return navigator;
+	}
+	
+	protected DirectionalNavigator createNavigator() {
 		InvestWebUI ui = (InvestWebUI) getUI();
 		
 		if (ui != null) return ui.getDirectionalNavigator();
-		else return null;
+		System.out.println("!!!! was null");
+		return null;
 	}
 
 }

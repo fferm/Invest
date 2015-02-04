@@ -21,13 +21,11 @@ public class StockListViewImplTest {
 	private StockListViewImpl view;
 	private ArrayList<Stock> testStocks;
 	private StockListPresenter mockedPresenter;
-	private DirectionalNavigator mockedNavigator;
 
 	@Before
 	public void setUp() {
 		view = new TestStockListViewImpl();
 		mockedPresenter = view.presenter;
-		mockedNavigator = view.navigator;
 
 		initTestStocks();
 		
@@ -112,18 +110,18 @@ public class StockListViewImplTest {
 	
 	@Test
 	public void testEditSingleStock_nullValue() throws Exception {
-		view.editSingleStock(null);
+		view.navigateToSingleStockView(null);
 		
-		verify(mockedNavigator).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
+		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
 	}
 
 	@Test
 	public void testEditSingleStock_notNullValue() throws Exception {
 		Stock testStock = new Stock("TST").setName("Test");
 		
-		view.editSingleStock(testStock);
+		view.navigateToSingleStockView(testStock);
 		// TODO
-		verify(mockedNavigator).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
+		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
 	}
 }
 
@@ -135,7 +133,7 @@ class TestStockListViewImpl extends StockListViewImpl {
 	}
 
 	@Override
-	protected DirectionalNavigator findNavigator() {
+	protected DirectionalNavigator createNavigator() {
 		return mock(DirectionalNavigator.class);
 	}
 }

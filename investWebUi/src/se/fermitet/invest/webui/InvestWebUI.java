@@ -33,7 +33,7 @@ public class InvestWebUI extends UI {
 		navigator.addView(STOCKLISTVIEW, StockListViewImpl.class);
 		navigator.addView(SINGLESTOCKVIEW, SingleStockViewImpl.class);
 
-		getNavigator().navigateTo(STOCKLISTVIEW);
+		navigator.navigateTo(STOCKLISTVIEW);
 	}
 	
 	public DirectionalNavigator getDirectionalNavigator() {

@@ -55,6 +55,13 @@ public class SingleStockPresenterTest {
 		
 		assertSame(expected, answer);
 	}
+	
+	@Test
+	public void testCancelNavigatesToStockList() throws Exception {
+		presenter.onCancelButtonClick();
+		
+		verify(mockedView).navigateBack();
+	}
 }
 
 class TestSingleStockPresenter extends SingleStockPresenter {

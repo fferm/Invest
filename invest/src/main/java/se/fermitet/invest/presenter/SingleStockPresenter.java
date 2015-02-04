@@ -22,7 +22,6 @@ public class SingleStockPresenter extends Presenter<SingleStockView, StocksModel
 	}
 
 	public void onCancelButtonClick() {
-		// TODO navigate back to window that called you
-		throw new UnsupportedOperationException("unimplemented");
+		view.navigateBack();
 	}
 }
