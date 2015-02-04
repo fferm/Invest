@@ -19,7 +19,7 @@ abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent imp
 		super();
 		
 		this.presenter = createPresenter();
-		this.navigator = ensureNavigatorAvailable();
+		this.navigator = findNavigator();
 		
 		setCompositionRoot(createMainLayout());
 	}
@@ -27,8 +27,11 @@ abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent imp
 	protected abstract Component createMainLayout();
 	protected abstract PRESENTER createPresenter();
 
-	protected DirectionalNavigator ensureNavigatorAvailable() {
-		return ((InvestWebUI) getUI()).getDirectionalNavigator();
+	protected DirectionalNavigator findNavigator() {
+		InvestWebUI ui = (InvestWebUI) getUI();
+		
+		if (ui != null) return ui.getDirectionalNavigator();
+		else return null;
 	}
 
 }

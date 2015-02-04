@@ -135,7 +135,7 @@ class TestStockListViewImpl extends StockListViewImpl {
 	}
 
 	@Override
-	protected DirectionalNavigator ensureNavigatorAvailable() {
+	protected DirectionalNavigator findNavigator() {
 		return mock(DirectionalNavigator.class);
 	}
 }
