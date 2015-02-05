@@ -89,8 +89,8 @@ public class MongoStorageTest {
 	
 	@Test
 	public void testRemoveStock() throws Exception {
-		Stock s1 = new Stock("S1").setName("S1");
-		Stock s2 = new Stock("S2").setName("S2");
+		Stock s1 = new Stock("S1", "S1");
+		Stock s2 = new Stock("S2", "S2");
 		
 		objUnderTest.saveStock(s1);
 		objUnderTest.saveStock(s2);

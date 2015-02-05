@@ -47,7 +47,7 @@ public class SingleStockPresenterTest {
 	@Test
 	public void testGetStockWithData() throws Exception {
 		UUID id = UUID.randomUUID();
-		Stock expected = new Stock("TST").setName("TST");
+		Stock expected = new Stock("TST", "TST");
 		
 		when(mockedModel.getStockById(id)).thenReturn(expected);
 		
@@ -65,7 +65,7 @@ public class SingleStockPresenterTest {
 	
 	@Test
 	public void testOkSavesAndNavigatesBack() throws Exception {
-		Stock testStock = new Stock().setName("name").setSymbol("symbol");
+		Stock testStock = new Stock("name", "symbol");
 		
 		presenter.onOkButtonClick(testStock);
 		

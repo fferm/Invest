@@ -7,6 +7,8 @@ import se.fermitet.invest.presenter.SingleStockPresenter;
 import se.fermitet.invest.viewinterface.SingleStockView;
 import se.fermitet.vaadin.navigation.URIParameter;
 
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -27,76 +29,88 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	Button cancelButton;
 
 	private Stock stock;
-	
+
 	@Override
 	protected Component createMainLayout() {
 		FormLayout layout = new FormLayout();
-		
+
 		initFields();
-		
+
 		layout.addComponent(symbolField);
 		layout.addComponent(nameField);
-		
+
 		HorizontalLayout buttonPanel = new HorizontalLayout();
 		buttonPanel.setSpacing(true);
 		buttonPanel.addComponent(okButton);
 		buttonPanel.addComponent(cancelButton);
-		
+
 		layout.addComponent(buttonPanel);
-		
+
 		return layout;
 	}
 
 	private void initFields() {
 		symbolField = new TextField("Ticker");
+		symbolField.setImmediate(true);
+		symbolField.addValidator(new BeanValidator(Stock.class, "symbol"));
+		symbolField.addValueChangeListener(e -> valueChanged());
+
 		nameField = new TextField("Namn");
-		
+		nameField.setImmediate(true);
+		nameField.addValidator(new BeanValidator(Stock.class, "name"));
+		nameField.addValueChangeListener(e -> valueChanged());
+
 		okButton = new Button("OK");
 		okButton.addClickListener((Button.ClickListener) l -> {
 			onOkClick();
 		});
-		
+
 		cancelButton = new Button("Avbryt");
 		cancelButton.addClickListener((Button.ClickListener) l -> {
 			onCancelClick();
 		});
 	}
-	
+
+	private void valueChanged() {
+		okButton.setEnabled(isValid());
+	}
+
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
+		// TODO: Do not send null to presenter, instead create stock here
 		if (parameters.size() == 0) this.stock = presenter.getStockBasedOnIdString(null);
 		else this.stock = presenter.getStockBasedOnIdString(parameters.get(0).getValue());
-		
-		syncUiWithStock();
+
+		bindToData();
 	}
 
 	protected SingleStockPresenter createPresenter() {
 		return new SingleStockPresenter(this);
 	}
 
-	
-	private void syncUiWithStock() {
-		String nameTxt = stock.getName() == null ? "" : stock.getName();
-		String symbolTxt = stock.getSymbol() == null ? "" : stock.getSymbol();
 
-		symbolField.setValue(symbolTxt);
-		nameField.setValue(nameTxt);
+	private void bindToData() {
+		BeanItem<Stock> item = new BeanItem<Stock>(stock);
+
+		symbolField.setPropertyDataSource(item.getItemProperty("symbol"));
+		nameField.setPropertyDataSource(item.getItemProperty("name"));
 	}
-	
-	private void syncStockWithUi() {
-		stock.setName(nameField.getValue());
-		stock.setSymbol(symbolField.getValue());
-	}
+
+	//	private void syncStockWithUi() {
+	//		stock.setName(nameField.getValue());
+	//		stock.setSymbol(symbolField.getValue());
+	//	}
 
 	private void onOkClick() {
-		syncStockWithUi();
-		presenter.onOkButtonClick(this.stock);
+		//		syncStockWithUi();
+		if (isValid()) presenter.onOkButtonClick(this.stock);
 	}
-	
+
 	private void onCancelClick() {
+		System.out.println("!!!! name: " + stock.getName() + "   symbol: " + stock.getSymbol());
 		this.presenter.onCancelButtonClick();
 	}
-	
+
 	@Override
 	public void navigateBack() {
 		this.getNavigator().navigateBack();

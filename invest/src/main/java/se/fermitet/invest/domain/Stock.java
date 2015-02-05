@@ -30,18 +30,16 @@ public class Stock extends InvestDomainObject {
 		return symbol;
 	}
 
-	public Stock setSymbol(String symbol) {
+	public void setSymbol(String symbol) {
 		this.symbol = symbol;
-		return this;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
 
-	public Stock setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	@Override

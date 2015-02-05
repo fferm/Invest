@@ -28,7 +28,7 @@ public class SingleStockViewImplTest {
 		String nameValue = "my name";
 		String symbolValue = "my symbol";
 		
-		Stock testStock = new Stock(symbolValue).setName(nameValue);
+		Stock testStock = new Stock(nameValue, symbolValue);
 		
 		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
 		
@@ -55,7 +55,7 @@ public class SingleStockViewImplTest {
 		String nameValue = "my name";
 		String symbolValue = "my symbol";
 		
-		Stock testStock = new Stock(symbolValue).setName(nameValue);
+		Stock testStock = new Stock(nameValue, symbolValue);
 		
 		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
 		
@@ -77,12 +77,12 @@ public class SingleStockViewImplTest {
 	
 	@Test
 	public void testOKButtonCallsPresenterWithUpdatedStock() throws Exception {
-		Stock initialStock = new Stock().setName("Name").setSymbol("Symbol");
+		Stock initialStock = new Stock("Name", "Symbol");
 		
 		String newName = "new name";
 		String newSymbol = "new symbol";
 		
-		Stock updatedStock = new Stock().setName(newName).setSymbol(newSymbol);
+		Stock updatedStock = new Stock(newName, newSymbol);
 		
 		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
 		
@@ -96,6 +96,26 @@ public class SingleStockViewImplTest {
 		view.okButton.click();
 		
 		verify(mockedPresenter).onOkButtonClick(eq(updatedStock));
+	}
+	
+	@Test
+	public void testEmptySymbolShouldGiveValidationFault() throws Exception {
+		Stock initialStock = new Stock("Name", "Symbol");
+		
+		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
+		
+		view.enter(mock(ViewChangeEvent.class));
+
+		
+		assertTrue("ok button enabled before", view.okButton.isEnabled());
+		assertTrue("symbol field valid before", view.symbolField.isValid());
+		assertTrue("form valid before", view.isValid());
+		
+		view.symbolField.setValue(null);
+		
+		assertFalse("ok button disabled after", view.okButton.isEnabled());
+		assertFalse("symbol field not valid after", view.symbolField.isValid());
+		assertFalse("form not valid after", view.isValid());
 	}
 }
 

@@ -35,8 +35,8 @@ public class StockListViewImplTest {
 	private void initTestStocks() {
 		testStocks = new ArrayList<Stock>();
 		
-		testStocks.add(new Stock("TST1").setName("Name 1"));
-		testStocks.add(new Stock("TST2").setName("Name 2"));
+		testStocks.add(new Stock("Name 1", "TST1"));
+		testStocks.add(new Stock("Name 2", "TST2"));
 		testStocks.add(new Stock("TST3"));
 	}
 
@@ -117,7 +117,7 @@ public class StockListViewImplTest {
 
 	@Test
 	public void testEditSingleStock_notNullValue() throws Exception {
-		Stock testStock = new Stock("TST").setName("Test");
+		Stock testStock = new Stock("Test", "TST");
 		
 		view.navigateToSingleStockView(testStock);
 		// TODO

@@ -21,8 +21,8 @@ public class FillStockTestData {
 		}
 		
 		
-		Stock s1 = new Stock("AXIS").setName("Axis");
-		Stock s2 = new Stock("SHB B").setName("Handelsbanken B");
+		Stock s1 = new Stock("Axis", "AXIS");
+		Stock s2 = new Stock("Handelsbanken B", "SHB B");
 		Stock s3 = new Stock("NET B");
 
 		storage.saveStock(s1);

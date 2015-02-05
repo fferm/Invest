@@ -48,9 +48,8 @@ public class StockTest {
 		assertEquals("getter", SYMBOL, stock.getSymbol());
 		
 		String NEWSYMBOL = "NEW SYMBOL";
-		Stock newStock = stock.setSymbol(NEWSYMBOL);
+		stock.setSymbol(NEWSYMBOL);
 		assertEquals("getter after setter", NEWSYMBOL, stock.getSymbol());
-		assertSame("same", stock, newStock);
 	}
 	
 	@Test
@@ -60,9 +59,8 @@ public class StockTest {
 		assertNull("getter before", stock.getName());
 		
 		String newName = "new name";
-		Stock newStock = stock.setName(newName);
+		stock.setName(newName);
 		assertEquals("getter after set", newName, stock.getName());
-		assertSame("same", stock, newStock);
 	}
 	
 	@Test
@@ -97,12 +95,12 @@ public class StockTest {
 		String name1 = "name 1";
 		String name2 = "name 2";
 		
-		Stock s1 = new Stock(sym1).setName(name1);
-		Stock s2 = new Stock(sym1).setName(name1);
-		Stock diffSym = new Stock(sym2).setName(name1);
-		Stock diffName = new Stock(sym1).setName(name2);
-		Stock nullName1 = new Stock(sym1).setName(null);
-		Stock nullName2 = new Stock(sym1).setName(null);
+		Stock s1 = new Stock(name1, sym1);
+		Stock s2 = new Stock(name1, sym1);
+		Stock diffSym = new Stock(name1, sym2);
+		Stock diffName = new Stock(name2, sym1);
+		Stock nullName1 = new Stock(null, sym1);
+		Stock nullName2 = new Stock(null, sym1);
 		
 		assertTrue("Equal to itself", s1.equals(s1));
 		assertTrue("Equal to object with same symbol and name", s1.equals(s2));

@@ -59,7 +59,7 @@ public class StockListPresenterTest {
 	
 	@Test
 	public void testEditButtonClickCallsEditSingleStock() throws Exception {
-		Stock editStock = new Stock("TST").setName("TST");
+		Stock editStock = new Stock("TST", "TST");
 		
 		presenter.onEditButtonClick(editStock);
 
