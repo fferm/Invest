@@ -54,11 +54,15 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 		symbolField.setImmediate(true);
 		symbolField.addValidator(new BeanValidator(Stock.class, "symbol"));
 		symbolField.addValueChangeListener(e -> valueChanged());
+		symbolField.setNullRepresentation("");
+		symbolField.setNullSettingAllowed(true);
 
 		nameField = new TextField("Namn");
 		nameField.setImmediate(true);
 		nameField.addValidator(new BeanValidator(Stock.class, "name"));
 		nameField.addValueChangeListener(e -> valueChanged());
+		nameField.setNullRepresentation("");
+		nameField.setNullSettingAllowed(true);
 
 		okButton = new Button("OK");
 		okButton.addClickListener((Button.ClickListener) l -> {
@@ -77,7 +81,6 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
-		// TODO: Do not send null to presenter, instead create stock here
 		if (parameters.size() == 0) this.stock = presenter.getStockBasedOnIdString(null);
 		else this.stock = presenter.getStockBasedOnIdString(parameters.get(0).getValue());
 
@@ -96,18 +99,11 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 		nameField.setPropertyDataSource(item.getItemProperty("name"));
 	}
 
-	//	private void syncStockWithUi() {
-	//		stock.setName(nameField.getValue());
-	//		stock.setSymbol(symbolField.getValue());
-	//	}
-
 	private void onOkClick() {
-		//		syncStockWithUi();
 		if (isValid()) presenter.onOkButtonClick(this.stock);
 	}
 
 	private void onCancelClick() {
-		System.out.println("!!!! name: " + stock.getName() + "   symbol: " + stock.getSymbol());
 		this.presenter.onCancelButtonClick();
 	}
 

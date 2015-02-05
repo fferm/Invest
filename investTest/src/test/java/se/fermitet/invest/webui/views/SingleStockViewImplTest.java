@@ -46,8 +46,8 @@ public class SingleStockViewImplTest {
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
-		assertEquals("", view.nameField.getValue());
-		assertEquals("", view.symbolField.getValue());
+		assertNull(view.nameField.getValue());
+		assertNull(view.symbolField.getValue());
 	}
 	
 	@Test
