@@ -6,15 +6,13 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.SingleStockPresenter;
 import se.fermitet.invest.viewinterface.SingleStockView;
 import se.fermitet.vaadin.navigation.URIParameter;
+import se.fermitet.vaadin.widgets.POJOAttributeTextField;
 
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 
 public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implements SingleStockView {
 	/**
@@ -22,8 +20,8 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	 */
 	private static final long serialVersionUID = 1028596715063809826L;
 
-	TextField symbolField;
-	TextField nameField;
+	POJOAttributeTextField<Stock> symbolField;
+	POJOAttributeTextField<Stock> nameField;
 
 	Button okButton;
 	Button cancelButton;
@@ -50,19 +48,11 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	}
 
 	private void initFields() {
-		symbolField = new TextField("Ticker");
-		symbolField.setImmediate(true);
-		symbolField.addValidator(new BeanValidator(Stock.class, "symbol"));
+		symbolField = new POJOAttributeTextField<Stock>("Ticker", Stock.class, "symbol");
 		symbolField.addValueChangeListener(e -> valueChanged());
-		symbolField.setNullRepresentation("");
-		symbolField.setNullSettingAllowed(true);
 
-		nameField = new TextField("Namn");
-		nameField.setImmediate(true);
-		nameField.addValidator(new BeanValidator(Stock.class, "name"));
+		nameField = new POJOAttributeTextField<Stock>("Namn", Stock.class, "name");
 		nameField.addValueChangeListener(e -> valueChanged());
-		nameField.setNullRepresentation("");
-		nameField.setNullSettingAllowed(true);
 
 		okButton = new Button("OK");
 		okButton.addClickListener((Button.ClickListener) l -> {
@@ -93,10 +83,8 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 
 
 	private void bindToData() {
-		BeanItem<Stock> item = new BeanItem<Stock>(stock);
-
-		symbolField.setPropertyDataSource(item.getItemProperty("symbol"));
-		nameField.setPropertyDataSource(item.getItemProperty("name"));
+		symbolField.bindToData(stock);
+		nameField.bindToData(stock);
 	}
 
 	private void onOkClick() {

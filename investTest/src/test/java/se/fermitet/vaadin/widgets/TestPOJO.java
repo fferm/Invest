@@ -5,27 +5,38 @@ public class TestPOJO {
 	private int intAttribute;
 	private TestPOJO_Linked linkedAttribute;
 
+	public TestPOJO() {
+		this(null);
+	}
+	
+	public TestPOJO(String strAttribute) {
+		this(strAttribute, 0, null);
+	}
+	
+	public TestPOJO(String strAttribute, int intAttribute, TestPOJO_Linked linkedAttribute) {
+		super();
+		this.setStrAttribute(strAttribute);
+		this.setIntAttribute(intAttribute);
+		this.setLinkedAttribute(linkedAttribute);
+	}
 	
 	public int getIntAttribute() {
 		return intAttribute;
 	}
-	public TestPOJO setIntAttribute(int intAttribute) {
+	public void setIntAttribute(int intAttribute) {
 		this.intAttribute = intAttribute;
-		return this;
 	}
 	public String getStrAttribute() {
 		return strAttribute;
 	}
-	public TestPOJO setStrAttribute(String strAttribute) {
+	public void setStrAttribute(String strAttribute) {
 		this.strAttribute = strAttribute;
-		return this;
 	}
 	public TestPOJO_Linked getLinkedAttribute() {
 		return linkedAttribute;
 	}
-	public TestPOJO setLinkedAttribute(TestPOJO_Linked linkedAttribute) {
+	public void setLinkedAttribute(TestPOJO_Linked linkedAttribute) {
 		this.linkedAttribute = linkedAttribute;
-		return this;
 	}
 	
 	@Override

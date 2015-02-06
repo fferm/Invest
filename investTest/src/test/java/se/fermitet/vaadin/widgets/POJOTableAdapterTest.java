@@ -250,23 +250,23 @@ public class POJOTableAdapterTest {
 	private List<TestPOJO> getUnsortedTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
-		ret.add(new TestPOJO().setStrAttribute(null));
-		ret.add(new TestPOJO().setStrAttribute("E"));
-		ret.add(new TestPOJO().setStrAttribute("C"));
-		ret.add(new TestPOJO().setStrAttribute("A"));
-		ret.add(new TestPOJO().setStrAttribute(null));
-		ret.add(new TestPOJO().setStrAttribute("D"));
-		ret.add(new TestPOJO().setStrAttribute("B"));
+		ret.add(new TestPOJO(null));
+		ret.add(new TestPOJO("E"));
+		ret.add(new TestPOJO("C"));
+		ret.add(new TestPOJO("A"));
+		ret.add(new TestPOJO(null));
+		ret.add(new TestPOJO("D"));
+		ret.add(new TestPOJO("B"));
 		
 		return ret;
 	}
 	private List<TestPOJO> getTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
-		ret.add(new TestPOJO().setStrAttribute("Str 1").setIntAttribute(1).setLinkedAttribute(new TestPOJO_Linked("Linked 1")));
-		ret.add(new TestPOJO().setStrAttribute("Str 2").setIntAttribute(2).setLinkedAttribute(new TestPOJO_Linked("Linked 2")));
-		ret.add(new TestPOJO().setStrAttribute( null  ).setIntAttribute(3).setLinkedAttribute(new TestPOJO_Linked("Linked 3")));
-		ret.add(new TestPOJO().setStrAttribute("Str 4").setIntAttribute(4).setLinkedAttribute(null                           ));
+		ret.add(new TestPOJO("Str 1", 1, new TestPOJO_Linked("Linked 1")));
+		ret.add(new TestPOJO("Str 2", 2, new TestPOJO_Linked("Linked 2")));
+		ret.add(new TestPOJO(null,    3, new TestPOJO_Linked("Linked 3")));
+		ret.add(new TestPOJO("Str 4", 4, null));
 
 		return ret;
 	}
@@ -274,7 +274,7 @@ public class POJOTableAdapterTest {
 	private List<TestPOJO> getTestDataSecond() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
-		ret.add(new TestPOJO().setStrAttribute("Second 1").setIntAttribute(100).setLinkedAttribute(new TestPOJO_Linked("Second linked 1")));
+		ret.add(new TestPOJO("Second 1", 100, new TestPOJO_Linked("Second linked 1")));
 
 		return ret;
 
