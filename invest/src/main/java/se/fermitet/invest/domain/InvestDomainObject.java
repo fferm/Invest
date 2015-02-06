@@ -6,11 +6,11 @@ import javax.validation.constraints.NotNull;
 
 import org.mongodb.morphia.annotations.Id;
 
-class InvestDomainObject {
+abstract class InvestDomainObject {
 
 	@NotNull
 	@Id
-	private UUID id = UUID.randomUUID();
+	UUID id = UUID.randomUUID();
 
 	public UUID getId() {
 		return this.id;

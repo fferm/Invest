@@ -1,70 +1,80 @@
 package se.fermitet.invest.domain;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
 
-public class Transaction {
+public class Transaction extends InvestDomainObject {
 
+	@NotNull
 	private LocalDate date;
+	
+	@NotNull
+	@Valid
 	private Stock stock;
-	private Integer number;
+	
+	@Min(1)
+	private int number;
+	
+	@NotNull
 	private Money price;
 	private Money fee;
 
 	public Transaction() {
+		this(null, LocalDate.now(), 0, null, null);
+	}
+
+	public Transaction(Stock stock, LocalDate date, int number,	Money price, Money fee) {
 		super();
-		this.setDate(LocalDate.now());
+		setStock(stock);
+		setDate(date);
+		setNumber(number);
+		setPrice(price);
+		setFee(fee);
 	}
 
 	public LocalDate getDate() {
 		return this.date;
 	}
 
-	public Transaction setDate(LocalDate date) {
-		validateDate(date);
+	public void setDate(LocalDate date) {
 		this.date = date;
-		return this;
 	}
 
-	private void validateDate(LocalDate date) {
-		if (date == null) throw new IllegalArgumentException("Cannot set the date of a transaction to null");
-	}
-	
 	public Stock getStock() {
 		return this.stock;
 	}
 
-	public Transaction setStock(Stock stock) {
+	public void setStock(Stock stock) {
 		this.stock = stock;
-		return this;
 	}
 
-	public Integer getNumber() {
+	public int getNumber() {
 		return this.number;
 	}
 
-	public Transaction setNumber(Integer number) {
+	public void setNumber(int number) {
 		this.number = number;
-		return this;
 	}
 
 	public Money getPrice() {
 		return this.price;
 	}
 
-	public Transaction setPrice(Money price) {
+	public void setPrice(Money price) {
 		this.price = price;
-		return this;
 	}
 
 	public Money getFee() {
 		return this.fee;
 	}
 
-	public Transaction setFee(Money fee) {
+	public void setFee(Money fee) {
 		this.fee = fee;
-		return this;
 	}
 
 	@Override
@@ -73,7 +83,7 @@ public class Transaction {
 		int result = 1;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((fee == null) ? 0 : fee.hashCode());
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
+		result = prime * result + number;
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		result = prime * result + ((stock == null) ? 0 : stock.hashCode());
 		return result;
@@ -98,10 +108,7 @@ public class Transaction {
 				return false;
 		} else if (!fee.equals(other.fee))
 			return false;
-		if (number == null) {
-			if (other.number != null)
-				return false;
-		} else if (!number.equals(other.number))
+		if (number != other.number)
 			return false;
 		if (price == null) {
 			if (other.price != null)
@@ -117,5 +124,4 @@ public class Transaction {
 	}
 
 	
-
 }
