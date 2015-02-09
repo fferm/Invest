@@ -3,7 +3,6 @@ package se.fermitet.invest.webui.views;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -11,6 +10,7 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.StockListPresenter;
+import se.fermitet.invest.testData.StockDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import se.fermitet.vaadin.navigation.URIParameter;
@@ -19,7 +19,7 @@ import com.vaadin.ui.Button;
  
 public class StockListViewImplTest {
 	private StockListViewImpl view;
-	private ArrayList<Stock> testStocks;
+	private List<Stock> testStocks;
 	private StockListPresenter mockedPresenter;
 
 	@Before
@@ -33,11 +33,7 @@ public class StockListViewImplTest {
 	}
 	
 	private void initTestStocks() {
-		testStocks = new ArrayList<Stock>();
-		
-		testStocks.add(new Stock("Name 1", "TST1"));
-		testStocks.add(new Stock("Name 2", "TST2"));
-		testStocks.add(new Stock("TST3"));
+		testStocks = new StockDataProvider().getTestStocks();
 	}
 
 	@Test
@@ -120,7 +116,6 @@ public class StockListViewImplTest {
 		Stock testStock = new Stock("Test", "TST");
 		
 		view.navigateToSingleStockView(testStock);
-		// TODO
 		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
 	}
 }

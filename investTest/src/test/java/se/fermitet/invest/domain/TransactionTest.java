@@ -221,6 +221,15 @@ public class TransactionTest {
 		Set<ConstraintViolation<Transaction>> results = validator.validate(invalidStock);
 		assertTrue("size", results.size() > 0);
 	}
+	
+	@Test
+	public void testValidateEmpty() throws Exception {
+		Transaction empty = new Transaction();
+		
+		@SuppressWarnings("unused")
+		Set<ConstraintViolation<Transaction>> results = validator.validate(empty);
+		// Should not give weird exceptions
+	}
 
 	private void checkValidatorResults(Set<ConstraintViolation<Transaction>> results, String propertyName) {
 		assertTrue(propertyName + " size", results.size() > 0);

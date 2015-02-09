@@ -71,7 +71,7 @@ public class POJOTableAdapter<POJOCLASS> implements Serializable {
 	}
 
 	public void setData(List<POJOCLASS> allData) {
-		this.data = allData;
+		this.data = new ArrayList<POJOCLASS>(allData);
 
 		if (sortGetter != null) performSortOnData();
 		

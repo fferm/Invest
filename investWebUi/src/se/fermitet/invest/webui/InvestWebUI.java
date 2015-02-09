@@ -3,6 +3,7 @@ package se.fermitet.invest.webui;
 import javax.servlet.annotation.WebServlet;
 
 import se.fermitet.invest.webui.views.SingleStockViewImpl;
+import se.fermitet.invest.webui.views.SingleTransactionViewImpl;
 import se.fermitet.invest.webui.views.StockListViewImpl;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
@@ -18,6 +19,7 @@ public class InvestWebUI extends UI {
 
 	public final static String STOCKLISTVIEW = "stockListView";
 	public final static String SINGLESTOCKVIEW = "singleStock";
+	public final static String SINGLETRANSACTIONVIEW = "singletransaction";
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = InvestWebUI.class)
@@ -32,8 +34,9 @@ public class InvestWebUI extends UI {
 		
 		navigator.addView(STOCKLISTVIEW, StockListViewImpl.class);
 		navigator.addView(SINGLESTOCKVIEW, SingleStockViewImpl.class);
+		navigator.addView(SINGLETRANSACTIONVIEW, SingleTransactionViewImpl.class);
 
-		navigator.navigateTo(STOCKLISTVIEW);
+		navigator.navigateTo(SINGLETRANSACTIONVIEW);
 	}
 	
 	public DirectionalNavigator getDirectionalNavigator() {
