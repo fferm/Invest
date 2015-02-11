@@ -3,6 +3,7 @@ package se.fermitet.invest.webui.views;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -19,7 +20,8 @@ import com.vaadin.ui.Button;
  
 public class StockListViewImplTest {
 	private StockListViewImpl view;
-	private List<Stock> testStocks;
+	private List<Stock> testStocksUnsorted;
+	private List<Stock> testStocksSorted;
 	private StockListPresenter mockedPresenter;
 
 	@Before
@@ -29,11 +31,18 @@ public class StockListViewImplTest {
 
 		initTestStocks();
 		
-		view.displayStocks(testStocks);
+		view.displayStocks(testStocksUnsorted);
 	}
 	
 	private void initTestStocks() {
-		testStocks = new StockDataProvider().getTestStocks();
+		testStocksUnsorted = new ArrayList<Stock>(new StockDataProvider().getTestStocks());
+
+		testStocksSorted = new ArrayList<Stock>(testStocksUnsorted);
+		testStocksSorted.sort((Stock o1, Stock o2) -> {
+			String o1Symbol = o1.getSymbol();
+			String o2Symbol = o2.getSymbol();
+			return o1Symbol.compareTo(o2Symbol);
+		});
 	}
 
 	@Test
@@ -46,7 +55,7 @@ public class StockListViewImplTest {
 	@Test
 	public void testCallingDisplayStocksDisplaysStocks() throws Exception {
 		List<Stock> displayedData = view.stockTableAdapter.getData();
-		assertArrayEquals(testStocks.toArray(), displayedData.toArray());
+		assertArrayEquals(testStocksSorted.toArray(), displayedData.toArray());
 	}
 	
 	@Test
@@ -86,7 +95,7 @@ public class StockListViewImplTest {
 		assertNotNull("not null", editButton);
 		
 		view.stockTable.select(0);
-		Stock selectedStock = testStocks.get(0);
+		Stock selectedStock = testStocksSorted.get(0);
 		
 		editButton.click();
 		
@@ -95,8 +104,8 @@ public class StockListViewImplTest {
 	
 	@Test
 	public void testDeleteButton() throws Exception {
-		int idx = 1;
-		Stock toDelete = testStocks.get(idx);
+		int idx = 2;
+		Stock toDelete = testStocksSorted.get(idx);
 		
 		view.stockTable.select(idx);
 		view.deleteButton.click();

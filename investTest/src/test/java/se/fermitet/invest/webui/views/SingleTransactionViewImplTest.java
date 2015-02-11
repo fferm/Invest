@@ -3,10 +3,11 @@ package se.fermitet.invest.webui.views;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
@@ -14,6 +15,7 @@ import se.fermitet.invest.presenter.SingleTransactionPresenter;
 import se.fermitet.invest.testData.StockDataProvider;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.ComboBox;
 
 public class SingleTransactionViewImplTest {
 	private SingleTransactionViewImpl view;
@@ -42,13 +44,27 @@ public class SingleTransactionViewImplTest {
 	}
 	
 	@Test
-	@Ignore // TODO
-	public void testCallingShowStocksInSelectionDisplaysStocks() throws Exception {
+	public void testCallingShowStocksInSelectionDisplaysSymbolsSorted() throws Exception {
 		List<Stock> testStocks = new StockDataProvider().getTestStocks();
 		
 		view.showStocksInSelection(testStocks);
 
-		fail("continue this test");
+		ComboBox stockCombo = view.stockComboAdapter.getUI();
+		assertEquals("size", testStocks.size(), stockCombo.size());
+		
+		List<String> desiredCaptions = new ArrayList<String>();
+		for (Stock testStock : testStocks) {
+			desiredCaptions.add(testStock.getSymbol());
+		}
+		Collections.sort(desiredCaptions);
+		
+		int i = 0;
+		for(Object itemId : stockCombo.getItemIds()) {
+			String caption = stockCombo.getItemCaption(itemId);
+			assertEquals("Idx: " + i, desiredCaptions.get(i), caption);
+			
+			i++;
+		}
 	}
 
 

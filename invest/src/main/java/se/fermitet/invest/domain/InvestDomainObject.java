@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.json.JSONObject;
 import org.mongodb.morphia.annotations.Id;
 
 abstract class InvestDomainObject {
@@ -14,6 +15,11 @@ abstract class InvestDomainObject {
 
 	public UUID getId() {
 		return this.id;
+	}
+	
+	@Override
+	public String toString() {
+		return new JSONObject(this).toString();
 	}
 
 }

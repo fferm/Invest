@@ -9,6 +9,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.json.JSONObject;
 import org.junit.Test;
 
 public class StockTest {
@@ -114,6 +115,20 @@ public class StockTest {
 		
 		assertTrue("Equal objects have same hash", s1.hashCode() == s2.hashCode());
 		assertTrue("Equal objects have same hash (both have null names", nullName1.hashCode() == nullName2.hashCode());
+	}
+	
+	@Test
+	public void testToString() throws Exception {
+		String symbol = "SYMBOL";
+		String name = "NAME";
+		
+		Stock empty = new Stock();
+		Stock hasSymbol = new Stock(symbol);
+		Stock hasBoth = new Stock(name, symbol);
+		
+		assertEquals("hasBoth", new JSONObject(hasBoth).toString(), hasBoth.toString());
+		assertEquals("hasSymbol", new JSONObject(hasSymbol).toString(), hasSymbol.toString());
+		assertEquals("empty", new JSONObject(empty).toString(), empty.toString());
 	}
 
 	

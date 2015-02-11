@@ -20,9 +20,9 @@ public class StockDataProvider {
 	private void initTestStocks() {
 		testStocks = new ArrayList<Stock>();
 		
-		testStocks.add(new Stock("Name 1", "TST1"));
-		testStocks.add(new Stock("Name 2", "TST2"));
-		testStocks.add(new Stock("TST3"));
+		testStocks.add(new Stock("Name 1", "C"));
+		testStocks.add(new Stock("Name 2", "B"));
+		testStocks.add(new Stock("A"));
 	}
 
 }
