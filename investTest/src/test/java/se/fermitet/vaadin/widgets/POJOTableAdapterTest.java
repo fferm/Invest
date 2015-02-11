@@ -1,30 +1,25 @@
 package se.fermitet.vaadin.widgets;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import se.fermitet.vaadin.widgets.POJOTableAdapter.SelectionListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
 
-public class POJOTableAdapterTest {
-	private POJOTableAdapter<TestPOJO> tableAdapter;
+@SuppressWarnings("rawtypes")
+public class POJOTableAdapterTest extends POJOAbstractSelectAdapterTest<POJOTableAdapter>{
 
-	@Before
-	public void setUp() throws Exception {
-		tableAdapter = new POJOTableAdapter<TestPOJO>(TestPOJO.class);
+	protected POJOTableAdapter<TestPOJO> createAdapter() {
+		return new POJOTableAdapter<TestPOJO>(TestPOJO.class);
 	}
-
+	
 	@Test
 	public void testSimpleConstructor() throws Exception {
 		POJOTableAdapter<TestPOJO> table = new POJOTableAdapter<TestPOJO>(TestPOJO.class);
@@ -42,17 +37,12 @@ public class POJOTableAdapterTest {
 
 	@Test
 	public void testGetTable() throws Exception {
-		Table table = tableAdapter.getTable();
+		Table table = adapter.getTable();
 
 		assertNotNull(table);
 	}
 
-	@Test
-	public void testSetDataAfterColumnDefinitionShouldNotGiveRuntimeException () throws Exception {
-		setColumnDefinitions();
-		tableAdapter.setData(getTestData());
-	}
-
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testHeaderHandling() throws Exception {
 		String propWithText = "intAttribute";
@@ -62,39 +52,22 @@ public class POJOTableAdapterTest {
 		List<ColumnDefinition> defs = new ArrayList<ColumnDefinition>();
 		defs.add(new ColumnDefinition(propWithText, propText));
 		defs.add(new ColumnDefinition(propWithoutText, null));
-		tableAdapter.setColumns(defs);
-		tableAdapter.setData(getTestData());
+		adapter.setVisibleData(defs);
+		adapter.setData(testData);
 		
-		assertEquals("normal text", propText, tableAdapter.getTable().getColumnHeader(propWithText));
-		assertEquals("empty", "", tableAdapter.getTable().getColumnHeader(propWithoutText));
+		assertEquals("normal text", propText, adapter.getTable().getColumnHeader(propWithText));
+		assertEquals("empty", "", adapter.getTable().getColumnHeader(propWithoutText));
 	}
 	
-	@Test
-	public void testTableSize() throws Exception {
-		setColumnDefinitions();
-
-		assertEquals("Empty before", 0, tableAdapter.getTable().size());
-
-		List<TestPOJO> testData = getTestData();
-		tableAdapter.setData(testData);
-
-		assertEquals("Size after", testData.size(), tableAdapter.getTable().size());
-
-		// Call again and check size 
-		List<TestPOJO> testDataSecond = getTestDataSecond();
-		tableAdapter.setData(testDataSecond);
-		assertEquals("Size after second", testDataSecond.size(), tableAdapter.getTable().size());
-	}
-
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testDisplayedData() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getTestData();
-		tableAdapter.setData(testData);
+		defineVisibleData();
+		adapter.setData(testData);
 
 		int i = 0;
-		for (Object itemId : tableAdapter.getTable().getItemIds()) {
-			Item item = tableAdapter.getTable().getItem(itemId);
+		for (Object itemId : adapter.getTable().getItemIds()) {
+			Item item = adapter.getTable().getItem(itemId);
 			TestPOJO pojo = testData.get(i);
 
 			for (Object propId : item.getItemPropertyIds()) {
@@ -120,164 +93,31 @@ public class POJOTableAdapterTest {
 		}
 	}
 
-	@Test
-	public void testGetData() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getTestData();
-		tableAdapter.setData(testData);
-
-		List<TestPOJO> dataFromTable = tableAdapter.getData();
-		assertArrayEquals(testData.toArray(), dataFromTable.toArray());
-
-		// Check that it is unmodifiable
-		try {
-			dataFromTable.add(null);
-			fail("Adding items to the data from table should give exception");
-		} catch (UnsupportedOperationException e) {
-			// OK
-		} catch (Exception e) {
-			fail("Got exception.  Msg: " + e.getMessage() + "     type was: " + e.getClass().getName());
-		}
-
-	}
-
-	private void setColumnDefinitions() {
+	@SuppressWarnings("unchecked")
+	protected void defineVisibleData() {
 		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
 		colDefs.add(new ColumnDefinition("strAttribute", "String attribute"));
 		colDefs.add(new ColumnDefinition("intAttribute", "Int attribute"));
 		colDefs.add(new ColumnDefinition("linkedAttribute.stringAttribute", "Linked attribute"));
 		
-		tableAdapter.setColumns(colDefs);
-	}
-
-	@Test
-	public void testSelection() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getTestData();
-		tableAdapter.setData(testData);
-
-		assertNull("Null selection before", tableAdapter.getSelectedData());
-
-		TestPOJO toSelect = testData.get(0);
-		tableAdapter.select(toSelect);
-
-		assertEquals("selectedItem", toSelect, tableAdapter.getSelectedData());
-
-		tableAdapter.select(null);
-		assertNull("Null selection when select(null) is called", tableAdapter.getSelectedData());
-
-		tableAdapter.select(toSelect);
-		tableAdapter.unselect();
-
-		assertNull("Null selection when unselect is called", tableAdapter.getSelectedData());
+		adapter.setVisibleData(colDefs);
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test
-	public void testSelectionFiresSelectionEvent() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getTestData();
-		tableAdapter.setData(testData);
+	@Override
+	protected void defineIllegalColumn() {
+		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
+		colDefs.add(new ColumnDefinition("ILLEGAL", null));
 		
-		Integer idxOfItemToSelect = 1;
-		TestPOJO selectedPOJO = testData.get(idxOfItemToSelect);
-
-		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
-		tableAdapter.addSelectionListener(listener);
-
-		tableAdapter.getTable().select(idxOfItemToSelect);
-		verify(listener).onSelect(1, selectedPOJO);
+		adapter.setVisibleData(colDefs);
 	}
-	
-	@Test
-	public void testUnselectionFiresSelectionEventWithNullParameters() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getTestData();
-		tableAdapter.setData(testData);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void defineIllegalNestedColumn() {
+		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
+		colDefs.add(new ColumnDefinition("linkedAttribute.ILLEGAL", null));
 		
-		Integer idxOfItemToSelect = 1;
-
-		tableAdapter.getTable().select(idxOfItemToSelect);
-
-		@SuppressWarnings("unchecked")
-		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
-		tableAdapter.addSelectionListener(listener);
-
-		tableAdapter.getTable().unselect(idxOfItemToSelect);
-		verify(listener).onSelect(null,  null);
+		adapter.setVisibleData(colDefs);
 	}
-	
-	@Test
-	public void testSorting_sortOrderAfterSetData() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getUnsortedTestData();
-		
-		tableAdapter.setData(testData);
-		tableAdapter.setSortOrder("strAttribute");
-
-		assessSortOrder();
-	}
-
-	@Test
-	public void testSorting_sortOrderBeforeSetData() throws Exception {
-		setColumnDefinitions();
-		List<TestPOJO> testData = getUnsortedTestData();
-		
-		tableAdapter.setSortOrder("strAttribute");
-		tableAdapter.setData(testData);
-
-		assessSortOrder();
-	}
-
-	private void assessSortOrder() {
-		List<TestPOJO> dataFromTable = tableAdapter.getData();
-		
-		String prev = null;
-		boolean onFirst = false;
-		for (TestPOJO testPOJO : dataFromTable) {
-			String current = testPOJO.getStrAttribute();
-			
-			if (!onFirst) assertNotNull("Shouldn't start with a null value", current);
-			else if (prev != null && current != null) assertTrue(current.compareTo(prev) >= 1);
-			else if (prev != null && current == null) {} // do nothing
-			else if (prev == null && current != null) fail("a value cannot be after null.  Value = " + current);
-				
-			onFirst = true;
-			prev = current;
-		}
-	}
-
-	private List<TestPOJO> getUnsortedTestData() {
-		List<TestPOJO> ret = new ArrayList<TestPOJO>();
-
-		ret.add(new TestPOJO(null));
-		ret.add(new TestPOJO("E"));
-		ret.add(new TestPOJO("C"));
-		ret.add(new TestPOJO("A"));
-		ret.add(new TestPOJO(null));
-		ret.add(new TestPOJO("D"));
-		ret.add(new TestPOJO("B"));
-		
-		return ret;
-	}
-	private List<TestPOJO> getTestData() {
-		List<TestPOJO> ret = new ArrayList<TestPOJO>();
-
-		ret.add(new TestPOJO("Str 1", 1, new TestPOJO_Linked("Linked 1")));
-		ret.add(new TestPOJO("Str 2", 2, new TestPOJO_Linked("Linked 2")));
-		ret.add(new TestPOJO(null,    3, new TestPOJO_Linked("Linked 3")));
-		ret.add(new TestPOJO("Str 4", 4, null));
-
-		return ret;
-	}
-
-	private List<TestPOJO> getTestDataSecond() {
-		List<TestPOJO> ret = new ArrayList<TestPOJO>();
-
-		ret.add(new TestPOJO("Second 1", 100, new TestPOJO_Linked("Second linked 1")));
-
-		return ret;
-
-	}
-
 }

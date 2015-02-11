@@ -63,7 +63,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 		cols.add(new ColumnDefinition("symbol", "Ticker"));
 		cols.add(new ColumnDefinition("name", "Namn"));
 
-		stockTableAdapter.setColumns(cols);
+		stockTableAdapter.setVisibleData(cols);
 		stockTableAdapter.addSelectionListener((Integer idx, Stock selectedStock) -> handleSelectionEvent(idx, selectedStock));
 		stockTableAdapter.setSortOrder("symbol");
 		

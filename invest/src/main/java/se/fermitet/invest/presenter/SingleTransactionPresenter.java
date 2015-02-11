@@ -11,7 +11,8 @@ public class SingleTransactionPresenter extends Presenter<SingleTransactionView,
 	protected StocksModel stocksModel;
 
 	public SingleTransactionPresenter(SingleTransactionView view) {
-		super(view, TransactionModel.class);
+		// TODO: change to TransactionModel
+		super(view, StocksModel.class);
 		
 		this.stocksModel = createStocksModel();
 	}
