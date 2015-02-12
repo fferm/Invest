@@ -25,8 +25,21 @@ public class ModelsTest {
 		assertEquals(StocksModel.class, obj.getClass());
 	}
 	
+	@Test
+	public void testTransactionModelBasedOnClass() throws Exception {
+		Model obj = Models.fromClass(TransactionModel.class);
+		
+		assertNotNull(obj);
+		assertEquals(TransactionModel.class, obj.getClass());
+	}
+	
 	@Test(expected = InvestException.class)
-	public void testModelBasedOnUnknownClassGivesException() throws Exception {
+	public void testModelBasedOnNullClassGivesException() throws Exception {
 		Models.fromClass(null);
+	}
+	
+	@Test(expected = InvestException.class)
+	public void testModelBasedOnNonModelClassGivesException() throws Exception {
+		Models.fromClass(Model.class);
 	}
 }
