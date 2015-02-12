@@ -3,12 +3,12 @@ package se.fermitet.invest.presenter;
 import java.util.UUID;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.SingleStockView;
 
-public class SingleStockPresenter extends Presenter<SingleStockView, StocksModel>{
+public class SingleStockPresenter extends Presenter<SingleStockView, StockModel>{
 	public SingleStockPresenter(SingleStockView view) {
-		super(view, StocksModel.class);
+		super(view, StockModel.class);
 	}
 	
 	public Stock getStockBasedOnIdString(String idString) {

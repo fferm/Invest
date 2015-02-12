@@ -1,14 +1,14 @@
 package se.fermitet.invest.presenter;
 
 import se.fermitet.invest.model.Models;
-import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.model.TransactionModel;
 import se.fermitet.invest.viewinterface.SingleTransactionView;
 
 
 public class SingleTransactionPresenter extends Presenter<SingleTransactionView, TransactionModel>{
 
-	protected StocksModel stocksModel;
+	protected StockModel stocksModel;
 
 	public SingleTransactionPresenter(SingleTransactionView view) {
 		super(view, TransactionModel.class);
@@ -20,8 +20,8 @@ public class SingleTransactionPresenter extends Presenter<SingleTransactionView,
 		this.view.showStocksInSelection(stocksModel.getAllStocks());
 	}
 
-	protected StocksModel createStocksModel() {
-		return (StocksModel) Models.fromClass(StocksModel.class);
+	protected StockModel createStocksModel() {
+		return (StockModel) Models.fromClass(StockModel.class);
 	}
 
 }

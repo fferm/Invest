@@ -15,7 +15,7 @@ import se.fermitet.invest.storage.Storage;
 import se.fermitet.invest.storage.StorageFactory;
 
 public class StocksModelTest {
-	private StocksModel stocksModelWithTestStorageFactory;
+	private StockModel stocksModelWithTestStorageFactory;
 	private Storage mockedStorage;
 
 	@Before
@@ -26,7 +26,7 @@ public class StocksModelTest {
 	
 	@Test
 	public void testNoPublicConstructor() throws Exception {
-		Constructor<?>[] constructors = StocksModel.class.getConstructors();
+		Constructor<?>[] constructors = StockModel.class.getConstructors();
 		for (@SuppressWarnings("rawtypes") Constructor constructor : constructors) {
 			assertTrue("Found a public constructor: " + constructor, (constructor.getModifiers() & Modifier.PUBLIC) == 0);
 		}
@@ -64,7 +64,7 @@ public class StocksModelTest {
 	}
 }
 
-class StocksModelWithTestStorageFactory extends StocksModel {
+class StocksModelWithTestStorageFactory extends StockModel {
 	public StocksModelWithTestStorageFactory() {
 		super();
 	}

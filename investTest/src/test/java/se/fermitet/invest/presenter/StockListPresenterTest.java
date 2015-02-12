@@ -9,13 +9,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.StockListView;
 
 public class StockListPresenterTest {
 	private StockListView mockedView;
 	private StockListPresenter presenter;
-	private StocksModel mockedModel;
+	private StockModel mockedModel;
 
 	@Before
 	public void setUp() throws Exception {
@@ -73,7 +73,7 @@ class TestStockListPresenter extends StockListPresenter {
 	}
 	
 	@Override
-	protected StocksModel createModel() {
-		return mock(StocksModel.class);
+	protected StockModel createModel() {
+		return mock(StockModel.class);
 	}
 }

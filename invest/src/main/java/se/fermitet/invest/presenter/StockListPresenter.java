@@ -1,13 +1,13 @@
 package se.fermitet.invest.presenter;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.StockListView;
 
-public class StockListPresenter extends Presenter<StockListView, StocksModel>{
+public class StockListPresenter extends Presenter<StockListView, StockModel>{
 
 	public StockListPresenter(StockListView view) {
-		super(view, StocksModel.class);
+		super(view, StockModel.class);
 	}
 
 	public void fillStockListWithAllStocks() {

@@ -9,14 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.model.StocksModel;
+import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.model.TransactionModel;
 import se.fermitet.invest.viewinterface.SingleTransactionView;
 
 public class SingleTransactionPresenterTest {
 	private SingleTransactionPresenter presenter;
 	private TransactionModel mockedModel;
-	private StocksModel mockedStocksModel;
+	private StockModel mockedStocksModel;
 	private SingleTransactionView mockedView;
 	
 	@Before
@@ -52,8 +52,8 @@ class TestSingleTransactionPresenter extends SingleTransactionPresenter {
 	}
 	
 	@Override
-	protected StocksModel createStocksModel() {
-		return mock(StocksModel.class);
+	protected StockModel createStocksModel() {
+		return mock(StockModel.class);
 	}
 	
 }

@@ -9,8 +9,8 @@ import se.fermitet.invest.exception.InvestException;
 public class ModelsTest {
 	@Test
 	public void testStocksModelsSame() throws Exception {
-		StocksModel mod1 = Models.stocksModel();
-		StocksModel mod2 = Models.stocksModel();
+		StockModel mod1 = Models.stocksModel();
+		StockModel mod2 = Models.stocksModel();
 		
 		assertNotNull(mod1);
 		assertNotNull(mod2);
@@ -19,10 +19,10 @@ public class ModelsTest {
 	
 	@Test
 	public void testStocksModelBasedOnClass() throws Exception {
-		Model obj = Models.fromClass(StocksModel.class);
+		Model obj = Models.fromClass(StockModel.class);
 		
 		assertNotNull(obj);
-		assertEquals(StocksModel.class, obj.getClass());
+		assertEquals(StockModel.class, obj.getClass());
 	}
 	
 	@Test
