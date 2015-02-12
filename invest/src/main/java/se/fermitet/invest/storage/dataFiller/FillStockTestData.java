@@ -17,7 +17,7 @@ public class FillStockTestData {
 
 		List<Stock> allPrevStocks = storage.getAllStocks();
 		for (Stock stock : allPrevStocks) {
-			storage.delete(stock);
+			storage.deleteStock(stock);
 		}
 		
 		

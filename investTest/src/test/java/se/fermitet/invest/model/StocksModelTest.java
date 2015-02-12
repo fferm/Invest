@@ -51,7 +51,7 @@ public class StocksModelTest {
 		Stock toDelete = new Stock("TO DELETE");
 		stocksModelWithTestStorageFactory.deleteStock(toDelete);
 		
-		verify(mockedStorage).delete(toDelete);
+		verify(mockedStorage).deleteStock(toDelete);
 	}
 	
 	@Test

@@ -35,7 +35,7 @@ class MongoStorage implements Storage {
 		ds.save(stock);
 	}
 	
-	public void delete(Stock stock) {
+	public void deleteStock(Stock stock) {
 		Datastore ds = getDatastore();
 		
 		ds.delete(stock);

@@ -33,7 +33,7 @@ public class StockModel extends Model {
 	}
 
 	public void deleteStock(Stock toDelete) {
-		storage.delete(toDelete);
+		storage.deleteStock(toDelete);
 	}
 
 }

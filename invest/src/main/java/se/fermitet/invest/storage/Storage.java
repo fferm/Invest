@@ -9,6 +9,6 @@ public interface Storage {
 	public List<Stock> getAllStocks();
 	public Stock getStockById(UUID id);
 	public void saveStock(Stock stock);
-	public void delete(Stock toDelete);
+	public void deleteStock(Stock toDelete);
 
 }
