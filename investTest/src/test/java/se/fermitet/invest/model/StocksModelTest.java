@@ -73,7 +73,7 @@ class StocksModelWithTestStorageFactory extends StockModel {
 	protected StorageFactory createStorageFactory() {
 		return new StorageFactory() {
 			@Override
-			protected Storage createStorage() {
+			public Storage getStorage() {
 				return mock(Storage.class);
 			}
 		};
