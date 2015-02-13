@@ -26,6 +26,7 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 
 	@Test
 	public void testStoreAndRetrieveOne() throws Exception {
+		objUnderTest.saveStock(this.stock);
 		objUnderTest.saveTransaction(transaction);
 
 		List<Transaction> all = objUnderTest.getAllTransactions();
