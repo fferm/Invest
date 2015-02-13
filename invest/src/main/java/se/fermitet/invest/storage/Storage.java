@@ -14,5 +14,6 @@ public interface Storage {
 
 	public List<Transaction> getAllTransactions();
 	public void saveTransaction(Transaction transaction);
+	public void deleteTransaction(Transaction t1);
 
 }

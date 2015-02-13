@@ -36,9 +36,7 @@ class MongoStorage implements Storage {
 	}
 
 	public void deleteStock(Stock stock) {
-		Datastore ds = getDatastore();
-		
-		ds.delete(stock);
+		delete(stock);
 	}
 	
 	
@@ -50,6 +48,11 @@ class MongoStorage implements Storage {
 	public void saveTransaction(Transaction transaction) {
 		save(transaction);
 	}
+	
+	public void deleteTransaction(Transaction t1) {
+		delete(t1);
+	}
+
 
 	
 	private List<?> getAll(Class<?> clazz) {
@@ -58,6 +61,10 @@ class MongoStorage implements Storage {
 	
 	private void save(Object obj) {
 		getDatastore().save(obj);
+	}
+	
+	private void delete(Object obj) {
+		getDatastore().delete(obj);
 	}
 
 	protected String getDbName() {
@@ -102,4 +109,5 @@ class MongoStorage implements Storage {
 	}
 
 
+	
 }
