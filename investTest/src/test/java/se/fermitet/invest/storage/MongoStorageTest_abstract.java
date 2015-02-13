@@ -11,17 +11,17 @@ import org.mongodb.morphia.mapping.MappedClass;
 import com.mongodb.MongoClient;
 
 public abstract class MongoStorageTest_abstract {
-	protected TestMongoStorage objUnderTest;
+	protected Storage objUnderTest;
 	
 	@Before
 	public void setUp() throws Exception {
 		objUnderTest = new TestMongoStorage();
-		objUnderTest.cleanUpDatabase();
+		((TestMongoStorage) objUnderTest).cleanUpDatabase();
 	}
 	
 	@After
 	public void tearDown() throws Exception {
-		objUnderTest.cleanUpDatabase();
+		((TestMongoStorage) objUnderTest).cleanUpDatabase();
 	}
 	
 

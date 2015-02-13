@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
-
 public class Transaction extends InvestDomainObject {
 
 	@NotNull
@@ -41,8 +40,8 @@ public class Transaction extends InvestDomainObject {
 		return this.date;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setDate(LocalDate localDate) {
+		this.date = localDate;
 	}
 
 	public Stock getStock() {
