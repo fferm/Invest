@@ -14,6 +14,7 @@ public interface Storage {
 	public void deleteStock(Stock toDelete);
 
 	public List<Transaction> getAllTransactions();
+	public Transaction getTransactionById(UUID id);
 	public void saveTransaction(Transaction transaction);
 	public void deleteTransaction(Transaction t1);
 

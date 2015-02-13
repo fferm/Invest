@@ -4,36 +4,32 @@ import java.util.List;
 import java.util.UUID;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.storage.Storage;
-import se.fermitet.invest.storage.StorageFactory;
 
-public class StockModel extends Model {
+public class StockModel extends Model<Stock> {
 	
-	Storage storage;
-
 	StockModel() {
 		super();
-		storage = createStorageFactory().getStorage();
 	}
 
-	protected StorageFactory createStorageFactory() {
-		return new StorageFactory();
-	}
-	
-	public List<Stock> getAllStocks() {
+	@Override
+	public List<Stock> getAll() {
 		return storage.getAllStocks();
 	}
 	
-	public Stock getStockById(UUID id) {
+	@Override
+	public Stock getById(UUID id) {
 		return storage.getStockById(id);
 	}
 
+	@Override
 	public void save(Stock stock) {
 		storage.saveStock(stock);
 	}
 
-	public void deleteStock(Stock toDelete) {
+	@Override
+	public void delete(Stock toDelete) {
 		storage.deleteStock(toDelete);
 	}
+
 
 }

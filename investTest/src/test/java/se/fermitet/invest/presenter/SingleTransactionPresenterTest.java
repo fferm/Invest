@@ -30,11 +30,11 @@ public class SingleTransactionPresenterTest {
 	@Test
 	public void testProvideAllStocks() throws Exception {
 		List<Stock> list = new ArrayList<Stock>();
-		when(mockedStocksModel.getAllStocks()).thenReturn(list);
+		when(mockedStocksModel.getAll()).thenReturn(list);
 	
 		presenter.provideAllStocks();
 		
-		verify(mockedStocksModel).getAllStocks();
+		verify(mockedStocksModel).getAll();
 		verify(mockedView).showStocksInSelection(list);
 	}
 

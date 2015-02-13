@@ -49,7 +49,7 @@ public class SingleStockPresenterTest {
 		UUID id = UUID.randomUUID();
 		Stock expected = new Stock("TST", "TST");
 		
-		when(mockedModel.getStockById(id)).thenReturn(expected);
+		when(mockedModel.getById(id)).thenReturn(expected);
 		
 		Stock answer = presenter.getStockBasedOnIdString(id.toString());
 		

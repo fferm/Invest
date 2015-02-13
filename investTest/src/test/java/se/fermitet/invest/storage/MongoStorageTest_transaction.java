@@ -3,6 +3,7 @@ package se.fermitet.invest.storage;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
@@ -57,6 +58,29 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 		assertEquals("size", 1, allLeft.size());
 		assertTrue("contains", allLeft.contains(t2));
 	}
+	
+	@Test
+	public void testGetById() throws Exception {
+		Stock s1 = new Stock("S1", "S1");
+
+		objUnderTest.saveStock(s1);
+
+		Transaction t1 = new Transaction(s1, LocalDate.now(), -10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		Transaction t2 = new Transaction(s1, LocalDate.now().minusDays(10), 100, Money.parse("SEK 100"), Money.parse("SEK 2"));
+
+		objUnderTest.saveTransaction(t1);
+		objUnderTest.saveTransaction(t2);
+
+		Transaction fromDb = objUnderTest.getTransactionById(t1.getId());
+		
+		assertNotNull("not null", fromDb);
+		assertEquals("equal", t1, fromDb);
+		
+		Transaction shouldBeNull = objUnderTest.getTransactionById(UUID.randomUUID());
+		assertNull("should be null", shouldBeNull);
+	}
+	
+
 
 
 }

@@ -25,16 +25,14 @@ class MongoStorage implements Storage {
 	public List<Stock> getAllStocks() {
 		return (List<Stock>) getAll(Stock.class);
 	}
-	
+
 	public Stock getStockById(UUID id) {
-		Datastore ds = getDatastore();
-		
-		return ds.get(Stock.class, id);
+		return (Stock) getById(Stock.class, id);
 	}
-	
+
 	public Stock getStockBySymbol(String symbol) {
 		Query<Stock> q = getDatastore().createQuery(Stock.class).field("symbol").equal(symbol);
-		
+
 		return q.get();
 	}
 
@@ -46,31 +44,41 @@ class MongoStorage implements Storage {
 	public void deleteStock(Stock stock) {
 		delete(stock);
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	public List<Transaction> getAllTransactions() {
 		return (List<Transaction>) getAll(Transaction.class);
 	}
 
+	public Transaction getTransactionById(UUID id) {
+		return (Transaction) getById(Transaction.class, id);
+	}
+
 	public void saveTransaction(Transaction transaction) {
 		save(transaction);
 	}
-	
+
 	public void deleteTransaction(Transaction t1) {
 		delete(t1);
 	}
 
 
-	
+
+
+
 	private List<?> getAll(Class<?> clazz) {
 		return getDatastore().createQuery(clazz).asList();
 	}
-	
+
+	private Object getById(Class<?> clazz, UUID id) {
+		return getDatastore().get(clazz, id);
+	}
+
 	private void save(Object obj) {
 		getDatastore().save(obj);
 	}
-	
+
 	private void delete(Object obj) {
 		getDatastore().delete(obj);
 	}
@@ -115,8 +123,4 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
-
-
-
-	
 }

@@ -30,11 +30,11 @@ public class StockListPresenterTest {
 	@Test
 	public void testFillStockListWithAllStock() throws Exception {
 		List<Stock> list = new ArrayList<Stock>();
-		when(mockedModel.getAllStocks()).thenReturn(list);
+		when(mockedModel.getAll()).thenReturn(list);
 	
 		presenter.fillStockListWithAllStocks();
 		
-		verify(mockedModel).getAllStocks();
+		verify(mockedModel).getAll();
 		verify(mockedView).displayStocks(list);
 	}
 	
@@ -42,11 +42,11 @@ public class StockListPresenterTest {
 	public void testDeleteFromViewCallsModelDelete() throws Exception {
 		Stock toDelete = new Stock("TEST");
 		List<Stock> list = new ArrayList<Stock>();
-		when(mockedModel.getAllStocks()).thenReturn(list);
+		when(mockedModel.getAll()).thenReturn(list);
 		
 		presenter.onDeleteButtonClick(toDelete);
 		
-		verify(mockedModel).deleteStock(toDelete);
+		verify(mockedModel).delete(toDelete);
 		verify(mockedView).displayStocks(list);
 	}
 	

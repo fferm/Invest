@@ -17,7 +17,7 @@ public class SingleStockPresenter extends Presenter<SingleStockView, StockModel>
 		} else {
 			UUID id = UUID.fromString(idString);
 			
-			return model.getStockById(id);
+			return model.getById(id);
 		}
 	}
 

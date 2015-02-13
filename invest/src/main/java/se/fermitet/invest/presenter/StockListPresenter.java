@@ -11,7 +11,7 @@ public class StockListPresenter extends Presenter<StockListView, StockModel>{
 	}
 
 	public void fillStockListWithAllStocks() {
-		this.view.displayStocks(model.getAllStocks());
+		this.view.displayStocks(model.getAll());
 	}
 
 	public void onNewButtonClick() {
@@ -23,8 +23,8 @@ public class StockListPresenter extends Presenter<StockListView, StockModel>{
 	}
 
 	public void onDeleteButtonClick(Stock toDelete) {
-		model.deleteStock(toDelete);
-		view.displayStocks(model.getAllStocks());
+		model.delete(toDelete);
+		view.displayStocks(model.getAll());
 	}
 	
 

@@ -17,7 +17,7 @@ public class SingleTransactionPresenter extends Presenter<SingleTransactionView,
 	}
 
 	public void provideAllStocks() {
-		this.view.showStocksInSelection(stocksModel.getAllStocks());
+		this.view.showStocksInSelection(stocksModel.getAll());
 	}
 
 	protected StockModel createStocksModel() {
