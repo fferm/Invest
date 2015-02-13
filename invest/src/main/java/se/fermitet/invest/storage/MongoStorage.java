@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
@@ -30,6 +31,13 @@ class MongoStorage implements Storage {
 		
 		return ds.get(Stock.class, id);
 	}
+	
+	public Stock getStockBySymbol(String symbol) {
+		Query<Stock> q = getDatastore().createQuery(Stock.class).field("symbol").equal(symbol);
+		
+		return q.get();
+	}
+
 
 	public void saveStock(Stock stock) {
 		save(stock);
@@ -107,6 +115,7 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
+
 
 
 	
