@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -132,7 +133,7 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		adapter.setData(testData);
 		adapter.setSortOrder("strAttribute");
 
-		assessSortOrder();
+		assessSimpleSortOrder();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -144,11 +145,11 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		adapter.setSortOrder("strAttribute");
 		adapter.setData(testData);
 
-		assessSortOrder();
+		assessSimpleSortOrder();
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	private void assessSortOrder() {
+	private void assessSimpleSortOrder() {
 		List<TestPOJO> dataFromTable = adapter.getData();
 
 		String prev = null;
@@ -178,6 +179,43 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		ret.add(new TestPOJO("B"));
 
 		return ret;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSorting_multipleAttributes() throws Exception {
+		defineVisibleData();
+		
+		TestPOJO t1 = new TestPOJO("D", 1, null);
+		TestPOJO t2 = new TestPOJO("B", 3, null);
+		TestPOJO t3 = new TestPOJO(null, 3, null);
+		TestPOJO t4 = new TestPOJO("A", 5, null);
+		TestPOJO t5 = new TestPOJO("C", 5, null);
+		TestPOJO t6 = new TestPOJO("E", 5, null);
+		TestPOJO t7 = new TestPOJO(null, 5, null);
+
+		List<TestPOJO> expected = new ArrayList<TestPOJO>();
+		expected.add(t1);
+		expected.add(t2);
+		expected.add(t3);
+		expected.add(t4);
+		expected.add(t5);
+		expected.add(t6);
+		expected.add(t7);
+		
+		List<TestPOJO> shuffled = new ArrayList<TestPOJO>(expected);
+		Collections.shuffle(shuffled);
+		
+		List<String> sortOrder = new ArrayList<String>();
+		sortOrder.add("intAttribute");
+		sortOrder.add("strAttribute");
+		
+		adapter.setSortOrder(sortOrder);
+		adapter.setData(shuffled);
+		
+		List<TestPOJO> dataFromTable = adapter.getData();
+		
+		assertArrayEquals(expected.toArray(), dataFromTable.toArray());
 	}
 
 	@SuppressWarnings("unchecked")

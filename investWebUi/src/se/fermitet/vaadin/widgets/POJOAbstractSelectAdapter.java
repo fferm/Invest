@@ -1,15 +1,16 @@
 package se.fermitet.vaadin.widgets;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.DefaultItemSorter;
 import com.vaadin.ui.AbstractSelect;
 
 @SuppressWarnings("serial")
@@ -18,48 +19,61 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	private Class<POJOCLASS> pojoClass;
 	protected UICLASS ui;
 	protected BeanContainer<Integer, POJOCLASS> container;
-	private List<POJOCLASS> data;
-	private Method sortGetter;
 	private List<SelectionListener<POJOCLASS>> listeners;
+	private List<String> sortOrder;
 
 	POJOAbstractSelectAdapter(Class<POJOCLASS> pojoClass, String caption) {
 		super();
-		
+
 		this.pojoClass = pojoClass;
-		this.ui = createUI(caption);
-		this.ui.setImmediate(true);
-		
 		this.listeners = new ArrayList<SelectionListener<POJOCLASS>>();
-		
+
+		initContainer();
+		initUI(caption);
+	}
+
+	private void initContainer() {
 		this.container = new BeanContainer<Integer, POJOCLASS>(pojoClass);
+
+		this.container.setItemSorter(new DefaultItemSorter() {
+			@Override
+			protected int compareProperty(Object propertyId, boolean sortDirection, Item item1, Item item2) {
+				Object val1 = item1.getItemProperty(propertyId).getValue();
+				Object val2 = item2.getItemProperty(propertyId).getValue();
+
+				if (val1 == null) return sortDirection ? 1 : -1;
+				if (val2 == null) return sortDirection ? -1 : 1;
+
+				return super.compareProperty(propertyId, sortDirection, item1, item2);
+			}
+		});
+	}
+
+	private void initUI(String caption) {
+		this.ui = createUI(caption);
 		this.ui.setContainerDataSource(this.container);
-		
+		this.ui.setImmediate(true);
 		this.ui.addValueChangeListener((Property.ValueChangeEvent event) -> {
 			fireSelectionEvent(event);
 		});
 	}
-	
+
 	protected abstract UICLASS createUI(String caption);
 	protected abstract void updateUIFromData();
 
 	public UICLASS getUI() {
 		return ui;
 	}
-	
-	public void setData(List<POJOCLASS> allData) {
-		this.data = new ArrayList<POJOCLASS>(allData);
 
-		if (sortGetter != null) performSortOnData();
-		
-		updateFromData();
-	}
-	
-	private void updateFromData() {
-		updateContainerFromData();
+	public void setData(List<POJOCLASS> allData) {
+		updateContainerFromData(allData);
+
+		if (this.sortOrder != null) performSortOnData();
+
 		updateUIFromData();
 	}
-	
-	protected void updateContainerFromData() {
+
+	protected void updateContainerFromData(List<POJOCLASS> data) {
 		ui.removeAllItems();
 
 		int i = 0;
@@ -71,23 +85,40 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	}
 
 	public List<POJOCLASS> getData() {
-		return Collections.unmodifiableList(this.data);
-	}
-	
-	public void setSortOrder(String propertyId) {
-		this.sortGetter = findGetterMethod(propertyId);
-		
-		if (this.data != null) {
-			performSortOnData();
-			updateFromData();
+		List<POJOCLASS> ret = new ArrayList<POJOCLASS>();
+
+		for (Integer itemId : container.getItemIds()) {
+			ret.add(container.getItem(itemId).getBean());
 		}
+
+		return Collections.unmodifiableList(ret);
 	}
-	
+
+	public void setSortOrder(List<String> propertyIds) {
+		this.sortOrder = propertyIds;
+		performSortOnData();
+		updateUIFromData();
+	}
+
+	public void setSortOrder(String propertyId) {
+		List<String> propertyIds = new ArrayList<String>();
+		propertyIds.add(propertyId);
+		setSortOrder(propertyIds);
+	}
+
 	public void select(POJOCLASS toSelect) {
 		if (toSelect == null) {
 			ui.select(null);
 		} else {
-			ui.select(this.data.indexOf(toSelect));
+			for (Integer itemId : container.getItemIds()) {
+				BeanItem<POJOCLASS> item = container.getItem(itemId);
+				POJOCLASS bean = item.getBean();
+
+				if (bean.equals(toSelect)) {
+					ui.select(itemId);
+					return;
+				}
+			}
 		}
 	}
 
@@ -99,51 +130,20 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 		Integer selectedIdx = (Integer) ui.getValue();
 
 		if (selectedIdx != null) {
-			return data.get(selectedIdx);
+			Integer itemId = container.getIdByIndex(selectedIdx);
+			return container.getItem(itemId).getBean();
 		} else {
 			return null;
 		}
 	}
 
-
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void performSortOnData() {
-		Collections.sort(this.data, (Comparator<? super POJOCLASS>) (POJOCLASS o1, POJOCLASS o2) -> {
-			try {
-				Comparable s1 = (Comparable) sortGetter.invoke(o1);
-				Comparable s2 = (Comparable) sortGetter.invoke(o2);
-				
-				if (s1 == null) return 1;
-				if (s2 == null) return -1;
-				
-				else return s1.compareTo(s2);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new POJOUIException("Exception when trying to compare to property values", e);
-			}
-		});
+		Object[] propArray =  sortOrder.toArray();
+		boolean[] ascArray = new boolean[propArray.length];
+		for (int i = 0; i < ascArray.length; i++) ascArray[i] = true;
+
+		this.container.sort(propArray, ascArray);
 	}
-
-	private Method findGetterMethod(String propertyId) {
-		String propertyName = propertyId.substring(0, 1).toUpperCase() + propertyId.substring(1);
-
-		Method ret = null;
-
-		try {
-			try {
-				ret = pojoClass.getMethod("get" + propertyName, new Class[] {});
-			} catch (NoSuchMethodException e) {
-				ret = pojoClass.getMethod("is" + propertyName, new Class[] {});
-			}
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-			throw new POJOUIException("Exception when trying to find method is" + propertyName + " on class " + pojoClass.getName(), e);
-		}
-
-		return ret;
-	}
-
 
 	public interface SelectionListener<T> {
 		public void onSelect(Integer selectedIdx, T selectedPOJO);
@@ -156,11 +156,11 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	public void removeSelectionListener(SelectionListener<POJOCLASS> listener) {
 		listeners.remove(listener);
 	}
-	
+
 	protected void fireSelectionEvent(ValueChangeEvent event) {
 		Integer selectedIdx = (Integer) event.getProperty().getValue();
 
-		POJOCLASS selectedPOJO = selectedIdx == null ? null : this.data.get(selectedIdx);
+		POJOCLASS selectedPOJO = selectedIdx == null ? null : this.container.getItem(selectedIdx).getBean();
 
 		for (SelectionListener<POJOCLASS> listener : listeners) {
 			listener.onSelect(selectedIdx, selectedPOJO);
