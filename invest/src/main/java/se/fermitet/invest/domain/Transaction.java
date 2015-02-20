@@ -124,5 +124,15 @@ public class Transaction extends InvestDomainObject {
 		return true;
 	}
 
+	@Override
+	protected void initToStringProperties() throws NoSuchMethodException {
+		this.setToStringClassName("Transaction");
+		this.addToStringPropDef("stock", this.getClass().getMethod("getStock"));
+		this.addToStringPropDef("date", this.getClass().getMethod("getDate"));
+		this.addToStringPropDef("number", this.getClass().getMethod("getNumber"));
+		this.addToStringPropDef("price", this.getClass().getMethod("getPrice"));
+		this.addToStringPropDef("fee", this.getClass().getMethod("getFee"));
+	}
+
 	
 }

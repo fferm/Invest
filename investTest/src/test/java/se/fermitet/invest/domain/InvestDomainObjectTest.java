@@ -35,5 +35,11 @@ public class InvestDomainObjectTest {
 }
 
 class TestInvestDomainObject extends InvestDomainObject {
+
+	@Override
+	protected void initToStringProperties() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

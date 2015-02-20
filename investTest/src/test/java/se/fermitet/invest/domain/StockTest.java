@@ -9,7 +9,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.json.JSONObject;
 import org.junit.Test;
 
 public class StockTest {
@@ -126,9 +125,13 @@ public class StockTest {
 		Stock hasSymbol = new Stock(symbol);
 		Stock hasBoth = new Stock(name, symbol);
 		
-		assertEquals("hasBoth", new JSONObject(hasBoth).toString(), hasBoth.toString());
-		assertEquals("hasSymbol", new JSONObject(hasSymbol).toString(), hasSymbol.toString());
-		assertEquals("empty", new JSONObject(empty).toString(), empty.toString());
+		String expEmpty  = "[ Stock { symbol : null | name : null } ]";
+		String expSymbol = "[ Stock { symbol : " + symbol + " | name : null } ]";
+		String expBoth   = "[ Stock { symbol : " + symbol + " | name : " + name + " } ]";
+		
+		assertEquals("hasBoth", expBoth, hasBoth.toString());
+		assertEquals("hasSymbol", expSymbol, hasSymbol.toString());
+		assertEquals("empty", expEmpty, empty.toString());
 	}
 
 	

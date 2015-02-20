@@ -14,14 +14,14 @@ public class Stock extends InvestDomainObject {
 	public Stock() {
 		this(null, null);
 	}
-	
+
 	public Stock(String symbol) {
 		this(null, symbol);
 	}
 
 	public Stock(String name, String symbol) {
 		super();
-		
+
 		setName(name);
 		setSymbol(symbol);
 	}
@@ -33,7 +33,7 @@ public class Stock extends InvestDomainObject {
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -73,5 +73,12 @@ public class Stock extends InvestDomainObject {
 		return true;
 	}
 
-	
+	@Override
+	protected void initToStringProperties() throws NoSuchMethodException {
+		setToStringClassName("Stock");
+		addToStringPropDef("symbol", getClass().getMethod("getSymbol"));
+		addToStringPropDef("name", getClass().getMethod("getName"));
+	}
+
+
 }

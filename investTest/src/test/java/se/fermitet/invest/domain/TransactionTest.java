@@ -216,9 +216,9 @@ public class TransactionTest {
 	
 	@Test
 	public void testValidateValidStock() throws Exception {
-		Transaction invalidStock = new Transaction(new Stock(), LocalDate.now(), 0, Money.parse("SEK 100"), Money.parse("SEK 10"));
+		Transaction validStock = new Transaction(new Stock(), LocalDate.now(), 0, Money.parse("SEK 100"), Money.parse("SEK 10"));
 
-		Set<ConstraintViolation<Transaction>> results = validator.validate(invalidStock);
+		Set<ConstraintViolation<Transaction>> results = validator.validate(validStock);
 		assertTrue("size", results.size() > 0);
 	}
 	
@@ -236,5 +236,18 @@ public class TransactionTest {
 
 		ConstraintViolation<Transaction> violation = results.iterator().next();
 		assertEquals(propertyName + " path", propertyName, violation.getPropertyPath().toString());
+	}
+	
+	@Test
+	public void testToString() throws Exception {
+		Stock stock = new Stock();
+		LocalDate date = LocalDate.now();
+		Money price = Money.parse("SEK 100");
+		Money fee = Money.parse("SEK 10");
+		Transaction validStock = new Transaction(stock, date, 0, price, fee);
+	
+		String expected = "[ Transaction { stock : " + stock.toString() + " | date : " + date.toString() + " | number : 0 | price : " + price.toString() + " | fee : " + fee.toString() + " } ]";
+		
+		assertEquals(expected, validStock.toString());
 	}
 }

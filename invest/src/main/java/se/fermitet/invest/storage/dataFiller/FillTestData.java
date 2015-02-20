@@ -1,5 +1,6 @@
 package se.fermitet.invest.storage.dataFiller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.money.Money;
@@ -21,7 +22,7 @@ public class FillTestData {
 	public FillTestData(Storage storage) {
 		this.storage = storage;
 	}
-	
+
 	private void run() {
 		deleteAll();
 		fillAll();
@@ -33,50 +34,70 @@ public class FillTestData {
 	}
 
 	public void fillStocks() {
-		storage.saveStock(new Stock("Axis", "AXIS"));
-		storage.saveStock(new Stock("Handelsbanken B", "SHB B"));
-		storage.saveStock(new Stock("NET B"));
-		storage.saveStock(new Stock("SCA B", "SCA B"));
-		storage.saveStock(new Stock("AAK", "AAK"));
-		storage.saveStock(new Stock("Assa Abloy", "ASSA"));
-		storage.saveStock(new Stock("Billerud Korsnäs", "BILL"));
-		storage.saveStock(new Stock("Byggmax", "BMAX"));
-		storage.saveStock(new Stock("Fenix Outdoor", "FIX B"));
-		storage.saveStock(new Stock("Hemfosa","HEMF B"));
-		storage.saveStock(new Stock("Hexagon B", "HEXA B"));
-		storage.saveStock(new Stock("Latour", "LATO"));
-		storage.saveStock(new Stock("Lundbergs", "LUND"));
+		for (Stock stock : getStocks()) {
+			storage.saveStock(stock);
+		}
 
 		System.out.println("Saved stocks");
+
 	}
 
-	private void fillTransactions() {
-		fillAxisTransactions();
-		fillHemfosaTransactions();
+	public List<Stock> getStocks() {
+		List<Stock> ret = new ArrayList<Stock>();
+
+		ret.add(new Stock("Axis", "AXIS"));
+		ret.add(new Stock("Handelsbanken B", "SHB B"));
+		ret.add(new Stock("NET B"));
+		ret.add(new Stock("SCA B", "SCA B"));
+		ret.add(new Stock("AAK", "AAK"));
+		ret.add(new Stock("Assa Abloy", "ASSA"));
+		ret.add(new Stock("Billerud Korsnäs", "BILL"));
+		ret.add(new Stock("Byggmax", "BMAX"));
+		ret.add(new Stock("Fenix Outdoor", "FIX B"));
+		ret.add(new Stock("Hemfosa","HEMF B"));
+		ret.add(new Stock("Hexagon B", "HEXA B"));
+		ret.add(new Stock("Latour", "LATO"));
+		ret.add(new Stock("Lundbergs", "LUND"));
+
+		return ret;
 	}
-	
-	private void fillAxisTransactions() {
+
+	public void fillTransactions() {
 		Stock axis = storage.getStockBySymbol("AXIS");
+		fillSpecificTransactions(getAxisTransactions(axis), "AXIS");
 		
-		storage.saveTransaction(new Transaction(axis, new LocalDate(2006, 02, 06),  70, Money.parse("SEK  56.75"), Money.parse("SEK 9")));
-		storage.saveTransaction(new Transaction(axis, new LocalDate(2006, 06, 02),  15, Money.parse("SEK  61.25"), Money.parse("SEK 9")));
-		storage.saveTransaction(new Transaction(axis, new LocalDate(2007, 04, 26),   1, Money.parse("SEK 122.00"), Money.parse("SEK 9")));
-		storage.saveTransaction(new Transaction(axis, new LocalDate(2009,  4,  2),   9, Money.parse("SEK  52.50"), Money.parse("SEK 9")));
-		storage.saveTransaction(new Transaction(axis, new LocalDate(2009,  5,  4),   6, Money.parse("SEK  73.75"), Money.parse("SEK 9")));
-		storage.saveTransaction(new Transaction(axis, new LocalDate(2012,  8, 10), -15, Money.parse("SEK 174.50"), Money.parse("SEK 9")));
-		
-		System.out.println("Saved AXIS transactions");
-	}
-	
-	private void fillHemfosaTransactions() {
 		Stock hemfosa = storage.getStockBySymbol("HEMF B");
+		fillSpecificTransactions(getHemfosaTransactions(hemfosa), "Hemfosa");
+	}
+
+	private void fillSpecificTransactions(List<Transaction> transactions, String stockName) {
+		for (Transaction transaction : transactions) {
+			storage.saveTransaction(transaction);
+		}
+		System.out.println("Saved " + stockName + " transactions");
+	}
+
+	public List<Transaction> getAxisTransactions(Stock axis) {
+		List<Transaction> ret = new ArrayList<Transaction>();
+
+		ret.add(new Transaction(axis, new LocalDate(2006, 02, 06),  70, Money.parse("SEK  56.75"), Money.parse("SEK 9")));
+		ret.add(new Transaction(axis, new LocalDate(2006, 06, 02),  15, Money.parse("SEK  61.25"), Money.parse("SEK 9")));
+		ret.add(new Transaction(axis, new LocalDate(2007, 04, 26),   1, Money.parse("SEK 122.00"), Money.parse("SEK 9")));
+		ret.add(new Transaction(axis, new LocalDate(2009,  4,  2),   9, Money.parse("SEK  52.50"), Money.parse("SEK 9")));
+		ret.add(new Transaction(axis, new LocalDate(2009,  5,  4),   6, Money.parse("SEK  73.75"), Money.parse("SEK 9")));
+		ret.add(new Transaction(axis, new LocalDate(2012,  8, 10), -15, Money.parse("SEK 174.50"), Money.parse("SEK 9")));
 		
-		storage.saveTransaction(new Transaction(hemfosa, new LocalDate(2014, 6,  4),  48, Money.parse("SEK 109.50"), Money.parse("SEK 7.88")));
-		storage.saveTransaction(new Transaction(hemfosa, new LocalDate(2014, 7,  4),  20, Money.parse("SEK 114.25"), Money.parse("SEK 7.00")));
-		storage.saveTransaction(new Transaction(hemfosa, new LocalDate(2014, 9, 30),  58, Money.parse("SEK 112.75"), Money.parse("SEK 9.81")));
-		
-		System.out.println("Saved Hemfosa transactions");
-		
+		return ret;
+	}
+
+	public List<Transaction> getHemfosaTransactions(Stock hemfosa) {
+		List<Transaction> ret = new ArrayList<Transaction>();
+
+		ret.add(new Transaction(hemfosa, new LocalDate(2014, 6,  4),  48, Money.parse("SEK 109.50"), Money.parse("SEK 7.88")));
+		ret.add(new Transaction(hemfosa, new LocalDate(2014, 7,  4),  20, Money.parse("SEK 114.25"), Money.parse("SEK 7.00")));
+		ret.add(new Transaction(hemfosa, new LocalDate(2014, 9, 30),  58, Money.parse("SEK 112.75"), Money.parse("SEK 9.81")));
+
+		return ret;
 	}
 
 	private void deleteAll() {
@@ -89,7 +110,7 @@ public class FillTestData {
 		for(Transaction trans : all) {
 			storage.deleteTransaction(trans);
 		}
-		
+
 		System.out.println("Deleted transactions");
 	}
 

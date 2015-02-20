@@ -3,6 +3,7 @@ package se.fermitet.invest.presenter;
 import se.fermitet.invest.model.Model;
 import se.fermitet.invest.model.Models;
 
+@SuppressWarnings("rawtypes")
 public abstract class Presenter<VIEWINTERFACE, MODEL extends Model> {
 
 	protected VIEWINTERFACE view;

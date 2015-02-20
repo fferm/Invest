@@ -10,4 +10,8 @@ public class InvestException extends RuntimeException {
 	public InvestException(String msg) {
 		super(msg);
 	}
+	
+	public InvestException(String msg, Throwable t) {
+		super(msg, t);
+	}
 }
