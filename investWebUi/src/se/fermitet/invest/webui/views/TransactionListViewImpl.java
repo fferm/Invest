@@ -23,10 +23,10 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 	private static final long serialVersionUID = 2798795542114548594L;
 	
 	POJOTableAdapter<Transaction> tableAdapter;
-	private Table table;
-	private Button newButton;
-	private Button editButton;
-	private Button deleteButton;
+	Table table;
+	Button newButton;
+	Button editButton;
+	Button deleteButton;
 
 	@Override
 	protected Component createMainLayout() {
@@ -119,13 +119,14 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 
 
 	private void handleSelectionEvent(Integer idx, Transaction selected) {
-		throw new UnsupportedOperationException("unimplemented");
+		deleteButton.setEnabled(idx != null);
+		editButton.setEnabled(idx != null);
 	}
 
 
 	@Override
 	protected TransactionListPresenter createPresenter() {
-		throw new UnsupportedOperationException("unimplemented");
+		return new TransactionListPresenter(this);
 	}
 
 	@Override

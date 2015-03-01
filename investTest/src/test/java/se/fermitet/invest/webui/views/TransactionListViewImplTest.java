@@ -15,6 +15,8 @@ import se.fermitet.invest.presenter.TransactionListPresenter;
 import se.fermitet.invest.testData.TransactionDataProvider;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
+import com.vaadin.ui.Button;
+
 public class TransactionListViewImplTest {
 	private TransactionListViewImpl view;
 	private List<Transaction> testDataUnsorted;
@@ -64,6 +66,79 @@ public class TransactionListViewImplTest {
 		assertArrayEquals(testDataSorted.toArray(), displayedData.toArray());  // Sorting first by symbol, then by date
 	}
 	
+	@Test
+	public void testSelectionAffectstButtonsEnabledStatus() throws Exception {
+		Button deleteButton = view.deleteButton;
+		Button editButton = view.editButton;
+		
+		assertFalse("Before - delete", deleteButton.isEnabled());
+		assertFalse("Before - edit", editButton.isEnabled());
+		
+		view.table.select(1);
+		assertTrue("After select - delete", deleteButton.isEnabled());
+		assertTrue("After select - edit", editButton.isEnabled());
+
+		view.table.select(null);
+		assertFalse("After unselect - delete", deleteButton.isEnabled());
+		assertFalse("After unselect - edit", editButton.isEnabled());
+	}
+	
+	@Test
+	public void testNewButtonProperties() throws Exception {
+		fail("unimplemented");
+//		Button newButton = view.newButton;
+//		
+//		assertNotNull("not null", newButton);
+//		assertTrue("Enabled", newButton.isEnabled());
+//		assertTrue("Visible", newButton.isVisible());
+//		
+//		newButton.click();
+//		
+//		verify(mockedPresenter).onNewButtonClick();
+	}
+	
+	@Test
+	public void testEditButton() throws Exception {
+		fail("unimplemented");
+//		Button editButton = view.editButton;
+//		
+//		assertNotNull("not null", editButton);
+//		
+//		view.stockTable.select(0);
+//		Stock selectedStock = testStocksSorted.get(0);
+//		
+//		editButton.click();
+//		
+//		verify(mockedPresenter).onEditButtonClick(selectedStock);
+	}
+	
+	@Test
+	public void testDeleteButton() throws Exception {
+		int idx = 2;
+		Transaction toDelete = testDataSorted.get(idx);
+		
+		view.table.select(idx);
+		view.deleteButton.click();
+		
+		verify(mockedPresenter).onDeleteButtonClick(toDelete);
+	}
+	
+	@Test
+	public void testEditSingleStock_nullValue() throws Exception {
+		fail("unimplemented");
+//		view.navigateToSingleStockView(null);
+//		
+//		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
+	}
+
+	@Test
+	public void testEditSingleStock_notNullValue() throws Exception {
+		fail("unimplemented");
+//		Stock testStock = new Stock("Test", "TST");
+//		
+//		view.navigateToSingleStockView(testStock);
+//		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
+	}
 
 	
 

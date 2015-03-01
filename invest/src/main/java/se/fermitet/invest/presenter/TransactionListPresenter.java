@@ -2,15 +2,16 @@ package se.fermitet.invest.presenter;
 
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.model.TransactionModel;
+import se.fermitet.invest.viewinterface.TransactionListView;
 
-public class TransactionListPresenter extends Presenter<TransactionListPresenter, TransactionModel>{
+public class TransactionListPresenter extends Presenter<TransactionListView, TransactionModel>{
 
-	public TransactionListPresenter(TransactionListPresenter view) {
+	public TransactionListPresenter(TransactionListView view) {
 		super(view, TransactionModel.class);
 	}
 
 	public void fillViewWithData() {
-		throw new UnsupportedOperationException("unimplemented");
+		this.view.displayData(model.getAll());
 	}
 
 	public void onNewButtonClick() {
@@ -22,7 +23,8 @@ public class TransactionListPresenter extends Presenter<TransactionListPresenter
 	}
 
 	public void onDeleteButtonClick(Transaction selected) {
-		throw new UnsupportedOperationException("unimplemented");
+		model.delete(selected);
+		view.displayData(model.getAll());
 	}
 
 }
