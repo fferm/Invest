@@ -13,6 +13,7 @@ import org.junit.Test;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionListPresenter;
 import se.fermitet.invest.testData.TransactionDataProvider;
+import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.ui.Button;
@@ -85,16 +86,15 @@ public class TransactionListViewImplTest {
 	
 	@Test
 	public void testNewButtonProperties() throws Exception {
-		fail("unimplemented");
-//		Button newButton = view.newButton;
-//		
-//		assertNotNull("not null", newButton);
-//		assertTrue("Enabled", newButton.isEnabled());
-//		assertTrue("Visible", newButton.isVisible());
-//		
-//		newButton.click();
-//		
-//		verify(mockedPresenter).onNewButtonClick();
+		Button newButton = view.newButton;
+		
+		assertNotNull("not null", newButton);
+		assertTrue("Enabled", newButton.isEnabled());
+		assertTrue("Visible", newButton.isVisible());
+		
+		newButton.click();
+		
+		verify(mockedPresenter).onNewButtonClick();
 	}
 	
 	@Test
@@ -124,11 +124,10 @@ public class TransactionListViewImplTest {
 	}
 	
 	@Test
-	public void testEditSingleStock_nullValue() throws Exception {
-		fail("unimplemented");
-//		view.navigateToSingleStockView(null);
-//		
-//		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
+	public void testEditSingle_nullValue() throws Exception {
+		view.navigateToSingleTransactionView(null);
+		
+		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW);
 	}
 
 	@Test

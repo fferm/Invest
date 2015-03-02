@@ -8,4 +8,6 @@ public interface TransactionListView {
 	
 	public void displayData(List<Transaction> data);
 
+	public void navigateToSingleTransactionView(Transaction data);
+
 }

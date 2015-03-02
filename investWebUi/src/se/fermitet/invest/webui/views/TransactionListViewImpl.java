@@ -6,6 +6,7 @@ import java.util.List;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionListPresenter;
 import se.fermitet.invest.viewinterface.TransactionListView;
+import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
@@ -132,6 +133,15 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 	@Override
 	public void displayData(List<Transaction> data) {
 		tableAdapter.setData(data);
+	}
+
+	@Override
+	public void navigateToSingleTransactionView(Transaction data) {
+		if (data == null) {
+			getNavigator().navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW);
+		} else {
+			throw new UnsupportedOperationException("unimplemented");
+		}
 	}
 
 

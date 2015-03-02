@@ -52,11 +52,10 @@ public class TransactionListPresenterTest {
 	}
 	
 	@Test
-	public void testNewButtonClickCallsEditSingleStock() throws Exception {
-		fail("unimplemented");
-//		presenter.onNewButtonClick();
-//		
-//		verify(mockedView).navigateToSingleStockView(null);
+	public void testNewButtonClickCallsEditSingle() throws Exception {
+		presenter.onNewButtonClick();
+		
+		verify(mockedView).navigateToSingleTransactionView(null);
 	}
 	
 	@Test
