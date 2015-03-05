@@ -1,6 +1,5 @@
 package se.fermitet.invest.presenter;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -60,12 +59,10 @@ public class TransactionListPresenterTest {
 	
 	@Test
 	public void testEditButtonClickCallsEditSingleStock() throws Exception {
-		fail("unimplemented");
-//		Stock editStock = new Stock("TST", "TST");
-//		
-//		presenter.onEditButtonClick(editStock);
-//
-//		verify(mockedView).navigateToSingleStockView(editStock);
+		Transaction editObj = new Transaction();
+		presenter.onEditButtonClick(editObj);
+
+		verify(mockedView).navigateToSingleTransactionView(editObj);
 	}
 
 	

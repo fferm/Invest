@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import se.fermitet.vaadin.widgets.POJOAbstractSelectAdapter.SelectionListener;
 
+import com.vaadin.ui.AbstractSelect;
+
 
 @SuppressWarnings("rawtypes")
 public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbstractSelectAdapter> {
@@ -36,16 +38,18 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 	public void testSize() throws Exception {
 		defineVisibleData();
 
-		assertEquals("Empty before", 0, adapter.getUI().size());
+		AbstractSelect ui = (AbstractSelect) adapter.getUI();
+
+		assertEquals("Empty before", 0, ui.size());
 
 		adapter.setData(testData);
 
-		assertEquals("Size after", testData.size(), adapter.getUI().size());
+		assertEquals("Size after", testData.size(), ui.size());
 
 		// Call again and check size 
 		List<TestPOJO> testDataSecond = TestPOJO.getTestDataSecond();
 		adapter.setData(testDataSecond);
-		assertEquals("Size after second", testDataSecond.size(), adapter.getUI().size());
+		assertEquals("Size after second", testDataSecond.size(), ui.size());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,7 +106,7 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
 		adapter.addSelectionListener(listener);
 
-		adapter.getUI().select(idxOfItemToSelect);
+		((AbstractSelect) adapter.getUI()).select(idxOfItemToSelect);
 		verify(listener).onSelect(1, selectedPOJO);
 	}
 
@@ -114,12 +118,14 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 
 		Integer idxOfItemToSelect = 1;
 
-		adapter.getUI().select(idxOfItemToSelect);
+		AbstractSelect ui = (AbstractSelect) adapter.getUI();
+		
+		ui.select(idxOfItemToSelect);
 
 		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
 		adapter.addSelectionListener(listener);
 
-		adapter.getUI().unselect(idxOfItemToSelect);
+		ui.unselect(idxOfItemToSelect);
 		verify(listener).onSelect(null,  null);
 	}
 
@@ -170,11 +176,11 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 	private List<TestPOJO> getUnsortedTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
-		ret.add(new TestPOJO(null));
+		ret.add(new TestPOJO((String) null));
 		ret.add(new TestPOJO("E"));
 		ret.add(new TestPOJO("C"));
 		ret.add(new TestPOJO("A"));
-		ret.add(new TestPOJO(null));
+		ret.add(new TestPOJO((String) null));
 		ret.add(new TestPOJO("D"));
 		ret.add(new TestPOJO("B"));
 

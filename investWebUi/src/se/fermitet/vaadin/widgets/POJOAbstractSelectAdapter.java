@@ -1,6 +1,5 @@
 package se.fermitet.vaadin.widgets;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,22 +13,19 @@ import com.vaadin.data.util.DefaultItemSorter;
 import com.vaadin.ui.AbstractSelect;
 
 @SuppressWarnings("serial")
-abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSelect> implements Serializable {
+abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSelect> extends POJOAbstractAdapter<POJOCLASS, UICLASS> {
 
-	private Class<POJOCLASS> pojoClass;
-	protected UICLASS ui;
 	protected BeanContainer<Integer, POJOCLASS> container;
 	private List<SelectionListener<POJOCLASS>> listeners;
 	private List<String> sortOrder;
 
 	POJOAbstractSelectAdapter(Class<POJOCLASS> pojoClass, String caption) {
-		super();
+		super(pojoClass, caption);
 
-		this.pojoClass = pojoClass;
 		this.listeners = new ArrayList<SelectionListener<POJOCLASS>>();
 
 		initContainer();
-		initUI(caption);
+		configureUI();
 	}
 
 	private void initContainer() {
@@ -49,21 +45,14 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 		});
 	}
 
-	private void initUI(String caption) {
-		this.ui = createUI(caption);
+	private void configureUI() {
 		this.ui.setContainerDataSource(this.container);
-		this.ui.setImmediate(true);
 		this.ui.addValueChangeListener((Property.ValueChangeEvent event) -> {
 			fireSelectionEvent(event);
 		});
 	}
 
-	protected abstract UICLASS createUI(String caption);
 	protected abstract void updateUIFromData();
-
-	public UICLASS getUI() {
-		return ui;
-	}
 
 	public void setData(List<POJOCLASS> allData) {
 		updateContainerFromData(allData);

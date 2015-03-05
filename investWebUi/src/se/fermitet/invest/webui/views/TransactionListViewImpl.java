@@ -140,7 +140,7 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 		if (data == null) {
 			getNavigator().navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW);
 		} else {
-			throw new UnsupportedOperationException("unimplemented");
+			getNavigator().navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW, new URIParameter(data.getId().toString()));
 		}
 	}
 

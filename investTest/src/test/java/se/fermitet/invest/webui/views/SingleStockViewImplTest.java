@@ -14,7 +14,7 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class SingleStockViewImplTest {
-	private TestSingleStockViewImpl view;
+	private SingleStockViewImpl view;
 	private SingleStockPresenter mockedPresenter;
 
 	@Before
@@ -34,8 +34,8 @@ public class SingleStockViewImplTest {
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
-		assertEquals(nameValue, view.nameField.getValue());
-		assertEquals(symbolValue, view.symbolField.getValue());
+		assertEquals(nameValue, view.nameAdapter.getUI().getValue());
+		assertEquals(symbolValue, view.symbolAdapter.getUI().getValue());
 	}
 	
 	@Test
@@ -46,8 +46,8 @@ public class SingleStockViewImplTest {
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
-		assertNull(view.nameField.getValue());
-		assertNull(view.symbolField.getValue());
+		assertNull(view.nameAdapter.getUI().getValue());
+		assertNull(view.symbolAdapter.getUI().getValue());
 	}
 	
 	@Test
@@ -88,8 +88,8 @@ public class SingleStockViewImplTest {
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
-		view.nameField.setValue(newName);
-		view.symbolField.setValue(newSymbol);
+		view.nameAdapter.getUI().setValue(newName);
+		view.symbolAdapter.getUI().setValue(newSymbol);
 		
 		reset(mockedPresenter);
 		
@@ -108,13 +108,13 @@ public class SingleStockViewImplTest {
 
 		
 		assertTrue("ok button enabled before", view.okButton.isEnabled());
-		assertTrue("symbol field valid before", view.symbolField.isValid());
+		assertTrue("symbol field valid before", view.symbolAdapter.getUI().isValid());
 		assertTrue("form valid before", view.isValid());
 		
-		view.symbolField.setValue(null);
+		view.symbolAdapter.getUI().setValue(null);
 		
 		assertFalse("ok button disabled after", view.okButton.isEnabled());
-		assertFalse("symbol field not valid after", view.symbolField.isValid());
+		assertFalse("symbol field not valid after", view.symbolAdapter.getUI().isValid());
 		assertFalse("form not valid after", view.isValid());
 	}
 }

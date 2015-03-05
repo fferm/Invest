@@ -3,26 +3,41 @@ package se.fermitet.vaadin.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.money.Money;
+import org.joda.time.LocalDate;
+
 public class TestPOJO {
 	private String strAttribute;
 	private int intAttribute;
 	private TestPOJO_Linked linkedAttribute;
+	private Money moneyAttribute;
+	private LocalDate dateAttribute;
 
 	public TestPOJO() {
-		this(null);
+		this((String) null);
 	}
-	
+
 	public TestPOJO(String strAttribute) {
 		this(strAttribute, 0, null);
 	}
-	
+
 	public TestPOJO(String strAttribute, int intAttribute, TestPOJO_Linked linkedAttribute) {
 		super();
 		this.setStrAttribute(strAttribute);
 		this.setIntAttribute(intAttribute);
 		this.setLinkedAttribute(linkedAttribute);
 	}
-	
+
+	public TestPOJO(Money moneyAttribute) {
+		super();
+		this.moneyAttribute = moneyAttribute;
+	}
+
+	public TestPOJO(LocalDate dateAttribute) {
+		super();
+		this.dateAttribute = dateAttribute;
+	}
+
 	public int getIntAttribute() {
 		return intAttribute;
 	}
@@ -41,12 +56,24 @@ public class TestPOJO {
 	public void setLinkedAttribute(TestPOJO_Linked linkedAttribute) {
 		this.linkedAttribute = linkedAttribute;
 	}
-	
+	public Money getMoneyAttribute() {
+		return moneyAttribute;
+	}
+	public void setMoneyAttribute(Money moneyAttribute) {
+		this.moneyAttribute = moneyAttribute;
+	}
+	public LocalDate getDateAttribute() {
+		return dateAttribute;
+	}
+	public void setDateAttribute(LocalDate dateAttribute) {
+		this.dateAttribute = dateAttribute;
+	}
+
 	@Override
 	public String toString() {
 		return "TestPOJO: strAttribute: " + getStrAttribute() + "    intAttribute: " + getIntAttribute() + "   linkedAttribute: " + getLinkedAttribute();
 	}
-	
+
 	public static List<TestPOJO> getTestData() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 
@@ -58,7 +85,7 @@ public class TestPOJO {
 
 		return ret;
 	}
-	
+
 	public static List<TestPOJO> getTestDataSecond() {
 		List<TestPOJO> ret = new ArrayList<TestPOJO>();
 

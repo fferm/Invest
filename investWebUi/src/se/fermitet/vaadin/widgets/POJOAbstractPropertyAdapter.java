@@ -1,44 +1,38 @@
 package se.fermitet.vaadin.widgets;
 
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.BeanValidator;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.AbstractField;
 
-public class POJOAttributeTextField<POJOCLASS> extends TextField {
-	private static final long serialVersionUID = -8579073716821506905L;
-	private Class<?> pojoClass;
+abstract class POJOAbstractPropertyAdapter<POJOCLASS, FIELDCLASS extends AbstractField<?>> extends POJOAbstractAdapter<POJOCLASS, FIELDCLASS> {
+	private static final long serialVersionUID = 4600062141995002807L;
 	private String propertyName;
 	private BeanValidator validator;
 
-	public POJOAttributeTextField(String caption, Class<?> pojoClass, String propertyName) {
-		super(caption);
-		this.pojoClass = pojoClass;
+
+	POJOAbstractPropertyAdapter(Class<POJOCLASS> pojoClass, String propertyName, String caption) {
+		super(pojoClass, caption);
+		
 		this.propertyName = propertyName;
 		
-		initialize();
+		this.validator = new TestableBeanValidator(pojoClass, propertyName);
+		this.ui.addValidator(validator);
 	}
 	
-	private void initialize() {
-		this.setImmediate(true);
-		this.setNullRepresentation("");
-		this.setNullSettingAllowed(true);
-		
-		this.validator = new TestableBeanValidator(pojoClass, propertyName);
-		this.addValidator(validator);
-	}
-
-	public Class<?> getPojoClass() {
-		return pojoClass;
-	}
-
-	public String getPropertyId() {
+	public String getPropertyName() {
 		return propertyName;
 	}
 
 	public void bindToData(POJOCLASS data) {
 		BeanItem<POJOCLASS> item = new BeanItem<POJOCLASS>(data);
-		this.setPropertyDataSource(item.getItemProperty(this.propertyName));
+
+		fixConverter(item);
+		
+		this.ui.setPropertyDataSource((Property<?>) item.getItemProperty(this.propertyName));
 	}
+
+	protected abstract void fixConverter(BeanItem<POJOCLASS> item);
 
 
 }

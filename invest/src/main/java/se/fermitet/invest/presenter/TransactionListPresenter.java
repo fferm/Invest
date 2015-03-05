@@ -19,7 +19,7 @@ public class TransactionListPresenter extends Presenter<TransactionListView, Tra
 	}
 
 	public void onEditButtonClick(Transaction selected) {
-		throw new UnsupportedOperationException("unimplemented");
+		view.navigateToSingleTransactionView(selected);
 	}
 
 	public void onDeleteButtonClick(Transaction selected) {

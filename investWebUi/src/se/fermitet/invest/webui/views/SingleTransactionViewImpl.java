@@ -7,24 +7,25 @@ import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.SingleTransactionPresenter;
 import se.fermitet.invest.viewinterface.SingleTransactionView;
 import se.fermitet.vaadin.navigation.URIParameter;
-import se.fermitet.vaadin.widgets.POJOAttributeTextField;
 import se.fermitet.vaadin.widgets.POJOComboBoxAdapter;
+import se.fermitet.vaadin.widgets.POJOPropertyDatePopupAdapter;
+import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.PopupDateField;
 
 public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresenter> implements SingleTransactionView {
 
 	private static final long serialVersionUID = 8004896867328107503L;
 	POJOComboBoxAdapter<Stock> stockComboAdapter;
-	PopupDateField datePopup;
-	POJOAttributeTextField<Transaction> priceField;
-	POJOAttributeTextField<Transaction> feeField;
-	POJOAttributeTextField<Transaction> numberField;
+	POJOPropertyDatePopupAdapter<Transaction> dateAdapter;
+	POJOPropertyTextFieldAdapter<Transaction> priceFieldAdapter;
+	POJOPropertyTextFieldAdapter<Transaction> feeFieldAdapter;
+	POJOPropertyTextFieldAdapter<Transaction> numberFieldAdapter;
 	private Label titleLabel;
+	private Transaction transaction;
 
 	@Override
 	protected Component createMainLayout() {
@@ -34,10 +35,10 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		
 		mainLayout.addComponent(titleLabel);
 		mainLayout.addComponent(stockComboAdapter.getCombo());
-		mainLayout.addComponent(datePopup);
-//		mainLayout.addComponent(numberField);
-		mainLayout.addComponent(priceField);
-		mainLayout.addComponent(feeField);
+		mainLayout.addComponent(dateAdapter.getUI());
+		mainLayout.addComponent(numberFieldAdapter.getUI());
+		mainLayout.addComponent(priceFieldAdapter.getUI());
+		mainLayout.addComponent(feeFieldAdapter.getUI());
 		
 		return mainLayout;
 	}
@@ -49,13 +50,13 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		stockComboAdapter.setDisplayColumn("symbol");
 		stockComboAdapter.setSortOrder("symbol");
 		
-		datePopup = new PopupDateField("Datum");
+		dateAdapter = new POJOPropertyDatePopupAdapter<Transaction>(Transaction.class, "date", "Datum");
 		
-		priceField = new POJOAttributeTextField<Transaction>("Pris", Transaction.class, "price");
+		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "price", "Pris");
 		
-		feeField = new POJOAttributeTextField<Transaction>("Avgift", Transaction.class, "fee");
+		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "fee", "Avgift");
 		
-		numberField = new POJOAttributeTextField<Transaction>("Antal", Transaction.class, "number");
+		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "number", "Antal");
 	}
 	
 	
@@ -74,19 +75,20 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
  	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
 		presenter.provideAllStocks();
 		
+		if (parameters.size() == 0) this.transaction = presenter.getTransactionBasedOnIdString(null);
+		else this.transaction = presenter.getTransactionBasedOnIdString(parameters.get(0).getValue());
+
 		bindToData();
 	}
 
 	private void bindToData() {
-		Transaction trans = new Transaction();
-		
+		if (this.transaction == null) return;
+
 		// TODO Bind stock
-		// TODO bind date
-		priceField.bindToData(trans);
-//		numberField.bindToData(trans);
-		feeField.bindToData(trans);
-		// TODO Auto-generated method stub
-		
+		dateAdapter.bindToData(transaction);
+		priceFieldAdapter.bindToData(transaction);
+		numberFieldAdapter.bindToData(transaction);
+		feeFieldAdapter.bindToData(transaction);
 	}
 
 

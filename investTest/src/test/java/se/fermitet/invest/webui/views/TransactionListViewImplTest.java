@@ -15,6 +15,7 @@ import se.fermitet.invest.presenter.TransactionListPresenter;
 import se.fermitet.invest.testData.TransactionDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
+import se.fermitet.vaadin.navigation.URIParameter;
 
 import com.vaadin.ui.Button;
 
@@ -99,17 +100,16 @@ public class TransactionListViewImplTest {
 	
 	@Test
 	public void testEditButton() throws Exception {
-		fail("unimplemented");
-//		Button editButton = view.editButton;
-//		
-//		assertNotNull("not null", editButton);
-//		
-//		view.stockTable.select(0);
-//		Stock selectedStock = testStocksSorted.get(0);
-//		
-//		editButton.click();
-//		
-//		verify(mockedPresenter).onEditButtonClick(selectedStock);
+		Button editButton = view.editButton;
+		
+		assertNotNull("not null", editButton);
+		
+		view.table.select(0);
+		Transaction selected = testDataSorted.get(0);
+		
+		editButton.click();
+		
+		verify(mockedPresenter).onEditButtonClick(selected);
 	}
 	
 	@Test
@@ -131,12 +131,11 @@ public class TransactionListViewImplTest {
 	}
 
 	@Test
-	public void testEditSingleStock_notNullValue() throws Exception {
-		fail("unimplemented");
-//		Stock testStock = new Stock("Test", "TST");
-//		
-//		view.navigateToSingleStockView(testStock);
-//		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
+	public void testEditSingle_notNullValue() throws Exception {
+		Transaction testTrans = new Transaction();
+		
+		view.navigateToSingleTransactionView(testTrans);
+		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW, new URIParameter(testTrans.getId().toString()));
 	}
 
 	

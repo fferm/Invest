@@ -1,14 +1,18 @@
 package se.fermitet.invest.presenter;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
+import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.model.TransactionModel;
 import se.fermitet.invest.viewinterface.SingleTransactionView;
@@ -36,6 +40,63 @@ public class SingleTransactionPresenterTest {
 		
 		verify(mockedStocksModel).getAll();
 		verify(mockedView).showStocksInSelection(list);
+	}
+
+	@Test
+	public void testGetTransactionWithNullArgument() throws Exception {
+		Transaction answer = presenter.getTransactionBasedOnIdString(null);
+		
+		assertNotNull(answer);
+		assertNull(answer.getStock());
+		assertEquals(LocalDate.now(), answer.getDate());
+		assertNull(answer.getFee());
+		assertNull(answer.getPrice());
+		assertEquals(0, answer.getNumber());
+		assertNotNull(answer.getId());
+	}
+
+	@Test
+	public void testGetTransactionWithZeroLenghtArgument() throws Exception {
+		Transaction answer = presenter.getTransactionBasedOnIdString("");
+		
+		assertNotNull(answer);
+		assertNull(answer.getStock());
+		assertEquals(LocalDate.now(), answer.getDate());
+		assertNull(answer.getFee());
+		assertNull(answer.getPrice());
+		assertEquals(0, answer.getNumber());
+		assertNotNull(answer.getId());
+	}
+	
+	@Test
+	public void testGetTransactionWithData() throws Exception {
+		UUID id = UUID.randomUUID();
+		Transaction expected = new Transaction();
+		
+		when(mockedModel.getById(id)).thenReturn(expected);
+		
+		Transaction answer = presenter.getTransactionBasedOnIdString(id.toString());
+		
+		assertSame(expected, answer);
+	}
+	
+	@Test
+	public void testCancelNavigatesToTransactionList() throws Exception {
+		fail("unimplemented");
+//		presenter.onCancelButtonClick();
+//		
+//		verify(mockedView).navigateBack();
+	}
+	
+	@Test
+	public void testOkSavesAndNavigatesBack() throws Exception {
+		fail("unimplemented");
+//		Stock testStock = new Stock("name", "symbol");
+//		
+//		presenter.onOkButtonClick(testStock);
+//		
+//		verify(mockedModel).save(testStock);
+//		verify(mockedView).navigateBack();
 	}
 
 
