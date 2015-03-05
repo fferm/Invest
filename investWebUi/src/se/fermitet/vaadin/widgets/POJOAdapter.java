@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.vaadin.ui.AbstractComponent;
 
-public interface POJOAdapter<POJOCLASS, UICLASS extends AbstractComponent> extends Serializable {
+interface POJOAdapter<POJOCLASS, UICLASS extends AbstractComponent> extends Serializable {
 	
 	public UICLASS getUI();
 	public Class<POJOCLASS> getPojoClass();
