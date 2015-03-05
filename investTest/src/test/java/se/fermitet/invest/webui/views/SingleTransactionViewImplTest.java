@@ -73,8 +73,10 @@ public class SingleTransactionViewImplTest {
 
 	@Test
 	public void testEnterShowsSomeData_notNull() throws Exception {
-		String symbol = "SYM";
-		Stock stock = new Stock(symbol);
+		List<Stock> testStocks = new StockDataProvider().getTestStocks();
+		view.showStocksInSelection(testStocks);
+
+		Stock stock = testStocks.get(0);
 		LocalDate date = LocalDate.now();
 		int number = 10;
 		Money price = Money.parse("SEK 200");
@@ -86,7 +88,7 @@ public class SingleTransactionViewImplTest {
 		view.enter(mock(ViewChangeEvent.class));
 
 		assertEquals("Date", date.toDate(), view.dateAdapter.getUI().getValue());
-		assertEquals("Symbol", symbol, view.stockComboAdapter.getUI().getValue());
+		assertEquals("Symbol", stock.getSymbol(), view.stockComboAdapter.getUI().getItemCaption(view.stockComboAdapter.getUI().getValue()));
 		assertEquals("Number", "" + number, view.numberFieldAdapter.getUI().getValue());
 		assertEquals("Price", "200,00", view.priceFieldAdapter.getUI().getValue());
 		assertEquals("Fee", "10,00", view.feeFieldAdapter.getUI().getValue());

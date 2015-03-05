@@ -57,7 +57,6 @@ abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractFi
 		}  else if (clz.equals(LocalDate.class)) {
 			this.getUI().setConverter((Converter) new LocalDateConverter());
 		}
-
 	}
 
 	@Override
