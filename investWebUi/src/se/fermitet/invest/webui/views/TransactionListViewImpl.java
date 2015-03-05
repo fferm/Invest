@@ -47,7 +47,7 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 	
 	private void initTable(Layout parent) {
 		tableAdapter = new POJOTableAdapter<Transaction>(Transaction.class, "Affärer");
-		table = tableAdapter.getTable();
+		table = tableAdapter.getUI();
 
 		List<ColumnDefinition> cols = new ArrayList<ColumnDefinition>();
 		cols.add(new ColumnDefinition("date", "Datum"));

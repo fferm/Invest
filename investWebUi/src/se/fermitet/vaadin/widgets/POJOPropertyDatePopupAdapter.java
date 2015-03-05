@@ -14,12 +14,7 @@ public class POJOPropertyDatePopupAdapter<POJOCLASS> extends POJOAbstractPropert
 	private static final long serialVersionUID = -5381555555854972062L;
 
 	public POJOPropertyDatePopupAdapter(Class<POJOCLASS> pojoClass,	String propertyName, String caption) {
-		super(pojoClass, propertyName, caption);
-	}
-
-	@Override
-	protected PopupDateField createUI(String caption) {
-		return new PopupDateField(caption);
+		super(pojoClass, propertyName, new PopupDateField(caption));
 	}
 
 	@Override
@@ -28,7 +23,7 @@ public class POJOPropertyDatePopupAdapter<POJOCLASS> extends POJOAbstractPropert
 		Class<?> clz = prop.getType();
 		
 		if (clz.equals(LocalDate.class)) {
-			this.ui.setConverter(new LocalDateConverter());
+			this.getUI().setConverter(new LocalDateConverter());
 		}
 	}
 

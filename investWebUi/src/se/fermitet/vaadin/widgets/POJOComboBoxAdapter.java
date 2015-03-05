@@ -16,17 +16,12 @@ public class POJOComboBoxAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<PO
 	}
 
 	public POJOComboBoxAdapter(Class<POJOCLASS> pojoClass, String caption) {
-		super(pojoClass, caption);
-	}
-
-	@Override
-	protected ComboBox createUI(String caption) {
-		return new ComboBox(caption);
+		super(pojoClass, new ComboBox(caption));
 	}
 
 
 	public ComboBox getCombo() {
-		return this.ui;
+		return this.getUI();
 	}
 
 	public String getDisplayColumn() {
@@ -49,7 +44,7 @@ public class POJOComboBoxAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<PO
 
 			Object value = item.getItemProperty(this.displayColumn).getValue();
 
-			ui.setItemCaption(itemId, value == null ? "" : value.toString());
+			getUI().setItemCaption(itemId, value == null ? "" : value.toString());
 		}
 	}
 

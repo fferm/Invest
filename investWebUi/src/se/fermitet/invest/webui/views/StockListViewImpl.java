@@ -57,7 +57,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 
 	private void initStockTable(Layout parent) {
 		stockTableAdapter = new POJOTableAdapter<Stock>(Stock.class, "Aktier");
-		stockTable = stockTableAdapter.getTable();
+		stockTable = stockTableAdapter.getUI();
 
 		List<ColumnDefinition> cols = new ArrayList<ColumnDefinition>();
 		cols.add(new ColumnDefinition("symbol", "Ticker"));

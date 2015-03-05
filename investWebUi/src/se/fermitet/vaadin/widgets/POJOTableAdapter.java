@@ -13,17 +13,12 @@ public class POJOTableAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<POJOC
 	}
 
 	public POJOTableAdapter(Class<POJOCLASS> pojoClass, String caption) {
-		super(pojoClass, caption);
+		super(pojoClass, new Table(caption));
 	}
 	
-	@Override
-	protected Table createUI(String caption) {
-		return new Table(caption);
-	}
-	
-	public Table getTable() {
-		return super.getUI();
-	}
+//	public Table getTable() {
+//		return super.getUI();
+//	}
 
 	public void setVisibleData(List<ColumnDefinition> columnDefinitionsToShow) {
 		try {
@@ -39,13 +34,13 @@ public class POJOTableAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<POJOC
 				}
 
 				if (def.headerText == null) {
-					this.ui.setColumnHeader(propId, "");
+					this.getUI().setColumnHeader(propId, "");
 				} else {
-					this.ui.setColumnHeader(propId, def.headerText);
+					this.getUI().setColumnHeader(propId, def.headerText);
 				}
 			}
 
-			this.ui.setVisibleColumns(propIdsToShow.toArray());
+			this.getUI().setVisibleColumns(propIdsToShow.toArray());
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			throw new POJOUIException(e.getMessage(), e);

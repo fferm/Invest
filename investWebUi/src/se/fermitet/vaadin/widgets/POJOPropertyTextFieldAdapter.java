@@ -15,20 +15,14 @@ public class POJOPropertyTextFieldAdapter<POJOCLASS> extends POJOAbstractPropert
 	private static final long serialVersionUID = -8579073716821506905L;
 
 	public POJOPropertyTextFieldAdapter(Class<POJOCLASS> pojoClass, String propertyName, String caption) {
-		super(pojoClass, propertyName, caption);
-		this.pojoClass = pojoClass;
+		super(pojoClass, propertyName, new TextField(caption));
 
 		initialize();
 	}
 
 	private void initialize() {
-		this.ui.setNullRepresentation("");
-		this.ui.setNullSettingAllowed(true);
-	}
-
-	@Override
-	protected TextField createUI(String caption) {
-		return new TextField(caption);
+		this.getUI().setNullRepresentation("");
+		this.getUI().setNullSettingAllowed(true);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -38,9 +32,9 @@ public class POJOPropertyTextFieldAdapter<POJOCLASS> extends POJOAbstractPropert
 		Class<?> clz = prop.getType();
 
 		if (clz.equals(Integer.class)) {
-			this.ui.setConverter((Converter) new StringToIntegerConverter());
+			this.getUI().setConverter((Converter) new StringToIntegerConverter());
 		} else if (clz.equals(Money.class)) {
-			this.ui.setConverter((Converter) new MoneyConverter());
+			this.getUI().setConverter((Converter) new MoneyConverter());
 		}
 	}
 

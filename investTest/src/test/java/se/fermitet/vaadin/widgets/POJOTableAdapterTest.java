@@ -32,14 +32,7 @@ public class POJOTableAdapterTest extends POJOAbstractSelectAdapterTest<POJOTabl
 		String myCaption = "MY TEST CAPTION";
 		POJOTableAdapter<TestPOJO> tableAdapter = new POJOTableAdapter<TestPOJO>(TestPOJO.class, myCaption);
 
-		assertEquals(myCaption, tableAdapter.getTable().getCaption());
-	}
-
-	@Test
-	public void testGetTable() throws Exception {
-		Table table = adapter.getTable();
-
-		assertNotNull(table);
+		assertEquals(myCaption, tableAdapter.getUI().getCaption());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -55,8 +48,8 @@ public class POJOTableAdapterTest extends POJOAbstractSelectAdapterTest<POJOTabl
 		adapter.setVisibleData(defs);
 		adapter.setData(testData);
 		
-		assertEquals("normal text", propText, adapter.getTable().getColumnHeader(propWithText));
-		assertEquals("empty", "", adapter.getTable().getColumnHeader(propWithoutText));
+		assertEquals("normal text", propText, ((Table) adapter.getUI()).getColumnHeader(propWithText));
+		assertEquals("empty", "", ((Table) adapter.getUI()).getColumnHeader(propWithoutText));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -66,8 +59,8 @@ public class POJOTableAdapterTest extends POJOAbstractSelectAdapterTest<POJOTabl
 		adapter.setData(testData);
 
 		int i = 0;
-		for (Object itemId : adapter.getTable().getItemIds()) {
-			Item item = adapter.getTable().getItem(itemId);
+		for (Object itemId : adapter.getUI().getItemIds()) {
+			Item item = adapter.getUI().getItem(itemId);
 			TestPOJO pojo = testData.get(i);
 
 			for (Object propId : item.getItemPropertyIds()) {

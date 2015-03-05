@@ -38,7 +38,7 @@ public abstract class POJOAbstractPropertyAdapterTest<ADAPTERCLASS extends POJOA
 		assertEquals("Caption", caption, ui.getCaption());
 		assertEquals("pojo class", pojoClass, adapter.getPojoClass());
 		assertEquals("prop id", propertyName, adapter.getPropertyName());
-		assertTrue("immediate", adapter.ui.isImmediate());
+		assertTrue("immediate", ui.isImmediate());
 	}
 	
 	@Test
