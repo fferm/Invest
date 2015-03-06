@@ -34,7 +34,7 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		initFields();
 		
 		mainLayout.addComponent(titleLabel);
-		mainLayout.addComponent(stockComboAdapter.getCombo());
+		mainLayout.addComponent(stockComboAdapter.getUI());
 		mainLayout.addComponent(dateAdapter.getUI());
 		mainLayout.addComponent(numberFieldAdapter.getUI());
 		mainLayout.addComponent(priceFieldAdapter.getUI());

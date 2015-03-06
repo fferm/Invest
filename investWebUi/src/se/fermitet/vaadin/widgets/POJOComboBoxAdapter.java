@@ -19,11 +19,6 @@ public class POJOComboBoxAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<PO
 		super(pojoClass, new ComboBox(caption));
 	}
 
-
-	public ComboBox getCombo() {
-		return this.getUI();
-	}
-
 	public String getDisplayColumn() {
 		return this.displayColumn;
 	}

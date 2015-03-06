@@ -240,5 +240,7 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 	public void testDefiningIllegalNestedDataShouldGiveException() throws Exception {
 		defineIllegalNestedColumn();
 	}
+	
+	
 
 }

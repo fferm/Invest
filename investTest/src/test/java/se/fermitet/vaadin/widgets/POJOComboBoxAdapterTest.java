@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.vaadin.ui.ComboBox;
-
 @SuppressWarnings("rawtypes")
 public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOComboBoxAdapter>{
 
@@ -26,16 +24,9 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 		String myCaption = "MY TEST CAPTION";
 		POJOComboBoxAdapter<TestPOJO> adapter = new POJOComboBoxAdapter<TestPOJO>(TestPOJO.class, myCaption);
 
-		assertEquals(myCaption, adapter.getCombo().getCaption());
+		assertEquals(myCaption, adapter.getUI().getCaption());
 	}
 
-	@Test
-	public void testGetComboBox() throws Exception {
-		ComboBox combo = adapter.getCombo();
-		
-		assertNotNull(combo);
-	}
-	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testDisplayedData_strAttribute() throws Exception {
@@ -43,12 +34,12 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 		adapter.setDisplayColumn("strAttribute");
 
 		int i = 0;
-		for (Object itemId : adapter.getCombo().getItemIds()) {
+		for (Object itemId : adapter.getUI().getItemIds()) {
 			TestPOJO pojo = testData.get(i);
 			
 			String expected = pojo.getStrAttribute();
 			
-			String itemCaption = adapter.getCombo().getItemCaption(itemId);
+			String itemCaption = adapter.getUI().getItemCaption(itemId);
 			if (expected == null) assertEquals("(null) i: " + i, "", itemCaption);  // TODO, should it be a check for null instead
 			else if (expected.length() == 0) assertEquals("(empty) i: " + i, "", itemCaption);
 			else assertEquals("(non null) i: " + i, expected, itemCaption);
@@ -64,12 +55,12 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 		adapter.setDisplayColumn("intAttribute");
 
 		int i = 0;
-		for (Object itemId : adapter.getCombo().getItemIds()) {
+		for (Object itemId : adapter.getUI().getItemIds()) {
 			TestPOJO pojo = testData.get(i);
 			
 			String expected = "" + pojo.getIntAttribute();
 			
-			String itemCaption = adapter.getCombo().getItemCaption(itemId);
+			String itemCaption = adapter.getUI().getItemCaption(itemId);
 			assertEquals("i: " + i, expected, itemCaption);
 			
 			i++;
@@ -83,7 +74,7 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 		adapter.setDisplayColumn("linkedAttribute.stringAttribute");
 
 		int i = 0;
-		for (Object itemId : adapter.getCombo().getItemIds()) {
+		for (Object itemId : adapter.getUI().getItemIds()) {
 			TestPOJO pojo = testData.get(i);
 			
 			String expected = "";
@@ -95,7 +86,7 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 				if (stringAttribute != null) expected = stringAttribute;
 			}
 			
-			String itemCaption = adapter.getCombo().getItemCaption(itemId);
+			String itemCaption = adapter.getUI().getItemCaption(itemId);
 			assertEquals("i: " + i, expected, itemCaption);
 			
 			i++;
