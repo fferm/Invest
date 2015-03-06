@@ -22,11 +22,11 @@ public class POJOProperyDatePopupAdapterTest extends POJOAbstractPropertyAdapter
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testBindToData() throws Exception {
+	public void testBindToProperty() throws Exception {
 		LocalDate date = LocalDate.now();
 		TestPOJO pojo = new TestPOJO(date);
 
-		adapter.bindToData(pojo);
+		adapter.bindToProperty(pojo, getPropertyName());
 		
 		assertEquals("read from field", date.toDate(), ui.getValue());
 		
@@ -40,7 +40,7 @@ public class POJOProperyDatePopupAdapterTest extends POJOAbstractPropertyAdapter
 	@SuppressWarnings("unchecked")
 	@Override
 	protected POJOPropertyDatePopupAdapter createAdapter() {
-		return new POJOPropertyDatePopupAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, propertyName, caption);
+		return new POJOPropertyDatePopupAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, caption);
 	}
 
 	@Override

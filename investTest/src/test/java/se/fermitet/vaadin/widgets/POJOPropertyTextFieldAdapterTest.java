@@ -14,13 +14,13 @@ public class POJOPropertyTextFieldAdapterTest extends POJOAbstractPropertyAdapte
 	@SuppressWarnings("unchecked")
 	@Override
 	protected POJOPropertyTextFieldAdapter<TestPOJO> createAdapter() {
-		return new POJOPropertyTextFieldAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, propertyName, caption);
+		return new POJOPropertyTextFieldAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, caption);
 	}
 
 	@Test
 	public void testConstructor() throws Exception {
 		@SuppressWarnings("unchecked")
-		POJOPropertyTextFieldAdapter<TestPOJO> adapter = new POJOPropertyTextFieldAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, propertyName, caption);
+		POJOPropertyTextFieldAdapter<TestPOJO> adapter = new POJOPropertyTextFieldAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, caption);
 		
 		assertNotNull(adapter);
 	}
@@ -33,11 +33,11 @@ public class POJOPropertyTextFieldAdapterTest extends POJOAbstractPropertyAdapte
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testBindToData() throws Exception {
+	public void testBindToProperty() throws Exception {
 		String strData = "TestData";
 		TestPOJO testData = new TestPOJO(strData, 0, null);
 		
-		adapter.bindToData(testData);
+		adapter.bindToProperty(testData, getPropertyName());
 		
 		assertEquals("read from field", strData, ui.getValue());
 		
@@ -53,9 +53,9 @@ public class POJOPropertyTextFieldAdapterTest extends POJOAbstractPropertyAdapte
 		int intData = -10;
 		TestPOJO testData = new TestPOJO(null, intData, null);
 		
-		adapter = new POJOPropertyTextFieldAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, "intAttribute", caption);
+		adapter = new POJOPropertyTextFieldAdapter<TestPOJO>((Class<TestPOJO>) pojoClass, caption);
 		
-		adapter.bindToData(testData);
+		adapter.bindToProperty(testData, "intAttribute");
 		
 		assertEquals("" + intData, ((AbstractField<?>) adapter.getUI()).getValue());
 	}
@@ -67,9 +67,9 @@ public class POJOPropertyTextFieldAdapterTest extends POJOAbstractPropertyAdapte
 		
 		TestPOJO pojo = new TestPOJO(money);
 		
-		adapter = new POJOPropertyTextFieldAdapter<TestPOJO>(TestPOJO.class, "moneyAttribute", null);
+		adapter = new POJOPropertyTextFieldAdapter<TestPOJO>(TestPOJO.class, null);
 		
-		adapter.bindToData(pojo);
+		adapter.bindToProperty(pojo, "moneyAttribute");
 		
 		assertEquals("with decimals", "200,25", ((AbstractField<?>) adapter.getUI()).getValue());
 	}
@@ -81,9 +81,9 @@ public class POJOPropertyTextFieldAdapterTest extends POJOAbstractPropertyAdapte
 		
 		TestPOJO pojo = new TestPOJO(money);
 		
-		adapter = new POJOPropertyTextFieldAdapter<TestPOJO>(TestPOJO.class, "moneyAttribute", null);
+		adapter = new POJOPropertyTextFieldAdapter<TestPOJO>(TestPOJO.class, null);
 		
-		adapter.bindToData(pojo);
+		adapter.bindToProperty(pojo, "moneyAttribute");
 		
 		assertEquals("with decimals", "201,00",((AbstractField<?>) adapter.getUI()).getValue());
 	}

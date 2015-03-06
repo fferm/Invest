@@ -50,13 +50,13 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		stockComboAdapter.setDisplayColumn("symbol");
 		stockComboAdapter.setSortOrder("symbol");
 		
-		dateAdapter = new POJOPropertyDatePopupAdapter<Transaction>(Transaction.class, "date", "Datum");
+		dateAdapter = new POJOPropertyDatePopupAdapter<Transaction>(Transaction.class, "Datum");
 		
-		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "price", "Pris");
+		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Pris");
 		
-		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "fee", "Avgift");
+		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Avgift");
 		
-		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "number", "Antal");
+		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Antal");
 	}
 	
 	
@@ -85,10 +85,10 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		if (this.transaction == null) return;
 
 		stockComboAdapter.bindSelectionToProperty(transaction, "stock");
-		dateAdapter.bindToData(transaction);
-		priceFieldAdapter.bindToData(transaction);
-		numberFieldAdapter.bindToData(transaction);
-		feeFieldAdapter.bindToData(transaction);
+		dateAdapter.bindToProperty(transaction, "date");
+		priceFieldAdapter.bindToProperty(transaction, "price");
+		numberFieldAdapter.bindToProperty(transaction, "number");
+		feeFieldAdapter.bindToProperty(transaction, "fee");
 	}
 
 

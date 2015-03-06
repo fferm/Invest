@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.vaadin.data.Validator;
 import com.vaadin.ui.AbstractField;
 
 @SuppressWarnings("rawtypes")
@@ -37,24 +36,7 @@ public abstract class POJOAbstractPropertyAdapterTest<ADAPTERCLASS extends POJOA
 	public void testGetters() throws Exception {
 		assertEquals("Caption", caption, ui.getCaption());
 		assertEquals("pojo class", pojoClass, adapter.getPojoClass());
-		assertEquals("prop id", propertyName, adapter.getPropertyName());
 		assertTrue("immediate", ui.isImmediate());
-	}
-	
-	@Test
-	public void testValidator() throws Exception {
-		boolean found = false;
-		for (Validator val : ui.getValidators()) {
-			if (! (val instanceof TestableBeanValidator)) continue;
-			
-			TestableBeanValidator bVal = (TestableBeanValidator) val;
-
-			boolean sameClass = pojoClass.equals(bVal.getPojoClass());
-			boolean sameName = propertyName.equals(bVal.getPropertyName());
-			
-			if (sameClass && sameName && !found) found = true; 
-		}
-		assertTrue(found);
 	}
 	
 	@Test

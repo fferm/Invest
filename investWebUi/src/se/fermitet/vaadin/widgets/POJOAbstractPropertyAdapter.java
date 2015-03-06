@@ -19,35 +19,34 @@ abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractFi
 
 	private POJOAdapterHelper<POJOCLASS, UICLASS> pojoAdapter;
 
-	private String propertyName;
 	private BeanValidator validator;
 
-	POJOAbstractPropertyAdapter(Class<POJOCLASS> pojoClass, String propertyName, UICLASS ui) {
+	POJOAbstractPropertyAdapter(Class<POJOCLASS> pojoClass, UICLASS ui) {
 		super();
 		
 		this.pojoAdapter = new POJOAdapterHelper<POJOCLASS, UICLASS>(ui, pojoClass);
-		
-		this.propertyName = propertyName;
-		
-		this.validator = new TestableBeanValidator(pojoClass, propertyName);
-		this.getUI().addValidator(validator);
 	}
 	
-	public String getPropertyName() {
-		return propertyName;
-	}
-
-	public void bindToData(POJOCLASS data) {
-		BeanItem<POJOCLASS> item = new BeanItem<POJOCLASS>(data);
-
-		fixConverter(item);
+	public void bindToProperty(POJOCLASS data, String propertyName) {
+		fixValidator(propertyName);
 		
-		this.getUI().setPropertyDataSource((Property<?>) item.getItemProperty(this.propertyName));
+		BeanItem<POJOCLASS> item = new BeanItem<POJOCLASS>(data);
+		Property<?> prop = item.getItemProperty(propertyName);
+				
+		fixConverter(prop, propertyName);
+		
+		this.getUI().setPropertyDataSource(prop);
+	}
+	
+	private void fixValidator(String propertyName) {
+		this.validator = new TestableBeanValidator(getPojoClass(), propertyName);
+		
+		this.getUI().removeAllValidators();
+		this.getUI().addValidator(validator);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void fixConverter(BeanItem<POJOCLASS> item) {
-		Property<?> prop = item.getItemProperty(this.getPropertyName());
+	private void fixConverter(Property<?> prop, String propertyName) {
 		Class<?> clz = prop.getType();
 
 		if (clz.equals(Integer.class)) {
