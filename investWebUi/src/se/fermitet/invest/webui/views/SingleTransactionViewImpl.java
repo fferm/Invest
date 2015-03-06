@@ -84,8 +84,7 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 	private void bindToData() {
 		if (this.transaction == null) return;
 
-		stockComboAdapter.select(transaction.getStock());
-		// TODO Bind stock
+		stockComboAdapter.bindSelectionToProperty(transaction, "stock");
 		dateAdapter.bindToData(transaction);
 		priceFieldAdapter.bindToData(transaction);
 		numberFieldAdapter.bindToData(transaction);
