@@ -96,15 +96,17 @@ public class SingleTransactionViewImplTest {
 	
 	@Test
 	public void testEnterShowsSomeData_null() throws Exception {
-		fail("unimplemented");
-//		Stock testStock = new Stock();
-//		
-//		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
-//		
-//		view.enter(mock(ViewChangeEvent.class));
-//		
-//		assertNull(view.nameField.getValue());
-//		assertNull(view.symbolField.getValue());
+		Transaction defaultTrans = new Transaction();
+		
+		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(defaultTrans);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		assertEquals("Date", LocalDate.now().toDate(), view.dateAdapter.getUI().getValue());
+		assertNull("Stock", view.stockComboAdapter.getUI().getValue());
+		assertEquals("Number", "" + 0, view.numberFieldAdapter.getUI().getValue());
+		assertNull("Price", view.priceFieldAdapter.getUI().getValue());
+		assertNull("Fee", view.feeFieldAdapter.getUI().getValue());
 	}
 	
 	@Test

@@ -128,6 +128,8 @@ class MoneyConverter extends POJOConverter<String, Money> {
 
 	@Override
 	public String convertToPresentation(Money value, Class<? extends String> targetType, Locale locale)	throws ConversionException {
+		if (value == null) return null;
+		
 		NumberFormat formatter = NumberFormat.getInstance();
 		formatter.setMinimumFractionDigits(2);
 		formatter.setMaximumFractionDigits(2);
