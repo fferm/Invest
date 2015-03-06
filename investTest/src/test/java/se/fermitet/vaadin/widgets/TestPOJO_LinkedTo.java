@@ -1,9 +1,9 @@
 package se.fermitet.vaadin.widgets;
 
-public class TestPOJO_Linked {
+public class TestPOJO_LinkedTo {
 	private String string;
 
-	public TestPOJO_Linked(String string) {
+	public TestPOJO_LinkedTo(String string) {
 		this.string = string;
 	}
 	

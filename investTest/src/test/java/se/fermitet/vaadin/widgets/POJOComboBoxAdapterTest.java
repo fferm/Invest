@@ -79,7 +79,7 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 			
 			String expected = "";
 			
-			TestPOJO_Linked linkedAttribute = pojo.getLinkedAttribute();
+			TestPOJO_LinkedTo linkedAttribute = pojo.getLinkedAttribute();
 			if (linkedAttribute != null) {
 				String stringAttribute = linkedAttribute.getStringAttribute();
 				
@@ -115,7 +115,5 @@ public class POJOComboBoxAdapterTest extends POJOAbstractSelectAdapterTest<POJOC
 	protected void defineIllegalNestedColumn() {
 		adapter.setDisplayColumn("linkedAttribute.ILLEGAL");
 	}
-
-
-
+	
 }

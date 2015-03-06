@@ -3,6 +3,7 @@ package se.fermitet.vaadin.widgets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -10,6 +11,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.DefaultItemSorter;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.AbstractSelect;
 
 @SuppressWarnings("serial")
@@ -125,6 +127,43 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 			return container.getItem(itemId).getBean();
 		} else {
 			return null;
+		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void bindSelectionToProperty(Object data, String propertyName) {
+		BeanItem<?> item = new BeanItem<Object>(data);
+
+		this.getUI().setConverter((Converter) new SelectionConverter());
+
+		this.getUI().setPropertyDataSource((Property<?>) item.getItemProperty(propertyName));
+	}
+	
+	private class SelectionConverter implements Converter<Integer, POJOCLASS> {
+		@Override
+		public POJOCLASS convertToModel(Integer value, Class<? extends POJOCLASS> targetType, Locale locale) throws ConversionException {
+			BeanItem<POJOCLASS> selectedItem = (BeanItem<POJOCLASS>) container.getItem(value);
+
+			return selectedItem == null ? null : selectedItem.getBean();
+		}
+
+		@Override
+		public Integer convertToPresentation(POJOCLASS value, Class<? extends Integer> targetType, Locale locale) throws ConversionException {
+			for (Integer itemId : container.getItemIds()) {
+				BeanItem<POJOCLASS> candidateItem = container.getItem(itemId);
+				if (candidateItem.getBean().equals(value)) return itemId;
+			}
+			return null;
+		}
+
+		@Override
+		public Class<POJOCLASS> getModelType() {
+			return getPojoClass();
+		}
+
+		@Override
+		public Class<Integer> getPresentationType() {
+			return Integer.class;
 		}
 	}
 

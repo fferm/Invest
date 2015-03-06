@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import se.fermitet.vaadin.widgets.POJOAbstractSelectAdapter.SelectionListener;
 
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.AbstractSelect;
 
 
@@ -79,19 +80,30 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		adapter.setData(testData);
 
 		assertNull("Null selection before", adapter.getSelectedData());
+		assertNull("Null selection before from UI", getSelectionFromUI());
 
-		TestPOJO toSelect = testData.get(0);
+		TestPOJO toSelect = testData.get(1);
 		adapter.select(toSelect);
 
 		assertEquals("selectedItem", toSelect, adapter.getSelectedData());
+		assertEquals("selectedItem from UI", toSelect, getSelectionFromUI());
 
 		adapter.select(null);
 		assertNull("Null selection when select(null) is called", adapter.getSelectedData());
+		assertNull("Null selection when select(null) is called  (UI)", getSelectionFromUI());
 
 		adapter.select(toSelect);
 		adapter.unselect();
 
 		assertNull("Null selection when unselect is called", adapter.getSelectedData());
+		assertNull("Null selection when unselect is called  (UI)", getSelectionFromUI());
+	}
+	
+	private TestPOJO getSelectionFromUI() {
+		BeanItem item = (BeanItem) adapter.getUI().getContainerDataSource().getItem(adapter.getUI().getValue());
+		if (item == null) return null;
+		
+		return (TestPOJO) item.getBean();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -241,6 +253,27 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		defineIllegalNestedColumn();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelectionAffectsBoundData() throws Exception {
+		defineVisibleData();
+		adapter.setData(testData);
+
+		TestPOJO_LinkedFrom myPOJO = new TestPOJO_LinkedFrom();
+		assertNull("After constructor", myPOJO.getTestPOJO());
+		
+		adapter.bindSelectionToProperty(myPOJO, "testPOJO");
+		assertNull("After bind", myPOJO.getTestPOJO());
+		
+		TestPOJO toSelect = testData.get(2);
+		
+		adapter.select(toSelect);
+		assertEquals("after select", toSelect, myPOJO.getTestPOJO());
+		
+		adapter.unselect();
+		assertNull("after unselect", myPOJO.getTestPOJO());
+	}
+
 	
 
 }
