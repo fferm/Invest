@@ -1,11 +1,10 @@
 package se.fermitet.vaadin.widgets;
 
-import java.text.NumberFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
+
+import se.fermitet.vaadin.converters.LocalDateConverter;
+import se.fermitet.vaadin.converters.MoneyConverter;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -88,71 +87,6 @@ class TestableBeanValidator extends BeanValidator {
 
 	public String getPropertyName() {
 		return propertyName;
-	}
-}
-
-abstract class POJOConverter<PRESENTATION, MODEL> implements Converter<PRESENTATION, MODEL>{
-	private static final long serialVersionUID = 2527687838020839324L;
-
-	private Class<PRESENTATION> presentationClass;
-	private Class<MODEL> modelClass;
-
-	public POJOConverter(Class<PRESENTATION> presentationClass, Class<MODEL> modelClass) {
-		super();
-		this.presentationClass = presentationClass;
-		this.modelClass = modelClass;
-	}
-	
-	@Override
-	public Class<MODEL> getModelType() {
-		return modelClass;
-	}
-	
-	@Override
-	public Class<PRESENTATION> getPresentationType() {
-		return presentationClass;
-	}
-}
-
-class MoneyConverter extends POJOConverter<String, Money> {
-	private static final long serialVersionUID = -6251536302559035538L;
-
-	public MoneyConverter() {
-		super(String.class, Money.class);
-	}
-
-	@Override
-	public Money convertToModel(String value, Class<? extends Money> targetType, Locale locale)	throws ConversionException {
-		throw new UnsupportedOperationException("unimplemented");
-	}
-
-	@Override
-	public String convertToPresentation(Money value, Class<? extends String> targetType, Locale locale)	throws ConversionException {
-		if (value == null) return null;
-		
-		NumberFormat formatter = NumberFormat.getInstance();
-		formatter.setMinimumFractionDigits(2);
-		formatter.setMaximumFractionDigits(2);
-
-		return formatter.format(value.getAmount());
-	}
-}
-
-class LocalDateConverter extends POJOConverter<Date, LocalDate> {
-	private static final long serialVersionUID = -3288012479071159027L;
-
-	public LocalDateConverter() {
-		super(Date.class, LocalDate.class);
-	}
-
-	@Override
-	public LocalDate convertToModel(Date value, Class<? extends LocalDate> targetType, Locale locale) throws ConversionException {
-		return LocalDate.fromDateFields(value);
-	}
-
-	@Override
-	public Date convertToPresentation(LocalDate value, Class<? extends Date> targetType, Locale locale)	throws ConversionException {
-		return value.toDate();
 	}
 }
 
