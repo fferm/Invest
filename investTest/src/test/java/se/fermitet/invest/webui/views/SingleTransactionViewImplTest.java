@@ -111,19 +111,15 @@ public class SingleTransactionViewImplTest {
 	
 	@Test
 	public void testCancelButtonCallsPresenter() throws Exception {
-		fail("unimplemented");
-//		String nameValue = "my name";
-//		String symbolValue = "my symbol";
-//		
-//		Stock testStock = new Stock(nameValue, symbolValue);
-//		
-//		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
-//		
-//		view.enter(mock(ViewChangeEvent.class));
-//		
-//		view.cancelButton.click();
-//		
-//		verify(mockedPresenter).onCancelButtonClick();
+		Transaction testTransaction = new Transaction();
+		
+		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(testTransaction);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		view.cancelButton.click();
+		
+		verify(mockedPresenter).onCancelButtonClick();
 	}
 	
 	@Test

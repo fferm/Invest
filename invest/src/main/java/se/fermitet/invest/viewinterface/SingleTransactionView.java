@@ -8,4 +8,6 @@ public interface SingleTransactionView {
 
 	public void showStocksInSelection(List<Stock> list);
 
+	public void navigateBack();
+
 }

@@ -32,6 +32,8 @@ public class MoneyConverter extends AbstractConverter<String, Money> {
 	@Override
 	public Money convertToModel(String value, Class<? extends Money> targetType, Locale locale)	throws ConversionException {
 		try {
+			if (value == null) return null;
+			
 			Number amountNumber = formatter.parse(value.replace((char) 160, (char) 32).replace(" ", ""));
 
 			BigDecimal amount = null;

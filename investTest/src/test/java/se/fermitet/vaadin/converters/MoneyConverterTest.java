@@ -31,7 +31,7 @@ public class MoneyConverterTest extends AbstractConverterTest<String, Money, Mon
 		testCases.add(new ConverterTestCase(Money.parse("SEK 1000.25"), "1 000,25"));
 		testCases.add(new ConverterTestCase(Money.parse("SEK 1000000.25"), "1 000 000,25"));
 		testCases.add(new ConverterTestCase(Money.parse("SEK -1"), "-1,00"));
-
+		testCases.add(new ConverterTestCase(null, null));
 		
 		
 		return testCases;

@@ -12,8 +12,10 @@ import se.fermitet.vaadin.widgets.POJOPropertyDatePopupAdapter;
 import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
 public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresenter> implements SingleTransactionView {
@@ -25,6 +27,10 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 	POJOPropertyTextFieldAdapter<Transaction> feeFieldAdapter;
 	POJOPropertyTextFieldAdapter<Transaction> numberFieldAdapter;
 	private Label titleLabel;
+	
+	Button okButton;
+	Button cancelButton;
+
 	private Transaction transaction;
 
 	@Override
@@ -40,6 +46,13 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		mainLayout.addComponent(priceFieldAdapter.getUI());
 		mainLayout.addComponent(feeFieldAdapter.getUI());
 		
+		HorizontalLayout buttonPanel = new HorizontalLayout();
+		buttonPanel.setSpacing(true);
+		buttonPanel.addComponent(okButton);
+		buttonPanel.addComponent(cancelButton);
+
+		mainLayout.addComponent(buttonPanel);
+
 		return mainLayout;
 	}
 
@@ -57,6 +70,18 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Avgift");
 		
 		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Antal");
+		
+		okButton = new Button("OK");
+		okButton.addClickListener((Button.ClickListener) l -> {
+			throw new UnsupportedOperationException("unimplemented");
+//			onOkClick();
+		});
+
+		cancelButton = new Button("Avbryt");
+		cancelButton.addClickListener((Button.ClickListener) l -> {
+			onCancelClick();
+		});
+
 	}
 	
 	
@@ -90,6 +115,17 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		numberFieldAdapter.bindToProperty(transaction, "number");
 		feeFieldAdapter.bindToProperty(transaction, "fee");
 	}
+
+	private void onCancelClick() {
+		this.presenter.onCancelButtonClick();
+	}
+
+	@Override
+	public void navigateBack() {
+		throw new UnsupportedOperationException("unimplemented");
+//		this.getNavigator().navigateBack();
+	}
+
 
 
 }

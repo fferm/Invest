@@ -82,10 +82,9 @@ public class SingleTransactionPresenterTest {
 	
 	@Test
 	public void testCancelNavigatesToTransactionList() throws Exception {
-		fail("unimplemented");
-//		presenter.onCancelButtonClick();
-//		
-//		verify(mockedView).navigateBack();
+		presenter.onCancelButtonClick();
+		
+		verify(mockedView).navigateBack();
 	}
 	
 	@Test
