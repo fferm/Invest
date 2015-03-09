@@ -64,15 +64,20 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		stockComboAdapter = new POJOComboBoxAdapter<Stock>(Stock.class, "Aktie");
 		stockComboAdapter.setDisplayColumn("symbol");
 		stockComboAdapter.setSortOrder("symbol");
+		stockComboAdapter.getUI().addValueChangeListener(e -> valueChanged());
 		
 		dateAdapter = new POJOPropertyDatePopupAdapter<Transaction>(Transaction.class, "Datum");
+		dateAdapter.getUI().addValueChangeListener(e -> valueChanged());
 		
 		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Pris");
+		priceFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
 		
 		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Avgift");
+		feeFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
 		
 		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Integer>(Transaction.class, "Antal");
-		
+		numberFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
+
 		okButton = new Button("OK");
 		okButton.addClickListener((Button.ClickListener) l -> {
 			onOkClick();
@@ -89,6 +94,12 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 	public void showStocksInSelection(List<Stock> list) {
 		stockComboAdapter.setData(list);
 	}
+	
+	private void valueChanged() {
+		okButton.setEnabled(isValid());
+	}
+
+
 
 	@Override
 	protected SingleTransactionPresenter createPresenter() {

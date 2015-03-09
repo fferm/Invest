@@ -165,27 +165,37 @@ public class SingleTransactionViewImplTest {
 	}
 	
 	@Test
-	public void testEmptySymbolShouldGiveValidationFault() throws Exception {
-		fail("unimplemented");
-//		Stock initialStock = new Stock("Name", "Symbol");
-//		
-//		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
-//		
-//		view.enter(mock(ViewChangeEvent.class));
-//
-//		
-//		assertTrue("ok button enabled before", view.okButton.isEnabled());
-//		assertTrue("symbol field valid before", view.symbolField.isValid());
-//		assertTrue("form valid before", view.isValid());
-//		
-//		view.symbolField.setValue(null);
-//		
-//		assertFalse("ok button disabled after", view.okButton.isEnabled());
-//		assertFalse("symbol field not valid after", view.symbolField.isValid());
-//		assertFalse("form not valid after", view.isValid());
+	public void testInvalidTransactionHandling() throws Exception {
+		Transaction initialTransaction = new Transaction(new Stock("Name", "Symbol"), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));;
+		
+		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(initialTransaction);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		assertTrue("ok button enabled before", view.okButton.isEnabled());
+		assertTrue("date field valid before", view.dateAdapter.getUI().isValid());
+		assertTrue("form valid before", view.isValid());
+		
+		view.dateAdapter.setValue(null);
+		
+		assertFalse("ok button disabled after", view.okButton.isEnabled());
+		assertFalse("date field not valid after", view.dateAdapter.getUI().isValid());
+		assertFalse("form not valid after", view.isValid());
 	}
 
+	@Test
+	public void testErrorShouldNotAppearWhenClearingOutNumberField() throws Exception {
+		List<Stock> testStocks = new StockDataProvider().getTestStocks();
+		view.showStocksInSelection(testStocks);
 
+		Transaction initialTransaction = new Transaction(testStocks.get(1), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+
+		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(initialTransaction);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		view.numberFieldAdapter.getUI().setValue("");
+	}
 
 
 }

@@ -29,7 +29,10 @@ public abstract class AbstractConverterTest<PRESENTATION, MODEL, CONVERTER exten
 	
 	@Test
 	public void testConversions() throws Exception {
-		for (ConverterTestCase testCase : getTestCases()) {
+		List<AbstractConverterTest<PRESENTATION, MODEL, CONVERTER>.ConverterTestCase> testCases = getTestCases();
+		testCases.add(new ConverterTestCase(null, null));
+		
+		for (ConverterTestCase testCase : testCases) {
 			assertEquals("to model", testCase.modelObject, converter.convertToModel(testCase.presentationObject,  null, null));
 			assertEquals("to presentation", testCase.presentationObject, converter.convertToPresentation(testCase.modelObject, null, null));
 		}
