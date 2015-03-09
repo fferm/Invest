@@ -17,6 +17,7 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.SingleTransactionPresenter;
 import se.fermitet.invest.testData.StockDataProvider;
+import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.ComboBox;
@@ -124,36 +125,43 @@ public class SingleTransactionViewImplTest {
 	
 	@Test
 	public void testNavigateBack() throws Exception {
-		fail("unimplemented");
-//		DirectionalNavigator mockedNavigator = view.getNavigator();
-//		
-//		view.navigateBack();
-//		
-//		verify(mockedNavigator).navigateBack();
+		DirectionalNavigator mockedNavigator = view.getNavigator();
+		
+			view.navigateBack();
+		
+		verify(mockedNavigator).navigateBack();
 	}
 	
 	@Test
-	public void testOKButtonCallsPresenterWithUpdatedStock() throws Exception {
-		fail("unimplemented");
-//		Stock initialStock = new Stock("Name", "Symbol");
-//		
-//		String newName = "new name";
-//		String newSymbol = "new symbol";
-//		
-//		Stock updatedStock = new Stock(newName, newSymbol);
-//		
-//		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
-//		
-//		view.enter(mock(ViewChangeEvent.class));
-//		
-//		view.nameField.setValue(newName);
-//		view.symbolField.setValue(newSymbol);
-//		
-//		reset(mockedPresenter);
-//		
-//		view.okButton.click();
-//		
-//		verify(mockedPresenter).onOkButtonClick(eq(updatedStock));
+	public void testOKButtonCallsPresenterWithUpdatedData() throws Exception {
+		List<Stock> testStocks = new StockDataProvider().getTestStocks();
+		view.showStocksInSelection(testStocks);
+
+		Transaction initialTransaction = new Transaction();
+		Stock stock = testStocks.get(2);
+
+		int newNumber = 10;
+		LocalDate newDate = LocalDate.now().minusDays(2);
+		Money newPrice = Money.parse("SEK 200");
+		Money newFee = Money.parse("SEK 20");
+		
+		Transaction updatedTransaction = new Transaction(stock, newDate, newNumber, newPrice, newFee);
+
+		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(initialTransaction);
+		
+		view.enter(mock(ViewChangeEvent.class));
+		
+		view.stockComboAdapter.select(stock);
+		view.dateAdapter.setValue(newDate);
+		view.numberFieldAdapter.setValue(newNumber);
+		view.priceFieldAdapter.setValue(newPrice);
+		view.feeFieldAdapter.setValue(newFee);
+		
+		reset(mockedPresenter);
+		
+		view.okButton.click();
+		
+		verify(mockedPresenter).onOkButtonClick(eq(updatedTransaction));
 	}
 	
 	@Test
@@ -188,4 +196,10 @@ class TestSingleTransactionViewImpl extends SingleTransactionViewImpl {
 	protected SingleTransactionPresenter createPresenter() {
 		return mock(SingleTransactionPresenter.class);
 	}
+	
+	@Override
+	protected DirectionalNavigator createNavigator() {
+		return mock(DirectionalNavigator.class);
+	}
+
 }

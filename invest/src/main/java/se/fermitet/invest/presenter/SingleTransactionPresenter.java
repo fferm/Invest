@@ -37,14 +37,15 @@ public class SingleTransactionPresenter extends Presenter<SingleTransactionView,
 		view.navigateBack();
 	}
 
-//	public void onOkButtonClick(Transaction stock) {
-//		model.save(stock);
-//		view.navigateBack();
-//	}
+	public void onOkButtonClick(Transaction trans) {
+		model.save(trans);
+		view.navigateBack();
+	}
 
 
 
 	protected StockModel createStocksModel() {
 		return (StockModel) Models.fromClass(StockModel.class);
 	}
+
 }

@@ -89,13 +89,12 @@ public class SingleTransactionPresenterTest {
 	
 	@Test
 	public void testOkSavesAndNavigatesBack() throws Exception {
-		fail("unimplemented");
-//		Stock testStock = new Stock("name", "symbol");
-//		
-//		presenter.onOkButtonClick(testStock);
-//		
-//		verify(mockedModel).save(testStock);
-//		verify(mockedView).navigateBack();
+		Transaction testData = new Transaction();
+		
+		presenter.onOkButtonClick(testData);
+		
+		verify(mockedModel).save(testData);
+		verify(mockedView).navigateBack();
 	}
 
 

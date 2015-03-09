@@ -13,12 +13,14 @@ import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.ui.AbstractField;
 
-abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractField<?>> implements POJOAdapter<POJOCLASS, UICLASS> {
+abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractField<?>, VALUECLASS> implements POJOAdapter<POJOCLASS, UICLASS> {
 	private static final long serialVersionUID = 4600062141995002807L;
 
 	private POJOAdapterHelper<POJOCLASS, UICLASS> pojoAdapter;
 
 	private BeanValidator validator;
+
+	private Property<VALUECLASS> property;
 
 	POJOAbstractPropertyAdapter(Class<POJOCLASS> pojoClass, UICLASS ui) {
 		super();
@@ -26,15 +28,15 @@ abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractFi
 		this.pojoAdapter = new POJOAdapterHelper<POJOCLASS, UICLASS>(ui, pojoClass);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void bindToProperty(POJOCLASS data, String propertyName) {
 		fixValidator(propertyName);
 		
 		BeanItem<POJOCLASS> item = new BeanItem<POJOCLASS>(data);
-		Property<?> prop = item.getItemProperty(propertyName);
-				
-		fixConverter(prop, propertyName);
+		property = item.getItemProperty(propertyName);
+		fixConverter(propertyName);
 		
-		this.getUI().setPropertyDataSource(prop);
+		this.getUI().setPropertyDataSource(property);
 	}
 	
 	private void fixValidator(String propertyName) {
@@ -45,8 +47,8 @@ abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractFi
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void fixConverter(Property<?> prop, String propertyName) {
-		Class<?> clz = prop.getType();
+	private void fixConverter(String propertyName) {
+		Class<?> clz = property.getType();
 
 		if (clz.equals(Integer.class)) {
 			this.getUI().setConverter((Converter) new StringToIntegerConverter());
@@ -56,7 +58,15 @@ abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractFi
 			this.getUI().setConverter((Converter) new LocalDateConverter());
 		}
 	}
+	
+	public VALUECLASS getValue() {
+		return property.getValue();
+	}
 
+	public void setValue(VALUECLASS value) {
+		property.setValue(value);
+	}
+	
 	@Override
 	public UICLASS getUI() {
 		return pojoAdapter.getUI();

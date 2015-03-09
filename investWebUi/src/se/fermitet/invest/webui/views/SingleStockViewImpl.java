@@ -20,8 +20,8 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	 */
 	private static final long serialVersionUID = 1028596715063809826L;
 
-	POJOPropertyTextFieldAdapter<Stock> symbolAdapter;
-	POJOPropertyTextFieldAdapter<Stock> nameAdapter;
+	POJOPropertyTextFieldAdapter<Stock, String> symbolAdapter;
+	POJOPropertyTextFieldAdapter<Stock, String> nameAdapter;
 
 	Button okButton;
 	Button cancelButton;
@@ -48,10 +48,10 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 	}
 
 	private void initFields() {
-		symbolAdapter = new POJOPropertyTextFieldAdapter<Stock>(Stock.class, "Ticker");
+		symbolAdapter = new POJOPropertyTextFieldAdapter<Stock, String>(Stock.class, "Ticker");
 		symbolAdapter.getUI().addValueChangeListener(e -> valueChanged());
 
-		nameAdapter = new POJOPropertyTextFieldAdapter<Stock>(Stock.class, "Namn");
+		nameAdapter = new POJOPropertyTextFieldAdapter<Stock, String>(Stock.class, "Namn");
 		nameAdapter.getUI().addValueChangeListener(e -> valueChanged());
 
 		okButton = new Button("OK");

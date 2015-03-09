@@ -2,6 +2,8 @@ package se.fermitet.invest.webui.views;
 
 import java.util.List;
 
+import org.joda.money.Money;
+
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.SingleTransactionPresenter;
@@ -23,9 +25,9 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 	private static final long serialVersionUID = 8004896867328107503L;
 	POJOComboBoxAdapter<Stock> stockComboAdapter;
 	POJOPropertyDatePopupAdapter<Transaction> dateAdapter;
-	POJOPropertyTextFieldAdapter<Transaction> priceFieldAdapter;
-	POJOPropertyTextFieldAdapter<Transaction> feeFieldAdapter;
-	POJOPropertyTextFieldAdapter<Transaction> numberFieldAdapter;
+	POJOPropertyTextFieldAdapter<Transaction, Money> priceFieldAdapter;
+	POJOPropertyTextFieldAdapter<Transaction, Money> feeFieldAdapter;
+	POJOPropertyTextFieldAdapter<Transaction, Integer> numberFieldAdapter;
 	private Label titleLabel;
 	
 	Button okButton;
@@ -65,16 +67,15 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		
 		dateAdapter = new POJOPropertyDatePopupAdapter<Transaction>(Transaction.class, "Datum");
 		
-		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Pris");
+		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Pris");
 		
-		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Avgift");
+		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Avgift");
 		
-		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction>(Transaction.class, "Antal");
+		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Integer>(Transaction.class, "Antal");
 		
 		okButton = new Button("OK");
 		okButton.addClickListener((Button.ClickListener) l -> {
-			throw new UnsupportedOperationException("unimplemented");
-//			onOkClick();
+			onOkClick();
 		});
 
 		cancelButton = new Button("Avbryt");
@@ -83,7 +84,6 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		});
 
 	}
-	
 	
 	@Override
 	public void showStocksInSelection(List<Stock> list) {
@@ -116,14 +116,18 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
 		feeFieldAdapter.bindToProperty(transaction, "fee");
 	}
 
+	private void onOkClick() {
+		if (isValid()) presenter.onOkButtonClick(this.transaction);
+	}
+
+
 	private void onCancelClick() {
 		this.presenter.onCancelButtonClick();
 	}
 
 	@Override
 	public void navigateBack() {
-		throw new UnsupportedOperationException("unimplemented");
-//		this.getNavigator().navigateBack();
+		this.getNavigator().navigateBack();
 	}
 
 
