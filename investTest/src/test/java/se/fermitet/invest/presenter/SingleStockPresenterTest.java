@@ -3,59 +3,26 @@ package se.fermitet.invest.presenter;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.UUID;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StockModel;
+import se.fermitet.invest.viewinterface.SinglePOJOView;
 import se.fermitet.invest.viewinterface.SingleStockView;
 
-public class SingleStockPresenterTest {
-	private SingleStockPresenter presenter;
-	private StockModel mockedModel;
-	private SingleStockView mockedView;
-	
-	@Before
-	public void setUp() throws Exception {
-		this.mockedView = mock(SingleStockView.class);
-		this.presenter = new TestSingleStockPresenter(mockedView);
-		this.mockedModel = presenter.model;
-	}
-	
-	@Test
-	public void testGetStockWithNullArgument() throws Exception {
-		Stock answer = presenter.getStockBasedOnIdString(null);
-		
-		assertNotNull(answer);
-		assertNull(answer.getName());
-		assertNull(answer.getSymbol());
-		assertNotNull(answer.getId());
+public class SingleStockPresenterTest extends SinglePOJOPresenterTest<SingleStockPresenter, Stock, StockModel, SingleStockView> {
+	public SingleStockPresenterTest() {
+		super(SingleStockView.class, Stock.class);
 	}
 
-	@Test
-	public void testGetStockWithZeroLenghtArgument() throws Exception {
-		Stock answer = presenter.getStockBasedOnIdString("");
-		
-		assertNotNull(answer);
-		assertNull(answer.getName());
-		assertNull(answer.getSymbol());
-		assertNotNull(answer.getId());
+	@Override
+	protected void assessDefaultDO(Stock obj) {
+		assertNotNull(obj);
+		assertNull(obj.getName());
+		assertNull(obj.getSymbol());
+		assertNotNull(obj.getId());
 	}
-	
-	@Test
-	public void testGetStockWithData() throws Exception {
-		UUID id = UUID.randomUUID();
-		Stock expected = new Stock("TST", "TST");
-		
-		when(mockedModel.getById(id)).thenReturn(expected);
-		
-		Stock answer = presenter.getStockBasedOnIdString(id.toString());
-		
-		assertSame(expected, answer);
-	}
-	
+
 	@Test
 	public void testCancelNavigatesToStockList() throws Exception {
 		presenter.onCancelButtonClick();
@@ -71,6 +38,11 @@ public class SingleStockPresenterTest {
 		
 		verify(mockedModel).save(testStock);
 		verify(mockedView).navigateBack();
+	}
+
+	@Override
+	protected SingleStockPresenter createPresenter(SinglePOJOView view) {
+		return new TestSingleStockPresenter((SingleStockView) view);
 	}
 }
 

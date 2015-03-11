@@ -16,7 +16,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HasComponents;
 
 @SuppressWarnings("rawtypes")
-abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent implements View {
+public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent implements View {
 	private static final long serialVersionUID = 1L;
 	
 	PRESENTER presenter;

@@ -30,7 +30,7 @@ public class SingleStockViewImplTest {
 		
 		Stock testStock = new Stock(nameValue, symbolValue);
 		
-		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testStock);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -42,7 +42,7 @@ public class SingleStockViewImplTest {
 	public void testEnterShowsSomeData_null() throws Exception {
 		Stock testStock = new Stock();
 		
-		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testStock);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -57,7 +57,7 @@ public class SingleStockViewImplTest {
 		
 		Stock testStock = new Stock(nameValue, symbolValue);
 		
-		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(testStock);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testStock);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -84,7 +84,7 @@ public class SingleStockViewImplTest {
 		
 		Stock updatedStock = new Stock(newName, newSymbol);
 		
-		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialStock);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -102,7 +102,7 @@ public class SingleStockViewImplTest {
 	public void testEmptySymbolShouldGiveValidationFault() throws Exception {
 		Stock initialStock = new Stock("Name", "Symbol");
 		
-		when(mockedPresenter.getStockBasedOnIdString(anyString())).thenReturn(initialStock);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialStock);
 		
 		view.enter(mock(ViewChangeEvent.class));
 

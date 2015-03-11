@@ -71,8 +71,8 @@ public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implemen
 
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
-		if (parameters.size() == 0) this.stock = presenter.getStockBasedOnIdString(null);
-		else this.stock = presenter.getStockBasedOnIdString(parameters.get(0).getValue());
+		if (parameters.size() == 0) this.stock = presenter.getDOBasedOnIdString(null);
+		else this.stock = presenter.getDOBasedOnIdString(parameters.get(0).getValue());
 
 		bindToData();
 	}

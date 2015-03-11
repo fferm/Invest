@@ -8,7 +8,7 @@ import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.mongodb.morphia.annotations.Reference;
 
-public class Transaction extends InvestDomainObject {
+public class Transaction extends InvestPOJO {
 
 	@NotNull
 	private LocalDate date;

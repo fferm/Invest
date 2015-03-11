@@ -111,8 +111,8 @@ public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresent
  	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
 		presenter.provideAllStocks();
 		
-		if (parameters.size() == 0) this.transaction = presenter.getTransactionBasedOnIdString(null);
-		else this.transaction = presenter.getTransactionBasedOnIdString(parameters.get(0).getValue());
+		if (parameters.size() == 0) this.transaction = presenter.getDOBasedOnIdString(null);
+		else this.transaction = presenter.getDOBasedOnIdString(parameters.get(0).getValue());
 
 		bindToData();
 	}

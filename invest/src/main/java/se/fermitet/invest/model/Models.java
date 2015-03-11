@@ -7,7 +7,7 @@ public class Models {
 	private static StockModel stockModel;
 	private static TransactionModel transactionModel;
 	
-	public static Model fromClass(Class<? extends Model> clz) {
+	public static Model<?> fromClass(Class<?> clz) {
 		if (clz == null) throw new InvestException("Null model class");
 		
 		if (clz.equals(StockModel.class)) return stocksModel();

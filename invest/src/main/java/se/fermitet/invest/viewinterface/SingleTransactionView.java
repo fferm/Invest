@@ -4,7 +4,7 @@ import java.util.List;
 
 import se.fermitet.invest.domain.Stock;
 
-public interface SingleTransactionView {
+public interface SingleTransactionView extends SinglePOJOView {
 
 	public void showStocksInSelection(List<Stock> list);
 

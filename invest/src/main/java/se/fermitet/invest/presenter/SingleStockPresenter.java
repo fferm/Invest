@@ -1,26 +1,14 @@
 package se.fermitet.invest.presenter;
 
-import java.util.UUID;
-
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.SingleStockView;
 
-public class SingleStockPresenter extends Presenter<SingleStockView, StockModel>{
+public class SingleStockPresenter extends SinglePOJOPresenter<SingleStockView, Stock, StockModel> {
 	public SingleStockPresenter(SingleStockView view) {
-		super(view, StockModel.class);
+		super(view, StockModel.class, Stock.class);
 	}
 	
-	public Stock getStockBasedOnIdString(String idString) {
-		if (idString == null || idString.length() == 0) {
-			return new Stock();
-		} else {
-			UUID id = UUID.fromString(idString);
-			
-			return model.getById(id);
-		}
-	}
-
 	public void onCancelButtonClick() {
 		view.navigateBack();
 	}

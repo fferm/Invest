@@ -14,7 +14,7 @@ import org.mongodb.morphia.annotations.Transient;
 import se.fermitet.general.IdAble;
 import se.fermitet.invest.exception.InvestException;
 
-abstract class InvestDomainObject implements IdAble<UUID> {
+public abstract class InvestPOJO implements IdAble<UUID> {
 
 	@NotNull
 	@Id
@@ -25,10 +25,10 @@ abstract class InvestDomainObject implements IdAble<UUID> {
 	@Transient
 	private List<PropertyDef> toStringPropDefs;
 
-	public InvestDomainObject() {
+	public InvestPOJO() {
 		super();
 
-		toStringPropDefs = new ArrayList<InvestDomainObject.PropertyDef>();
+		toStringPropDefs = new ArrayList<InvestPOJO.PropertyDef>();
 		try {
 			initToStringProperties();
 		} catch (NoSuchMethodException e) {

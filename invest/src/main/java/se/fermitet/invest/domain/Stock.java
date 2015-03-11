@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
-public class Stock extends InvestDomainObject {
+public class Stock extends InvestPOJO {
 
 	@NotNull	
 	@Size(min=1)

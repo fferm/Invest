@@ -11,10 +11,10 @@ import javax.validation.ValidatorFactory;
 
 import org.junit.Test;
 
-public class InvestDomainObjectTest {
+public class InvestPOJOTest {
 	@Test
 	public void testConstructor() throws Exception {
-		InvestDomainObject obj = new TestInvestDomainObject();
+		InvestPOJO obj = new TestInvestDomainObject();
 		
 		assertNotNull("not null", obj);
 		assertNotNull("id", obj.getId());
@@ -22,24 +22,23 @@ public class InvestDomainObjectTest {
 	
 	@Test
 	public void testValidateId() throws Exception {
-		InvestDomainObject obj = new TestInvestDomainObject();
+		InvestPOJO obj = new TestInvestDomainObject();
 		obj.id = null;
 		
 		ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 		Validator validator = validatorFactory.getValidator();
 		
-		Set<ConstraintViolation<InvestDomainObject>> results = validator.validate(obj);
+		Set<ConstraintViolation<InvestPOJO>> results = validator.validate(obj);
 		
 		assertEquals("size", 1, results.size());
 	}
 }
 
-class TestInvestDomainObject extends InvestDomainObject {
+class TestInvestDomainObject extends InvestPOJO {
 
 	@Override
 	protected void initToStringProperties() {
-		// TODO Auto-generated method stub
-		
+		// DO nothing
 	}
 	
 }

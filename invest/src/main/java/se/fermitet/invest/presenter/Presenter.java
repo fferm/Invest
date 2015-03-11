@@ -3,14 +3,13 @@ package se.fermitet.invest.presenter;
 import se.fermitet.invest.model.Model;
 import se.fermitet.invest.model.Models;
 
-@SuppressWarnings("rawtypes")
-public abstract class Presenter<VIEWINTERFACE, MODEL extends Model> {
+public abstract class Presenter<VIEWINTERFACE, POJOCLASS, MODEL extends Model<POJOCLASS>> {
 
 	protected VIEWINTERFACE view;
 	protected MODEL model;
-	private Class<? extends Model> modelClass;
+	private Class<?> modelClass;
 
-	public Presenter(VIEWINTERFACE view, Class<? extends Model> modelClass) {
+	public Presenter(VIEWINTERFACE view, Class<?> modelClass) {
 		super();
 		
 		this.view = view;

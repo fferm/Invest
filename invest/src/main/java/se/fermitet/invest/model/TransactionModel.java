@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import se.fermitet.invest.domain.Transaction;
 
-
-
 public class TransactionModel extends Model<Transaction> {
 	TransactionModel() {
 		super();

@@ -84,7 +84,7 @@ public class SingleTransactionViewImplTest {
 		Money fee = Money.parse("SEK 10");
 		Transaction trans = new Transaction(stock, date, number, price, fee);
 
-		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(trans);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(trans);
 		
 		view.enter(mock(ViewChangeEvent.class));
 
@@ -99,7 +99,7 @@ public class SingleTransactionViewImplTest {
 	public void testEnterShowsSomeData_null() throws Exception {
 		Transaction defaultTrans = new Transaction();
 		
-		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(defaultTrans);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(defaultTrans);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -114,7 +114,7 @@ public class SingleTransactionViewImplTest {
 	public void testCancelButtonCallsPresenter() throws Exception {
 		Transaction testTransaction = new Transaction();
 		
-		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(testTransaction);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testTransaction);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -147,7 +147,7 @@ public class SingleTransactionViewImplTest {
 		
 		Transaction updatedTransaction = new Transaction(stock, newDate, newNumber, newPrice, newFee);
 
-		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(initialTransaction);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialTransaction);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -168,7 +168,7 @@ public class SingleTransactionViewImplTest {
 	public void testInvalidTransactionHandling() throws Exception {
 		Transaction initialTransaction = new Transaction(new Stock("Name", "Symbol"), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));;
 		
-		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(initialTransaction);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialTransaction);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
@@ -190,7 +190,7 @@ public class SingleTransactionViewImplTest {
 
 		Transaction initialTransaction = new Transaction(testStocks.get(1), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
 
-		when(mockedPresenter.getTransactionBasedOnIdString(anyString())).thenReturn(initialTransaction);
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialTransaction);
 		
 		view.enter(mock(ViewChangeEvent.class));
 		
