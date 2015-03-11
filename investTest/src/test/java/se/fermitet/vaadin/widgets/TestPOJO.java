@@ -1,12 +1,18 @@
 package se.fermitet.vaadin.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
-public class TestPOJO {
+import se.fermitet.general.IdAble;
+
+public class TestPOJO implements IdAble<UUID>{
+	UUID id = UUID.randomUUID();
+	
 	private String strAttribute;
 	private int intAttribute;
 	private TestPOJO_LinkedTo linkedAttribute;
@@ -83,6 +89,8 @@ public class TestPOJO {
 		ret.add(new TestPOJO("Str 4", 4, null));
 		ret.add(new TestPOJO("Str 5", 6, new TestPOJO_LinkedTo(null)));
 
+		Collections.shuffle(ret);
+
 		return ret;
 	}
 
@@ -143,6 +151,11 @@ public class TestPOJO {
 		} else if (!strAttribute.equals(other.strAttribute))
 			return false;
 		return true;
+	}
+
+	@Override
+	public UUID getId() {
+		return this.id;
 	}
 
 	

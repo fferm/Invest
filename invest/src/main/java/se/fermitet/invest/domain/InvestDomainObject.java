@@ -11,9 +11,10 @@ import javax.validation.constraints.NotNull;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Transient;
 
+import se.fermitet.general.IdAble;
 import se.fermitet.invest.exception.InvestException;
 
-abstract class InvestDomainObject {
+abstract class InvestDomainObject implements IdAble<UUID> {
 
 	@NotNull
 	@Id

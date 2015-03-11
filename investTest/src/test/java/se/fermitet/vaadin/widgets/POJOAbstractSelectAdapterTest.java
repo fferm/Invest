@@ -99,6 +99,21 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		assertNull("Null selection when unselect is called  (UI)", getSelectionFromUI());
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelectionAfterSort() throws Exception {
+		defineVisibleData();
+		Collections.shuffle(testData);
+		adapter.setData(testData);
+		adapter.setSortOrder("strAttribute");
+		
+		TestPOJO toSelect = testData.get(1);
+		adapter.select(toSelect);
+		
+		assertEquals("selectedItem", toSelect, adapter.getSelectedData());
+		assertEquals("selectedItem from UI", toSelect, getSelectionFromUI());
+	}
+	
 	private TestPOJO getSelectionFromUI() {
 		BeanItem item = (BeanItem) adapter.getUI().getContainerDataSource().getItem(adapter.getUI().getValue());
 		if (item == null) return null;
@@ -112,14 +127,13 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		defineVisibleData();
 		adapter.setData(testData);
 
-		Integer idxOfItemToSelect = 1;
-		TestPOJO selectedPOJO = testData.get(idxOfItemToSelect);
+		TestPOJO selectedPOJO = testData.get(1);
 
 		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
 		adapter.addSelectionListener(listener);
 
-		((AbstractSelect) adapter.getUI()).select(idxOfItemToSelect);
-		verify(listener).onSelect(1, selectedPOJO);
+		((AbstractSelect) adapter.getUI()).select(selectedPOJO.getId());
+		verify(listener).onSelect(selectedPOJO.getId(), selectedPOJO);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -128,16 +142,16 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		defineVisibleData();
 		adapter.setData(testData);
 
-		Integer idxOfItemToSelect = 1;
+		TestPOJO selectedPOJO = testData.get(1);
 
 		AbstractSelect ui = (AbstractSelect) adapter.getUI();
 		
-		ui.select(idxOfItemToSelect);
+		ui.select(selectedPOJO.getId());
 
 		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
 		adapter.addSelectionListener(listener);
 
-		ui.unselect(idxOfItemToSelect);
+		ui.unselect(selectedPOJO.getId());
 		verify(listener).onSelect(null,  null);
 	}
 

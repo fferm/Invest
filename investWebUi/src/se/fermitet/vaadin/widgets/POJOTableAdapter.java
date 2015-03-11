@@ -3,9 +3,11 @@ package se.fermitet.vaadin.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.fermitet.general.IdAble;
+
 import com.vaadin.ui.Table;
 
-public class POJOTableAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<POJOCLASS, Table> {
+public class POJOTableAdapter<POJOCLASS extends IdAble<?>> extends POJOAbstractSelectAdapter<POJOCLASS, Table> {
 	private static final long serialVersionUID = -8088105189014857952L;
 
 	public POJOTableAdapter(Class<POJOCLASS> pojoClass) {

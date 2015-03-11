@@ -66,7 +66,7 @@ public class StockListViewImplTest {
 		assertFalse("Before - delete", deleteButton.isEnabled());
 		assertFalse("Before - edit", editButton.isEnabled());
 		
-		view.stockTable.select(1);
+		view.stockTable.select(this.testStocksSorted.get(1).getId());
 		assertTrue("After select - delete", deleteButton.isEnabled());
 		assertTrue("After select - edit", editButton.isEnabled());
 
@@ -94,20 +94,19 @@ public class StockListViewImplTest {
 		
 		assertNotNull("not null", editButton);
 		
-		view.stockTable.select(0);
-		Stock selectedStock = testStocksSorted.get(0);
-		
+		Stock toSelect = testStocksUnsorted.get(0);
+		view.stockTableAdapter.select(toSelect);
+
 		editButton.click();
 		
-		verify(mockedPresenter).onEditButtonClick(selectedStock);
+		verify(mockedPresenter).onEditButtonClick(toSelect);
 	}
 	
 	@Test
 	public void testDeleteButton() throws Exception {
-		int idx = 2;
-		Stock toDelete = testStocksSorted.get(idx);
+		Stock toDelete = testStocksSorted.get(2);
 		
-		view.stockTable.select(idx);
+		view.stockTableAdapter.select(toDelete);
 		view.deleteButton.click();
 		
 		verify(mockedPresenter).onDeleteButtonClick(toDelete);

@@ -34,7 +34,7 @@ public class InvestWebUI extends UI {
 	protected void init(VaadinRequest request) {
 		initNavigator();
 
-		navigator.navigateTo(TRANSACTIONVIEW);
+		navigator.navigateTo(STOCKLISTVIEW);
 	}
 
 	protected void initNavigator() {

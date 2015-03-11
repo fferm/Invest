@@ -3,10 +3,12 @@ package se.fermitet.vaadin.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.fermitet.general.IdAble;
+
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.ComboBox;
 
-public class POJOComboBoxAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<POJOCLASS, ComboBox>{
+public class POJOComboBoxAdapter<POJOCLASS extends IdAble<?>> extends POJOAbstractSelectAdapter<POJOCLASS, ComboBox>{
 	private static final long serialVersionUID = -5091088337235569884L;
 
 	private String displayColumn;
@@ -34,7 +36,7 @@ public class POJOComboBoxAdapter<POJOCLASS> extends POJOAbstractSelectAdapter<PO
 
 		ensureNestedProperties();
 
-		for (Integer itemId : container.getItemIds()) {
+		for (Object itemId : container.getItemIds()) {
 			BeanItem<POJOCLASS> item = container.getItem(itemId);
 
 			Object value = item.getItemProperty(this.displayColumn).getValue();

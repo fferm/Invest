@@ -76,7 +76,7 @@ public class TransactionListViewImplTest {
 		assertFalse("Before - delete", deleteButton.isEnabled());
 		assertFalse("Before - edit", editButton.isEnabled());
 		
-		view.table.select(1);
+		view.table.select(testDataSorted.get(1).getId());
 		assertTrue("After select - delete", deleteButton.isEnabled());
 		assertTrue("After select - edit", editButton.isEnabled());
 
@@ -104,8 +104,8 @@ public class TransactionListViewImplTest {
 		
 		assertNotNull("not null", editButton);
 		
-		view.table.select(0);
-		Transaction selected = testDataSorted.get(0);
+		Transaction selected = testDataUnsorted.get(2);
+		view.tableAdapter.select(selected);
 		
 		editButton.click();
 		
@@ -114,10 +114,9 @@ public class TransactionListViewImplTest {
 	
 	@Test
 	public void testDeleteButton() throws Exception {
-		int idx = 2;
-		Transaction toDelete = testDataSorted.get(idx);
+		Transaction toDelete = testDataSorted.get(2);
 		
-		view.table.select(idx);
+		view.tableAdapter.select(toDelete);
 		view.deleteButton.click();
 		
 		verify(mockedPresenter).onDeleteButtonClick(toDelete);

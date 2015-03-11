@@ -57,7 +57,7 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 		cols.add(new ColumnDefinition("fee", "Courtage"));
 
 		tableAdapter.setVisibleData(cols);
-		tableAdapter.addSelectionListener((Integer idx, Transaction selected) -> handleSelectionEvent(idx, selected));
+		tableAdapter.addSelectionListener((Object idx, Transaction selected) -> handleSelectionEvent(idx, selected));
 		setSortOrder();
 		
 		table.setSelectable(true);
@@ -119,7 +119,7 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 
 
 
-	private void handleSelectionEvent(Integer idx, Transaction selected) {
+	private void handleSelectionEvent(Object idx, Transaction selected) {
 		deleteButton.setEnabled(idx != null);
 		editButton.setEnabled(idx != null);
 	}

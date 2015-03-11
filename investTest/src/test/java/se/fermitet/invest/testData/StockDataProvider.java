@@ -23,6 +23,8 @@ public class StockDataProvider {
 		testStocks.add(new Stock("Name 1", "C"));
 		testStocks.add(new Stock("Name 2", "B"));
 		testStocks.add(new Stock("A"));
+		testStocks.add(new Stock("B", "BB"));
+		testStocks.add(new Stock("AAB", "AAK"));
 	}
 
 }

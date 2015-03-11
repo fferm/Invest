@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import se.fermitet.general.IdAble;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -15,10 +17,10 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.AbstractSelect;
 
 @SuppressWarnings("serial")
-abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSelect> implements POJOAdapter<POJOCLASS, UICLASS> {
+abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS extends AbstractSelect> implements POJOAdapter<POJOCLASS, UICLASS> {
 	private POJOAdapterHelper<POJOCLASS, UICLASS> pojoAdapter;
 
-	protected BeanContainer<Integer, POJOCLASS> container;
+	protected BeanContainer<Object, POJOCLASS> container;
 	private List<SelectionListener<POJOCLASS>> listeners;
 	private List<String> sortOrder;
 
@@ -33,7 +35,7 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	}
 
 	private void initContainer() {
-		this.container = new BeanContainer<Integer, POJOCLASS>(getPojoClass());
+		this.container = new BeanContainer<Object, POJOCLASS>(getPojoClass());
 
 		this.container.setItemSorter(new DefaultItemSorter() {
 			@Override
@@ -69,18 +71,15 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	protected void updateContainerFromData(List<POJOCLASS> data) {
 		getUI().removeAllItems();
 
-		int i = 0;
-		// itemId is the index of the pojo in the data
 		for (POJOCLASS oneData : data) {
-			container.addItem(i, oneData);
-			i++;
+			container.addItem(oneData.getId(), oneData);
 		}
 	}
 
 	public List<POJOCLASS> getData() {
 		List<POJOCLASS> ret = new ArrayList<POJOCLASS>();
 
-		for (Integer itemId : container.getItemIds()) {
+		for (Object itemId : container.getItemIds()) {
 			ret.add(container.getItem(itemId).getBean());
 		}
 
@@ -103,15 +102,7 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 		if (toSelect == null) {
 			getUI().select(null);
 		} else {
-			for (Integer itemId : container.getItemIds()) {
-				BeanItem<POJOCLASS> item = container.getItem(itemId);
-				POJOCLASS bean = item.getBean();
-
-				if (bean.equals(toSelect)) {
-					getUI().select(itemId);
-					return;
-				}
-			}
+			getUI().select(toSelect.getId());
 		}
 	}
 
@@ -120,11 +111,11 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	}
 
 	public POJOCLASS getSelectedData() {
-		Integer selectedIdx = (Integer) getUI().getValue();
-
-		if (selectedIdx != null) {
-			Integer itemId = container.getIdByIndex(selectedIdx);
-			return container.getItem(itemId).getBean();
+		Object itemId = getUI().getValue();
+		if (itemId != null) {
+			BeanItem<POJOCLASS> item = container.getItem(itemId);
+			
+			return item == null ? null : item.getBean();
 		} else {
 			return null;
 		}
@@ -139,21 +130,19 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 		this.getUI().setPropertyDataSource((Property<?>) item.getItemProperty(propertyName));
 	}
 	
-	private class SelectionConverter implements Converter<Integer, POJOCLASS> {
+	private class SelectionConverter implements Converter<Object, POJOCLASS> {
 		@Override
-		public POJOCLASS convertToModel(Integer value, Class<? extends POJOCLASS> targetType, Locale locale) throws ConversionException {
+		public POJOCLASS convertToModel(Object value, Class<? extends POJOCLASS> targetType, Locale locale) throws ConversionException {
 			BeanItem<POJOCLASS> selectedItem = (BeanItem<POJOCLASS>) container.getItem(value);
 
 			return selectedItem == null ? null : selectedItem.getBean();
 		}
 
 		@Override
-		public Integer convertToPresentation(POJOCLASS value, Class<? extends Integer> targetType, Locale locale) throws ConversionException {
-			for (Integer itemId : container.getItemIds()) {
-				BeanItem<POJOCLASS> candidateItem = container.getItem(itemId);
-				if (candidateItem.getBean().equals(value)) return itemId;
-			}
-			return null;
+		public Object convertToPresentation(POJOCLASS value, Class<? extends Object> targetType, Locale locale) throws ConversionException {
+			if (value == null) return null;
+			
+			return value.getId();
 		}
 
 		@Override
@@ -162,8 +151,8 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 		}
 
 		@Override
-		public Class<Integer> getPresentationType() {
-			return Integer.class;
+		public Class<Object> getPresentationType() {
+			return Object.class;
 		}
 	}
 
@@ -176,7 +165,7 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	}
 
 	public interface SelectionListener<T> {
-		public void onSelect(Integer selectedIdx, T selectedPOJO);
+		public void onSelect(Object itemId, T selectedPOJO);
 	}
 
 	public void addSelectionListener(SelectionListener<POJOCLASS> listener) {
@@ -188,12 +177,12 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS, UICLASS extends AbstractSele
 	}
 
 	protected void fireSelectionEvent(ValueChangeEvent event) {
-		Integer selectedIdx = (Integer) event.getProperty().getValue();
+		POJOCLASS selectedPOJO = getSelectedData();
 
-		POJOCLASS selectedPOJO = selectedIdx == null ? null : this.container.getItem(selectedIdx).getBean();
-
+		Object itemId = selectedPOJO == null ? null : selectedPOJO.getId();
+		
 		for (SelectionListener<POJOCLASS> listener : listeners) {
-			listener.onSelect(selectedIdx, selectedPOJO);
+			listener.onSelect(itemId, selectedPOJO);
 		}
 	}
 	

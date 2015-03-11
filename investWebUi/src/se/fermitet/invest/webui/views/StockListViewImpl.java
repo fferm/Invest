@@ -64,7 +64,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 		cols.add(new ColumnDefinition("name", "Namn"));
 
 		stockTableAdapter.setVisibleData(cols);
-		stockTableAdapter.addSelectionListener((Integer idx, Stock selectedStock) -> handleSelectionEvent(idx, selectedStock));
+		stockTableAdapter.addSelectionListener((Object idx, Stock selectedStock) -> handleSelectionEvent(idx, selectedStock));
 		stockTableAdapter.setSortOrder("symbol");
 		
 		stockTable.setSelectable(true);
@@ -131,7 +131,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 		}
 	}
 
-	private void handleSelectionEvent(Integer idx, Stock selectedStock) {
+	private void handleSelectionEvent(Object idx, Stock selectedStock) {
 		deleteButton.setEnabled(idx != null);
 		editButton.setEnabled(idx != null);
 	}
