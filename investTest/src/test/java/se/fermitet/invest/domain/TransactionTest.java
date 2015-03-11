@@ -30,6 +30,8 @@ public class TransactionTest {
 		assertNotNull("Transaction itself not null", tx);
 		assertNotNull("Transaction date not null", tx.getDate());
 		assertEquals("Transaction date today if used with default constructor", LocalDate.now(), tx.getDate());
+		assertNotNull("Transaction number cannot be null", tx.getNumber());
+		assertEquals("Default value of number", (Integer) 0, tx.getNumber());
 	}
 
 	@Test
@@ -37,7 +39,7 @@ public class TransactionTest {
 		// date, stock, number, price, fee
 		Stock stock = new Stock("TST", "Test");
 		LocalDate date = LocalDate.now();
-		int number = 20;
+		Integer number = 20;
 		Money price = Money.parse("SEK 100");
 		Money fee = Money.parse("SEK 20");
 
@@ -81,10 +83,13 @@ public class TransactionTest {
 	public void testNumberProperty() throws Exception {
 		Transaction tx = new Transaction();
 
-		assertEquals("0 when created", 0, tx.getNumber());
+		assertEquals("0 when created", (Integer) 0, tx.getNumber());
 
 		tx.setNumber(10);
-		assertEquals("after setNumber()", 10, tx.getNumber());
+		assertEquals("after setNumber()", (Integer) 10, tx.getNumber());
+		
+		tx.setNumber(null);
+		assertEquals("after setNumber(null)", (Integer) 0, tx.getNumber());
 	}
 
 	@Test

@@ -51,7 +51,7 @@ public class SingleTransactionPresenterTest {
 		assertEquals(LocalDate.now(), answer.getDate());
 		assertNull(answer.getFee());
 		assertNull(answer.getPrice());
-		assertEquals(0, answer.getNumber());
+		assertEquals((Integer) 0, answer.getNumber());
 		assertNotNull(answer.getId());
 	}
 
@@ -64,7 +64,7 @@ public class SingleTransactionPresenterTest {
 		assertEquals(LocalDate.now(), answer.getDate());
 		assertNull(answer.getFee());
 		assertNull(answer.getPrice());
-		assertEquals(0, answer.getNumber());
+		assertEquals((Integer) 0, answer.getNumber());
 		assertNotNull(answer.getId());
 	}
 	

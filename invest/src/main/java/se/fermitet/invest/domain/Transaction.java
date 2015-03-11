@@ -19,7 +19,7 @@ public class Transaction extends InvestDomainObject {
 	private Stock stock;
 	
 	@Min(1)
-	private int number;
+	private Integer number;
 	
 	@NotNull
 	private Money price;
@@ -54,14 +54,15 @@ public class Transaction extends InvestDomainObject {
 		this.stock = stock;
 	}
 
-	public int getNumber() {
+	public Integer getNumber() {
 		return this.number;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setNumber(Integer number) {
+		if (number == null) setNumber(0);
+		else this.number = number;
 	}
-
+	
 	public Money getPrice() {
 		return this.price;
 	}

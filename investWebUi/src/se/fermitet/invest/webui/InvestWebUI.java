@@ -32,14 +32,18 @@ public class InvestWebUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		initNavigator();
+
+		navigator.navigateTo(TRANSACTIONVIEW);
+	}
+
+	protected void initNavigator() {
 		navigator = new DirectionalNavigator(this, this);
 		
 		navigator.addView(STOCKLISTVIEW, StockListViewImpl.class);
 		navigator.addView(SINGLESTOCKVIEW, SingleStockViewImpl.class);
 		navigator.addView(SINGLETRANSACTIONVIEW, SingleTransactionViewImpl.class);
 		navigator.addView(TRANSACTIONVIEW, TransactionListViewImpl.class);
-
-		navigator.navigateTo(TRANSACTIONVIEW);
 	}
 	
 	public DirectionalNavigator getDirectionalNavigator() {
