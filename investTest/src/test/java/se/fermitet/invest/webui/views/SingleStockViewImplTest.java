@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
@@ -13,14 +12,10 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
-public class SingleStockViewImplTest {
-	private SingleStockViewImpl view;
-	private SingleStockPresenter mockedPresenter;
-
-	@Before
-	public void setUp() {
-		view = new TestSingleStockViewImpl();
-		mockedPresenter = view.presenter;
+public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockViewImpl, SingleStockPresenter> {
+	@Override
+	protected SingleStockViewImpl createViewImpl() {
+		return new TestSingleStockViewImpl();
 	}
 
 	@Test

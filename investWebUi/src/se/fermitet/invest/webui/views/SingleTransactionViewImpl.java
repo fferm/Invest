@@ -20,7 +20,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
-public class SingleTransactionViewImpl extends ViewImpl<SingleTransactionPresenter> implements SingleTransactionView {
+public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransactionPresenter> implements SingleTransactionView {
 
 	private static final long serialVersionUID = 8004896867328107503L;
 	POJOComboBoxAdapter<Stock> stockComboAdapter;

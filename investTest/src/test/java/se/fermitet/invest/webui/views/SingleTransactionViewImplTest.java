@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
-import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
@@ -22,14 +21,10 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.ComboBox;
 
-public class SingleTransactionViewImplTest {
-	private SingleTransactionViewImpl view;
-	private SingleTransactionPresenter mockedPresenter;
-
-	@Before
-	public void setUp() {
-		view = new TestSingleTransactionViewImpl();
-		mockedPresenter = view.presenter;
+public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<SingleTransactionViewImpl, SingleTransactionPresenter> {
+	@Override
+	protected SingleTransactionViewImpl createViewImpl() {
+		return new TestSingleTransactionViewImpl();
 	}
 	
 	@Test

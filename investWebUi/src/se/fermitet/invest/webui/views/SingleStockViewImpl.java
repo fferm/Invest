@@ -14,7 +14,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 
-public class SingleStockViewImpl extends ViewImpl<SingleStockPresenter> implements SingleStockView {
+public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter> implements SingleStockView {
 	/**
 	 * 
 	 */
