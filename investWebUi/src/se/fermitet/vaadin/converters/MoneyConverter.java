@@ -1,6 +1,7 @@
 package se.fermitet.vaadin.converters;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -40,6 +41,8 @@ public class MoneyConverter extends AbstractConverter<String, Money> {
 			
 			if (amountNumber instanceof Long) amount = new BigDecimal((long) amountNumber);
 			if (amountNumber instanceof Double) amount = new BigDecimal((double) amountNumber);
+
+			amount = amount.setScale(curr.getDecimalPlaces(), RoundingMode.HALF_UP);
 
 			if (amount != null) return Money.of(curr, amount);
 			else return null;
