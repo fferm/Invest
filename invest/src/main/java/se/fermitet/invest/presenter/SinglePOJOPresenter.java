@@ -3,8 +3,9 @@ package se.fermitet.invest.presenter;
 import java.util.UUID;
 
 import se.fermitet.invest.model.Model;
+import se.fermitet.invest.viewinterface.SinglePOJOView;
 
-public abstract class SinglePOJOPresenter<VIEWINTERFACE, POJOCLASS, MODEL extends Model<POJOCLASS>> extends Presenter<VIEWINTERFACE, POJOCLASS, MODEL> {
+public abstract class SinglePOJOPresenter<VIEWINTERFACE extends SinglePOJOView, POJOCLASS, MODEL extends Model<POJOCLASS>> extends Presenter<VIEWINTERFACE, POJOCLASS, MODEL> {
 
 	private Class<POJOCLASS> pojoClass;
 
@@ -24,6 +25,17 @@ public abstract class SinglePOJOPresenter<VIEWINTERFACE, POJOCLASS, MODEL extend
 			return model.getById(id);
 		}
 	}
+	
+	public void onCancelButtonClick() {
+		view.navigateBack();
+	}
+	
+	public void onOkButtonClick(POJOCLASS pojo) {
+		model.save(pojo);
+		view.navigateBack();
+	}
+
+
 	
 	private POJOCLASS newDefaultPOJO() {
 		try {

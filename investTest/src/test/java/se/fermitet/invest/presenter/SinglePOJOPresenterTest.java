@@ -64,6 +64,26 @@ public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresen
 		
 		assertSame(expected, answer);
 	}
+	
+	@Test
+	public void testCancelNavigatesToListView() throws Exception {
+		presenter.onCancelButtonClick();
+		
+		verify(mockedView).navigateBack();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testOkSavesAndNavigatesBack() throws Exception {
+		POJOCLASS testData = createDefaultPOJO();
+		
+		presenter.onOkButtonClick(testData);
+		
+		verify(mockedModel).save(testData);
+		verify(mockedView).navigateBack();
+	}
+
+
 
 	@SuppressWarnings("unchecked")
 	private POJOCLASS createDefaultPOJO() {

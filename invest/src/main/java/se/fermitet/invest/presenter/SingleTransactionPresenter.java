@@ -21,17 +21,6 @@ public class SingleTransactionPresenter extends SinglePOJOPresenter<SingleTransa
 		this.view.showStocksInSelection(stocksModel.getAll());
 	}
 	
-	public void onCancelButtonClick() {
-		view.navigateBack();
-	}
-
-	public void onOkButtonClick(Transaction trans) {
-		model.save(trans);
-		view.navigateBack();
-	}
-
-
-
 	protected StockModel createStocksModel() {
 		return (StockModel) Models.fromClass(StockModel.class);
 	}

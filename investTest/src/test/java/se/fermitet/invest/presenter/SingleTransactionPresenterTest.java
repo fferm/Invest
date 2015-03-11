@@ -45,7 +45,7 @@ public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<Sing
 		presenter.provideAllStocks();
 		
 		verify(mockedStocksModel).getAll();
-		((SingleTransactionView) verify(mockedView)).showStocksInSelection(list);
+		verify(mockedView).showStocksInSelection(list);
 	}
 
 	@Override
@@ -57,23 +57,6 @@ public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<Sing
 		assertNull(obj.getPrice());
 		assertEquals((Integer) 0, obj.getNumber());
 		assertNotNull(obj.getId());
-	}
-	
-	@Test
-	public void testCancelNavigatesToTransactionList() throws Exception {
-		presenter.onCancelButtonClick();
-		
-		((SingleTransactionView) verify(mockedView)).navigateBack();
-	}
-	
-	@Test
-	public void testOkSavesAndNavigatesBack() throws Exception {
-		Transaction testData = new Transaction();
-		
-		presenter.onOkButtonClick(testData);
-		
-		verify(mockedModel).save(testData);
-		((SingleTransactionView) verify(mockedView)).navigateBack();
 	}
 }
 

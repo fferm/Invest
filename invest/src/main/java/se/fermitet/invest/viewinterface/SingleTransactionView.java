@@ -8,6 +8,4 @@ public interface SingleTransactionView extends SinglePOJOView {
 
 	public void showStocksInSelection(List<Stock> list);
 
-	public void navigateBack();
-
 }
