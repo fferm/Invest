@@ -17,6 +17,7 @@ public class ModelsTest {
 		assertSame(mod1, mod2);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testStocksModelBasedOnClass() throws Exception {
 		Model obj = Models.fromClass(StockModel.class);
@@ -25,6 +26,7 @@ public class ModelsTest {
 		assertEquals(StockModel.class, obj.getClass());
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testTransactionModelBasedOnClass() throws Exception {
 		Model obj = Models.fromClass(TransactionModel.class);
