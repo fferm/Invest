@@ -1,20 +1,16 @@
 package se.fermitet.invest.webui.views;
 
-import java.util.List;
-
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.SingleStockPresenter;
 import se.fermitet.invest.viewinterface.SingleStockView;
-import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 
-public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter> implements SingleStockView {
+public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter, Stock> implements SingleStockView {
 	/**
 	 * 
 	 */
@@ -25,8 +21,6 @@ public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter
 
 	Button okButton;
 	Button cancelButton;
-
-	private Stock stock;
 
 	@Override
 	protected Component createMainLayout() {
@@ -69,26 +63,26 @@ public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter
 		okButton.setEnabled(isValid());
 	}
 
-	@Override
-	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
-		if (parameters.size() == 0) this.stock = presenter.getDOBasedOnIdString(null);
-		else this.stock = presenter.getDOBasedOnIdString(parameters.get(0).getValue());
-
-		bindToData();
-	}
+//	@Override
+//	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
+//		if (parameters.size() == 0) this.pojo = presenter.getDOBasedOnIdString(null);
+//		else this.pojo = presenter.getDOBasedOnIdString(parameters.get(0).getValue());
+//
+//		bindToData();
+//	}
 
 	protected SingleStockPresenter createPresenter() {
 		return new SingleStockPresenter(this);
 	}
 
-
-	private void bindToData() {
-		symbolAdapter.bindToProperty(stock, "symbol");
-		nameAdapter.bindToProperty(stock, "name");
+	@Override
+	protected void bindToData() {
+		symbolAdapter.bindToProperty(pojo, "symbol");
+		nameAdapter.bindToProperty(pojo, "name");
 	}
 
 	private void onOkClick() {
-		if (isValid()) presenter.onOkButtonClick(this.stock);
+		if (isValid()) presenter.onOkButtonClick(this.pojo);
 	}
 
 	private void onCancelClick() {

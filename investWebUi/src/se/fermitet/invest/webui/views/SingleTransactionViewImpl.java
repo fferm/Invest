@@ -20,9 +20,10 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
-public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransactionPresenter> implements SingleTransactionView {
+public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransactionPresenter, Transaction> implements SingleTransactionView {
 
 	private static final long serialVersionUID = 8004896867328107503L;
+	
 	POJOComboBoxAdapter<Stock> stockComboAdapter;
 	POJOPropertyDatePopupAdapter<Transaction> dateAdapter;
 	POJOPropertyTextFieldAdapter<Transaction, Money> priceFieldAdapter;
@@ -32,8 +33,6 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 	
 	Button okButton;
 	Button cancelButton;
-
-	private Transaction transaction;
 
 	@Override
 	protected Component createMainLayout() {
@@ -111,24 +110,22 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
  	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
 		presenter.provideAllStocks();
 		
-		if (parameters.size() == 0) this.transaction = presenter.getDOBasedOnIdString(null);
-		else this.transaction = presenter.getDOBasedOnIdString(parameters.get(0).getValue());
-
-		bindToData();
+		super.enter(event, parameters);
 	}
 
-	private void bindToData() {
-		if (this.transaction == null) return;
+	@Override
+	protected void bindToData() {
+		if (this.pojo == null) return;
 
-		stockComboAdapter.bindSelectionToProperty(transaction, "stock");
-		dateAdapter.bindToProperty(transaction, "date");
-		priceFieldAdapter.bindToProperty(transaction, "price");
-		numberFieldAdapter.bindToProperty(transaction, "number");
-		feeFieldAdapter.bindToProperty(transaction, "fee");
+		stockComboAdapter.bindSelectionToProperty(pojo, "stock");
+		dateAdapter.bindToProperty(pojo, "date");
+		priceFieldAdapter.bindToProperty(pojo, "price");
+		numberFieldAdapter.bindToProperty(pojo, "number");
+		feeFieldAdapter.bindToProperty(pojo, "fee");
 	}
 
 	private void onOkClick() {
-		if (isValid()) presenter.onOkButtonClick(this.transaction);
+		if (isValid()) presenter.onOkButtonClick(this.pojo);
 	}
 
 

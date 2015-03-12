@@ -8,7 +8,7 @@ import se.fermitet.invest.domain.Stock;
 
 public class StockDataProvider {
 
-	private List<Stock> testStocks;
+	private static List<Stock> testStocks;
 	
 	public List<Stock> getTestStocks() {
 		if (testStocks == null) {

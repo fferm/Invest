@@ -12,39 +12,28 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
-public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockViewImpl, SingleStockPresenter> {
+public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockViewImpl, SingleStockPresenter, Stock> {
+	
+	public SingleStockViewImplTest() {
+		super(Stock.class);
+	}
+
 	@Override
 	protected SingleStockViewImpl createViewImpl() {
 		return new TestSingleStockViewImpl();
 	}
 
-	@Test
-	public void testEnterShowsSomeData_notNull() throws Exception {
-		String nameValue = "my name";
-		String symbolValue = "my symbol";
-		
-		Stock testStock = new Stock(nameValue, symbolValue);
-		
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testStock);
-		
-		view.enter(mock(ViewChangeEvent.class));
-		
-		assertEquals(nameValue, view.nameAdapter.getUI().getValue());
-		assertEquals(symbolValue, view.symbolAdapter.getUI().getValue());
+	@Override
+	protected Stock getTestPojo() {
+		return new Stock("my name", "my symbol");
 	}
-	
-	@Test
-	public void testEnterShowsSomeData_null() throws Exception {
-		Stock testStock = new Stock();
-		
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testStock);
-		
-		view.enter(mock(ViewChangeEvent.class));
-		
-		assertNull(view.nameAdapter.getUI().getValue());
-		assertNull(view.symbolAdapter.getUI().getValue());
+
+	@Override
+	protected void checkUIAgainstPojo(Stock pojo) {
+		assertEquals(pojo.getName(), view.nameAdapter.getUI().getValue());
+		assertEquals(pojo.getSymbol(), view.symbolAdapter.getUI().getValue());
 	}
-	
+
 	@Test
 	public void testCancelButtonCallsPresenter() throws Exception {
 		String nameValue = "my name";
@@ -112,6 +101,7 @@ public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockV
 		assertFalse("symbol field not valid after", view.symbolAdapter.getUI().isValid());
 		assertFalse("form not valid after", view.isValid());
 	}
+
 }
 
 @SuppressWarnings("serial")
