@@ -46,8 +46,8 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 
 	@Override
 	protected Transaction getTestPojo() {
-		Stock stock = testStocks.get(0);
-		LocalDate date = LocalDate.now();
+		Stock stock = testStocks.get(2);
+		LocalDate date = LocalDate.now().minusDays(10);
 		int number = 10;
 		Money price = Money.parse("SEK 200");
 		Money fee = Money.parse("SEK 10");
@@ -71,7 +71,15 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 		assertEquals("Price", conv.convertToPresentation(pojo.getPrice(),  null, null), view.priceFieldAdapter.getUI().getValue());
 		assertEquals("Fee", conv.convertToPresentation(pojo.getFee(),  null, null), view.feeFieldAdapter.getUI().getValue());
 	}
-
+	
+	@Override
+	protected void updateUIFromPOJO(Transaction updated) {
+		view.stockComboAdapter.select(updated.getStock());
+		view.dateAdapter.setValue(updated.getDate());
+		view.numberFieldAdapter.setValue(updated.getNumber());
+		view.priceFieldAdapter.setValue(updated.getPrice());
+		view.feeFieldAdapter.setValue(updated.getFee());
+	}
 
 	@Test
 	public void testHasComponents() throws Exception {
@@ -112,61 +120,7 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 			i++;
 		}
 	}
-
-	@Test
-	public void testCancelButtonCallsPresenter() throws Exception {
-		Transaction testTransaction = new Transaction();
-
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testTransaction);
-
-		view.enter(mock(ViewChangeEvent.class));
-
-		view.cancelButton.click();
-
-		verify(mockedPresenter).onCancelButtonClick();
-	}
-
-	@Test
-	public void testNavigateBack() throws Exception {
-		DirectionalNavigator mockedNavigator = view.getNavigator();
-
-		view.navigateBack();
-
-		verify(mockedNavigator).navigateBack();
-	}
-
-	@Test
-	public void testOKButtonCallsPresenterWithUpdatedData() throws Exception {
-		List<Stock> testStocks = new StockDataProvider().getTestStocks();
-		view.showStocksInSelection(testStocks);
-
-		Transaction initialTransaction = new Transaction();
-		Stock stock = testStocks.get(2);
-
-		int newNumber = 10;
-		LocalDate newDate = LocalDate.now().minusDays(2);
-		Money newPrice = Money.parse("SEK 200");
-		Money newFee = Money.parse("SEK 20");
-
-		Transaction updatedTransaction = new Transaction(stock, newDate, newNumber, newPrice, newFee);
-
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialTransaction);
-
-		view.enter(mock(ViewChangeEvent.class));
-
-		view.stockComboAdapter.select(stock);
-		view.dateAdapter.setValue(newDate);
-		view.numberFieldAdapter.setValue(newNumber);
-		view.priceFieldAdapter.setValue(newPrice);
-		view.feeFieldAdapter.setValue(newFee);
-
-		reset(mockedPresenter);
-
-		view.okButton.click();
-
-		verify(mockedPresenter).onOkButtonClick(eq(updatedTransaction));
-	}
-
+	
 	@Test
 	public void testInvalidTransactionHandling() throws Exception {
 		Transaction initialTransaction = new Transaction(new Stock("Name", "Symbol"), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));;
@@ -199,6 +153,7 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 
 		view.numberFieldAdapter.getUI().setValue("");
 	}
+
 
 
 

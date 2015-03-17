@@ -34,53 +34,13 @@ public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockV
 		assertEquals(pojo.getSymbol(), view.symbolAdapter.getUI().getValue());
 	}
 
-	@Test
-	public void testCancelButtonCallsPresenter() throws Exception {
-		String nameValue = "my name";
-		String symbolValue = "my symbol";
-		
-		Stock testStock = new Stock(nameValue, symbolValue);
-		
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(testStock);
-		
-		view.enter(mock(ViewChangeEvent.class));
-		
-		view.cancelButton.click();
-		
-		verify(mockedPresenter).onCancelButtonClick();
+	@Override
+	protected void updateUIFromPOJO(Stock updated) {
+		view.nameAdapter.setValue(updated.getName());
+		view.symbolAdapter.setValue(updated.getSymbol());
 	}
-	
-	@Test
-	public void testNavigateBack() throws Exception {
-		DirectionalNavigator mockedNavigator = view.getNavigator();
-		
-		view.navigateBack();
-		
-		verify(mockedNavigator).navigateBack();
-	}
-	
-	@Test
-	public void testOKButtonCallsPresenterWithUpdatedStock() throws Exception {
-		Stock initialStock = new Stock("Name", "Symbol");
-		
-		String newName = "new name";
-		String newSymbol = "new symbol";
-		
-		Stock updatedStock = new Stock(newName, newSymbol);
-		
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialStock);
-		
-		view.enter(mock(ViewChangeEvent.class));
-		
-		view.nameAdapter.getUI().setValue(newName);
-		view.symbolAdapter.getUI().setValue(newSymbol);
-		
-		reset(mockedPresenter);
-		
-		view.okButton.click();
-		
-		verify(mockedPresenter).onOkButtonClick(eq(updatedStock));
-	}
+
+
 	
 	@Test
 	public void testEmptySymbolShouldGiveValidationFault() throws Exception {

@@ -14,10 +14,8 @@ import se.fermitet.vaadin.widgets.POJOPropertyDatePopupAdapter;
 import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 
 public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransactionPresenter, Transaction> implements SingleTransactionView {
@@ -31,9 +29,6 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 	POJOPropertyTextFieldAdapter<Transaction, Integer> numberFieldAdapter;
 	private Label titleLabel;
 	
-	Button okButton;
-	Button cancelButton;
-
 	@Override
 	protected Component createMainLayout() {
 		FormLayout mainLayout = new FormLayout();
@@ -47,12 +42,7 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 		mainLayout.addComponent(priceFieldAdapter.getUI());
 		mainLayout.addComponent(feeFieldAdapter.getUI());
 		
-		HorizontalLayout buttonPanel = new HorizontalLayout();
-		buttonPanel.setSpacing(true);
-		buttonPanel.addComponent(okButton);
-		buttonPanel.addComponent(cancelButton);
-
-		mainLayout.addComponent(buttonPanel);
+		mainLayout.addComponent(initButtonPanel());
 
 		return mainLayout;
 	}
@@ -76,17 +66,6 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 		
 		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Integer>(Transaction.class, "Antal");
 		numberFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
-
-		okButton = new Button("OK");
-		okButton.addClickListener((Button.ClickListener) l -> {
-			onOkClick();
-		});
-
-		cancelButton = new Button("Avbryt");
-		cancelButton.addClickListener((Button.ClickListener) l -> {
-			onCancelClick();
-		});
-
 	}
 	
 	@Override
@@ -94,15 +73,8 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 		stockComboAdapter.setData(list);
 	}
 	
-	private void valueChanged() {
-		okButton.setEnabled(isValid());
-	}
-
-
-
 	@Override
 	protected SingleTransactionPresenter createPresenter() {
-		// TODO.  This could possibly be refactored to ViewImpl
 		return new SingleTransactionPresenter(this);
 	}
 
@@ -123,21 +95,4 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 		numberFieldAdapter.bindToProperty(pojo, "number");
 		feeFieldAdapter.bindToProperty(pojo, "fee");
 	}
-
-	private void onOkClick() {
-		if (isValid()) presenter.onOkButtonClick(this.pojo);
-	}
-
-
-	private void onCancelClick() {
-		this.presenter.onCancelButtonClick();
-	}
-
-	@Override
-	public void navigateBack() {
-		this.getNavigator().navigateBack();
-	}
-
-
-
 }
