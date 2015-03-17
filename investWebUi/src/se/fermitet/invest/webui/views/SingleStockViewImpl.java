@@ -5,8 +5,7 @@ import se.fermitet.invest.presenter.SingleStockPresenter;
 import se.fermitet.invest.viewinterface.SingleStockView;
 import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Layout;
 
 public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter, Stock> implements SingleStockView {
 	private static final long serialVersionUID = 1028596715063809826L;
@@ -15,26 +14,14 @@ public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter
 	POJOPropertyTextFieldAdapter<Stock, String> nameAdapter;
 
 	@Override
-	protected Component createMainLayout() {
-		FormLayout layout = new FormLayout();
-
-		initFields();
-
-		layout.addComponent(symbolAdapter.getUI());
-		layout.addComponent(nameAdapter.getUI());
-
-		layout.addComponent(initButtonPanel());
-
-		return layout;
-	}
-
-	private void initFields() {
+	protected void initAndAddFields(Layout layout) {
 		symbolAdapter = new POJOPropertyTextFieldAdapter<Stock, String>(Stock.class, "Ticker");
 		symbolAdapter.getUI().addValueChangeListener(e -> valueChanged());
-
+		layout.addComponent(symbolAdapter.getUI());
+		
 		nameAdapter = new POJOPropertyTextFieldAdapter<Stock, String>(Stock.class, "Namn");
 		nameAdapter.getUI().addValueChangeListener(e -> valueChanged());
-
+		layout.addComponent(nameAdapter.getUI());
 	}
 
 	protected SingleStockPresenter createPresenter() {

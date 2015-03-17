@@ -9,7 +9,9 @@ import se.fermitet.vaadin.navigation.URIParameter;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Layout;
 
 																			   //  VIEWINTERFACE extends SinglePOJOView, POJOCLASS, MODEL extends Model<POJOCLASS>
 public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?, POJOCLASS, ?>, POJOCLASS> extends ViewImpl<PRESENTER> implements SinglePOJOView {
@@ -21,8 +23,19 @@ public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?
 	Button cancelButton;
 
 	protected abstract void bindToData();
+	protected abstract void initAndAddFields(Layout layout);
 	
-	protected Component initButtonPanel() {
+	@Override
+	protected Component createMainLayout() {
+		Layout layout = new FormLayout();
+
+		initAndAddFields(layout);
+		initAndAddButtons(layout);
+
+		return layout;
+	}
+	
+	private void initAndAddButtons(Layout layout) {
 		HorizontalLayout buttonPanel = new HorizontalLayout();
 		buttonPanel.setSpacing(true);
 
@@ -38,7 +51,8 @@ public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?
 
 		buttonPanel.addComponent(okButton);
 		buttonPanel.addComponent(cancelButton);
-		return buttonPanel;
+		
+		layout.addComponent(buttonPanel);
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package se.fermitet.invest.webui.views;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
@@ -9,8 +8,6 @@ import org.junit.Test;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.SingleStockPresenter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
-
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockViewImpl, SingleStockPresenter, Stock> {
 	
@@ -40,26 +37,20 @@ public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockV
 		view.symbolAdapter.setValue(updated.getSymbol());
 	}
 
+	@Override
+	protected void makeUIDataInvalid() {
+		view.symbolAdapter.getUI().setValue(null);
+	}
 
+	@Override
+	protected void checkFieldValidity(boolean shouldBeValid) {
+		assertTrue("symbol field validity should be " + shouldBeValid, view.symbolAdapter.getUI().isValid() == shouldBeValid);
+	}
 	
 	@Test
-	public void testEmptySymbolShouldGiveValidationFault() throws Exception {
-		Stock initialStock = new Stock("Name", "Symbol");
-		
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialStock);
-		
-		view.enter(mock(ViewChangeEvent.class));
-
-		
-		assertTrue("ok button enabled before", view.okButton.isEnabled());
-		assertTrue("symbol field valid before", view.symbolAdapter.getUI().isValid());
-		assertTrue("form valid before", view.isValid());
-		
-		view.symbolAdapter.getUI().setValue(null);
-		
-		assertFalse("ok button disabled after", view.okButton.isEnabled());
-		assertFalse("symbol field not valid after", view.symbolAdapter.getUI().isValid());
-		assertFalse("form not valid after", view.isValid());
+	public void testHasComponents() throws Exception {
+		assertNotNull("symbol", view.symbolAdapter);
+		assertNotNull("name", view.nameAdapter);
 	}
 
 }

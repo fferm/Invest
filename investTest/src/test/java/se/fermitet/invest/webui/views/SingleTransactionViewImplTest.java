@@ -80,6 +80,17 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 		view.priceFieldAdapter.setValue(updated.getPrice());
 		view.feeFieldAdapter.setValue(updated.getFee());
 	}
+	
+	@Override
+	protected void makeUIDataInvalid() {
+		view.dateAdapter.setValue(null);
+	}
+
+	@Override
+	protected void checkFieldValidity(boolean shouldBeValid) {
+		assertTrue("date field validity should be " + shouldBeValid, view.dateAdapter.getUI().isValid() == shouldBeValid);
+	}
+
 
 	@Test
 	public void testHasComponents() throws Exception {
@@ -122,25 +133,6 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 	}
 	
 	@Test
-	public void testInvalidTransactionHandling() throws Exception {
-		Transaction initialTransaction = new Transaction(new Stock("Name", "Symbol"), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));;
-
-		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialTransaction);
-
-		view.enter(mock(ViewChangeEvent.class));
-
-		assertTrue("ok button enabled before", view.okButton.isEnabled());
-		assertTrue("date field valid before", view.dateAdapter.getUI().isValid());
-		assertTrue("form valid before", view.isValid());
-
-		view.dateAdapter.setValue(null);
-
-		assertFalse("ok button disabled after", view.okButton.isEnabled());
-		assertFalse("date field not valid after", view.dateAdapter.getUI().isValid());
-		assertFalse("form not valid after", view.isValid());
-	}
-
-	@Test
 	public void testErrorShouldNotAppearWhenClearingOutNumberField() throws Exception {
 		List<Stock> testStocks = new StockDataProvider().getTestStocks();
 		view.showStocksInSelection(testStocks);
@@ -153,6 +145,7 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 
 		view.numberFieldAdapter.getUI().setValue("");
 	}
+
 
 
 

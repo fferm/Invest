@@ -1,5 +1,6 @@
 package se.fermitet.invest.webui.views;
 
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -33,7 +34,15 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 	protected abstract POJOCLASS getTestPojo();
 	protected abstract void checkUIAgainstPojo(POJOCLASS pojo);
 	protected abstract void updateUIFromPOJO(POJOCLASS updated);
+	protected abstract void makeUIDataInvalid();
+	protected abstract void checkFieldValidity(boolean shouldBeValid);
+
+
+	protected POJOCLASS getDefaultPojo() throws Exception {
+		return pojoClass.newInstance();
+	}
 	
+
 	@Test
 	public void testEnterShowsSomeData_withValues() throws Exception {
 		POJOCLASS pojo = getTestPojo();
@@ -47,7 +56,7 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 
 	@Test
 	public void testEnterShowsSomeData_default() throws Exception {
-		POJOCLASS defaultPojo = pojoClass.newInstance();
+		POJOCLASS defaultPojo = getDefaultPojo();
 		
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(defaultPojo);
 		
@@ -55,7 +64,7 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 		
 		checkUIAgainstPojo(defaultPojo);
 	}
-	
+
 	@Test
 	public void testNavigateBack() throws Exception {
 		DirectionalNavigator mockedNavigator = view.getNavigator();
@@ -79,7 +88,7 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testOKButtonCallsPresenterWithUpdatedData() throws Exception {
-		POJOCLASS initial = pojoClass.newInstance();
+		POJOCLASS initial = getDefaultPojo();
 		POJOCLASS updated = getTestPojo();
 		
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initial);
@@ -95,4 +104,28 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 
 		verify(mockedPresenter).onOkButtonClick(eq(updated));
 	}
+	
+	@Test
+	public void testHandlingOfInvalidPojo() throws Exception {
+		POJOCLASS initial = getTestPojo();
+
+		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initial);
+
+		view.enter(mock(ViewChangeEvent.class));
+
+		assertTrue("ok button enabled before", view.okButton.isEnabled());
+		
+		checkFieldValidity(true);
+		assertTrue("form valid before", view.isValid());
+
+		makeUIDataInvalid();
+
+		assertFalse("ok button disabled after", view.okButton.isEnabled());
+		
+		checkFieldValidity(false);
+		assertFalse("form not valid after", view.isValid());
+	}
+
+
+
 }

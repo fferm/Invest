@@ -14,9 +14,7 @@ import se.fermitet.vaadin.widgets.POJOPropertyDatePopupAdapter;
 import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 
 public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransactionPresenter, Transaction> implements SingleTransactionView {
 
@@ -27,47 +25,32 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 	POJOPropertyTextFieldAdapter<Transaction, Money> priceFieldAdapter;
 	POJOPropertyTextFieldAdapter<Transaction, Money> feeFieldAdapter;
 	POJOPropertyTextFieldAdapter<Transaction, Integer> numberFieldAdapter;
-	private Label titleLabel;
 	
 	@Override
-	protected Component createMainLayout() {
-		FormLayout mainLayout = new FormLayout();
-		
-		initFields();
-		
-		mainLayout.addComponent(titleLabel);
-		mainLayout.addComponent(stockComboAdapter.getUI());
-		mainLayout.addComponent(dateAdapter.getUI());
-		mainLayout.addComponent(numberFieldAdapter.getUI());
-		mainLayout.addComponent(priceFieldAdapter.getUI());
-		mainLayout.addComponent(feeFieldAdapter.getUI());
-		
-		mainLayout.addComponent(initButtonPanel());
-
-		return mainLayout;
-	}
-
-	private void initFields() {
-		titleLabel = new Label("Affär");
-		
+	protected void initAndAddFields(Layout layout) {
 		stockComboAdapter = new POJOComboBoxAdapter<Stock>(Stock.class, "Aktie");
 		stockComboAdapter.setDisplayColumn("symbol");
 		stockComboAdapter.setSortOrder("symbol");
 		stockComboAdapter.getUI().addValueChangeListener(e -> valueChanged());
+		layout.addComponent(stockComboAdapter.getUI());
 		
 		dateAdapter = new POJOPropertyDatePopupAdapter<Transaction>(Transaction.class, "Datum");
 		dateAdapter.getUI().addValueChangeListener(e -> valueChanged());
-		
-		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Pris");
-		priceFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
-		
-		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Avgift");
-		feeFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
+		layout.addComponent(dateAdapter.getUI());
 		
 		numberFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Integer>(Transaction.class, "Antal");
 		numberFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
+		layout.addComponent(numberFieldAdapter.getUI());
+		
+		priceFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Pris");
+		priceFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
+		layout.addComponent(priceFieldAdapter.getUI());
+		
+		feeFieldAdapter = new POJOPropertyTextFieldAdapter<Transaction, Money>(Transaction.class, "Avgift");
+		feeFieldAdapter.getUI().addValueChangeListener(e -> valueChanged());
+		layout.addComponent(feeFieldAdapter.getUI());
 	}
-	
+
 	@Override
 	public void showStocksInSelection(List<Stock> list) {
 		stockComboAdapter.setData(list);
@@ -95,4 +78,5 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 		numberFieldAdapter.bindToProperty(pojo, "number");
 		feeFieldAdapter.bindToProperty(pojo, "fee");
 	}
+
 }
