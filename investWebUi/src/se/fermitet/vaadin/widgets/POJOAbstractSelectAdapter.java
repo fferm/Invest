@@ -17,25 +17,25 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.AbstractSelect;
 
 @SuppressWarnings("serial")
-abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS extends AbstractSelect> implements POJOAdapter<POJOCLASS, UICLASS> {
-	private POJOAdapterHelper<POJOCLASS, UICLASS> pojoAdapter;
+abstract class POJOAbstractSelectAdapter<POJO extends IdAble<?>, UI extends AbstractSelect> implements POJOAdapter<POJO, UI> {
+	private POJOAdapterHelper<POJO, UI> pojoAdapter;
 
-	protected BeanContainer<Object, POJOCLASS> container;
-	private List<SelectionListener<POJOCLASS>> listeners;
+	protected BeanContainer<Object, POJO> container;
+	private List<SelectionListener<POJO>> listeners;
 	private List<String> sortOrder;
 
-	POJOAbstractSelectAdapter(Class<POJOCLASS> pojoClass, UICLASS ui) {
+	POJOAbstractSelectAdapter(Class<POJO> pojoClass, UI ui) {
 		super();
-		this.pojoAdapter = new POJOAdapterHelper<POJOCLASS, UICLASS>(ui, pojoClass);
+		this.pojoAdapter = new POJOAdapterHelper<POJO, UI>(ui, pojoClass);
 		
-		this.listeners = new ArrayList<SelectionListener<POJOCLASS>>();
+		this.listeners = new ArrayList<SelectionListener<POJO>>();
 
 		initContainer();
 		configureUI();
 	}
 
 	private void initContainer() {
-		this.container = new BeanContainer<Object, POJOCLASS>(getPojoClass());
+		this.container = new BeanContainer<Object, POJO>(getPojoClass());
 
 		this.container.setItemSorter(new DefaultItemSorter() {
 			@Override
@@ -60,7 +60,7 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS ex
 
 	protected abstract void updateUIFromData();
 
-	public void setData(List<POJOCLASS> allData) {
+	public void setData(List<POJO> allData) {
 		updateContainerFromData(allData);
 
 		if (this.sortOrder != null) performSortOnData();
@@ -68,16 +68,16 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS ex
 		updateUIFromData();
 	}
 
-	protected void updateContainerFromData(List<POJOCLASS> data) {
+	protected void updateContainerFromData(List<POJO> data) {
 		getUI().removeAllItems();
 
-		for (POJOCLASS oneData : data) {
+		for (POJO oneData : data) {
 			container.addItem(oneData.getId(), oneData);
 		}
 	}
 
-	public List<POJOCLASS> getData() {
-		List<POJOCLASS> ret = new ArrayList<POJOCLASS>();
+	public List<POJO> getData() {
+		List<POJO> ret = new ArrayList<POJO>();
 
 		for (Object itemId : container.getItemIds()) {
 			ret.add(container.getItem(itemId).getBean());
@@ -98,7 +98,7 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS ex
 		setSortOrder(propertyIds);
 	}
 
-	public void select(POJOCLASS toSelect) {
+	public void select(POJO toSelect) {
 		if (toSelect == null) {
 			getUI().select(null);
 		} else {
@@ -110,10 +110,10 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS ex
 		select(null);
 	}
 
-	public POJOCLASS getSelectedData() {
+	public POJO getSelectedData() {
 		Object itemId = getUI().getValue();
 		if (itemId != null) {
-			BeanItem<POJOCLASS> item = container.getItem(itemId);
+			BeanItem<POJO> item = container.getItem(itemId);
 			
 			return item == null ? null : item.getBean();
 		} else {
@@ -130,23 +130,23 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS ex
 		this.getUI().setPropertyDataSource((Property<?>) item.getItemProperty(propertyName));
 	}
 	
-	private class SelectionConverter implements Converter<Object, POJOCLASS> {
+	private class SelectionConverter implements Converter<Object, POJO> {
 		@Override
-		public POJOCLASS convertToModel(Object value, Class<? extends POJOCLASS> targetType, Locale locale) throws ConversionException {
-			BeanItem<POJOCLASS> selectedItem = (BeanItem<POJOCLASS>) container.getItem(value);
+		public POJO convertToModel(Object value, Class<? extends POJO> targetType, Locale locale) throws ConversionException {
+			BeanItem<POJO> selectedItem = (BeanItem<POJO>) container.getItem(value);
 
 			return selectedItem == null ? null : selectedItem.getBean();
 		}
 
 		@Override
-		public Object convertToPresentation(POJOCLASS value, Class<? extends Object> targetType, Locale locale) throws ConversionException {
+		public Object convertToPresentation(POJO value, Class<? extends Object> targetType, Locale locale) throws ConversionException {
 			if (value == null) return null;
 			
 			return value.getId();
 		}
 
 		@Override
-		public Class<POJOCLASS> getModelType() {
+		public Class<POJO> getModelType() {
 			return getPojoClass();
 		}
 
@@ -168,31 +168,31 @@ abstract class POJOAbstractSelectAdapter<POJOCLASS extends IdAble<?>, UICLASS ex
 		public void onSelect(Object itemId, T selectedPOJO);
 	}
 
-	public void addSelectionListener(SelectionListener<POJOCLASS> listener) {
+	public void addSelectionListener(SelectionListener<POJO> listener) {
 		listeners.add(listener);
 	}
 
-	public void removeSelectionListener(SelectionListener<POJOCLASS> listener) {
+	public void removeSelectionListener(SelectionListener<POJO> listener) {
 		listeners.remove(listener);
 	}
 
 	protected void fireSelectionEvent(ValueChangeEvent event) {
-		POJOCLASS selectedPOJO = getSelectedData();
+		POJO selectedPOJO = getSelectedData();
 
 		Object itemId = selectedPOJO == null ? null : selectedPOJO.getId();
 		
-		for (SelectionListener<POJOCLASS> listener : listeners) {
+		for (SelectionListener<POJO> listener : listeners) {
 			listener.onSelect(itemId, selectedPOJO);
 		}
 	}
 	
 	@Override
-	public UICLASS getUI() {
+	public UI getUI() {
 		return this.pojoAdapter.getUI();
 	}
 	
 	@Override
-	public Class<POJOCLASS> getPojoClass() {
+	public Class<POJO> getPojoClass() {
 		return this.pojoAdapter.getPojoClass();
 	}
 

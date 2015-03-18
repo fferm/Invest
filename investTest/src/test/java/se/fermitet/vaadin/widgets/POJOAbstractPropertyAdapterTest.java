@@ -8,9 +8,9 @@ import org.junit.Test;
 import com.vaadin.ui.AbstractField;
 
 @SuppressWarnings("rawtypes")
-public abstract class POJOAbstractPropertyAdapterTest<ADAPTERCLASS extends POJOAbstractPropertyAdapter, UICLASS extends AbstractField<?>> {
-	protected ADAPTERCLASS adapter;
-	protected UICLASS ui;
+public abstract class POJOAbstractPropertyAdapterTest<ADAPTER extends POJOAbstractPropertyAdapter, UI extends AbstractField<?>> {
+	protected ADAPTER adapter;
+	protected UI ui;
 
 	protected String propertyName;
 	protected Class<?> pojoClass;
@@ -24,10 +24,10 @@ public abstract class POJOAbstractPropertyAdapterTest<ADAPTERCLASS extends POJOA
 		pojoClass = getPojoClass();
 
 		adapter =  createAdapter();
-		ui =  (UICLASS) adapter.getUI();
+		ui =  (UI) adapter.getUI();
 	}
 
-	protected abstract ADAPTERCLASS createAdapter();
+	protected abstract ADAPTER createAdapter();
 	protected abstract Class<?> getPojoClass();
 	protected abstract String getCaption();
 	protected abstract String getPropertyName();

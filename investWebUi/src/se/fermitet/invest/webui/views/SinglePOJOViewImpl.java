@@ -13,11 +13,11 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 
-																			   //  VIEWINTERFACE extends SinglePOJOView, POJOCLASS, MODEL extends Model<POJOCLASS>
-public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?, POJOCLASS, ?>, POJOCLASS> extends ViewImpl<PRESENTER> implements SinglePOJOView {
+																			   //  VIEWINTERFACE extends SinglePOJOView, POJO, MODEL extends Model<POJO>
+public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?, POJO, ?>, POJO> extends ViewImpl<PRESENTER> implements SinglePOJOView {
 	private static final long serialVersionUID = 7033937523664849158L;
 
-	protected POJOCLASS pojo;
+	protected POJO pojo;
 	
 	Button okButton;
 	Button cancelButton;
@@ -57,8 +57,8 @@ public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?
 
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
-		if (parameters.size() == 0) this.pojo = (POJOCLASS) presenter.getDOBasedOnIdString(null);
-		else this.pojo = (POJOCLASS) presenter.getDOBasedOnIdString(parameters.get(0).getValue());
+		if (parameters.size() == 0) this.pojo = (POJO) presenter.getDOBasedOnIdString(null);
+		else this.pojo = (POJO) presenter.getDOBasedOnIdString(parameters.get(0).getValue());
 
 		bindToData();
 	}

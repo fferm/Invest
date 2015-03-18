@@ -13,26 +13,26 @@ import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.ui.AbstractField;
 
-abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractField<?>, VALUECLASS> implements POJOAdapter<POJOCLASS, UICLASS> {
+abstract class POJOAbstractPropertyAdapter<POJO, UI extends AbstractField<?>, VALUE> implements POJOAdapter<POJO, UI> {
 	private static final long serialVersionUID = 4600062141995002807L;
 
-	private POJOAdapterHelper<POJOCLASS, UICLASS> pojoAdapter;
+	private POJOAdapterHelper<POJO, UI> pojoAdapter;
 
 	private BeanValidator validator;
 
-	private Property<VALUECLASS> property;
+	private Property<VALUE> property;
 
-	POJOAbstractPropertyAdapter(Class<POJOCLASS> pojoClass, UICLASS ui) {
+	POJOAbstractPropertyAdapter(Class<POJO> pojoClass, UI ui) {
 		super();
 		
-		this.pojoAdapter = new POJOAdapterHelper<POJOCLASS, UICLASS>(ui, pojoClass);
+		this.pojoAdapter = new POJOAdapterHelper<POJO, UI>(ui, pojoClass);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void bindToProperty(POJOCLASS data, String propertyName) {
+	public void bindToProperty(POJO data, String propertyName) {
 		fixValidator(propertyName);
 		
-		BeanItem<POJOCLASS> item = new BeanItem<POJOCLASS>(data);
+		BeanItem<POJO> item = new BeanItem<POJO>(data);
 		property = item.getItemProperty(propertyName);
 		fixConverter(propertyName);
 		
@@ -59,21 +59,21 @@ abstract class POJOAbstractPropertyAdapter<POJOCLASS, UICLASS extends AbstractFi
 		}
 	}
 	
-	public VALUECLASS getValue() {
+	public VALUE getValue() {
 		return property.getValue();
 	}
 
-	public void setValue(VALUECLASS value) {
+	public void setValue(VALUE value) {
 		property.setValue(value);
 	}
 	
 	@Override
-	public UICLASS getUI() {
+	public UI getUI() {
 		return pojoAdapter.getUI();
 	}
 	
 	@Override
-	public Class<POJOCLASS> getPojoClass() {
+	public Class<POJO> getPojoClass() {
 		return pojoAdapter.getPojoClass();
 	}
 }

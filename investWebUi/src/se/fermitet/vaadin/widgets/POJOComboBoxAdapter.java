@@ -8,16 +8,16 @@ import se.fermitet.general.IdAble;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.ComboBox;
 
-public class POJOComboBoxAdapter<POJOCLASS extends IdAble<?>> extends POJOAbstractSelectAdapter<POJOCLASS, ComboBox>{
+public class POJOComboBoxAdapter<POJO extends IdAble<?>> extends POJOAbstractSelectAdapter<POJO, ComboBox>{
 	private static final long serialVersionUID = -5091088337235569884L;
 
 	private String displayColumn;
 
-	public POJOComboBoxAdapter(Class<POJOCLASS> pojoClass) {
+	public POJOComboBoxAdapter(Class<POJO> pojoClass) {
 		this(pojoClass, null);
 	}
 
-	public POJOComboBoxAdapter(Class<POJOCLASS> pojoClass, String caption) {
+	public POJOComboBoxAdapter(Class<POJO> pojoClass, String caption) {
 		super(pojoClass, new ComboBox(caption));
 	}
 
@@ -37,7 +37,7 @@ public class POJOComboBoxAdapter<POJOCLASS extends IdAble<?>> extends POJOAbstra
 		ensureNestedProperties();
 
 		for (Object itemId : container.getItemIds()) {
-			BeanItem<POJOCLASS> item = container.getItem(itemId);
+			BeanItem<POJO> item = container.getItem(itemId);
 
 			Object value = item.getItemProperty(this.displayColumn).getValue();
 

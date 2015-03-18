@@ -13,12 +13,12 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 @SuppressWarnings("rawtypes")
-public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl, PRESENTER extends SinglePOJOPresenter, POJOCLASS> {
+public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl, PRESENTER extends SinglePOJOPresenter, POJO> {
 	protected VIEWIMPL view;
 	protected PRESENTER mockedPresenter;
-	private Class<POJOCLASS> pojoClass;
+	private Class<POJO> pojoClass;
 
-	public SinglePOJOViewImplTest(Class<POJOCLASS> pojoClass) {
+	public SinglePOJOViewImplTest(Class<POJO> pojoClass) {
 		super();
 		this.pojoClass = pojoClass;
 	}
@@ -31,21 +31,21 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 	}
 
 	protected abstract VIEWIMPL createViewImpl();
-	protected abstract POJOCLASS getTestPojo();
-	protected abstract void checkUIAgainstPojo(POJOCLASS pojo);
-	protected abstract void updateUIFromPOJO(POJOCLASS updated);
+	protected abstract POJO getTestPojo();
+	protected abstract void checkUIAgainstPojo(POJO pojo);
+	protected abstract void updateUIFromPOJO(POJO updated);
 	protected abstract void makeUIDataInvalid();
 	protected abstract void checkFieldValidity(boolean shouldBeValid);
 
 
-	protected POJOCLASS getDefaultPojo() throws Exception {
+	protected POJO getDefaultPojo() throws Exception {
 		return pojoClass.newInstance();
 	}
 	
 
 	@Test
 	public void testEnterShowsSomeData_withValues() throws Exception {
-		POJOCLASS pojo = getTestPojo();
+		POJO pojo = getTestPojo();
 
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(pojo);
 		
@@ -56,7 +56,7 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 
 	@Test
 	public void testEnterShowsSomeData_default() throws Exception {
-		POJOCLASS defaultPojo = getDefaultPojo();
+		POJO defaultPojo = getDefaultPojo();
 		
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(defaultPojo);
 		
@@ -88,8 +88,8 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testOKButtonCallsPresenterWithUpdatedData() throws Exception {
-		POJOCLASS initial = getDefaultPojo();
-		POJOCLASS updated = getTestPojo();
+		POJO initial = getDefaultPojo();
+		POJO updated = getTestPojo();
 		
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initial);
 
@@ -107,7 +107,7 @@ public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl
 	
 	@Test
 	public void testHandlingOfInvalidPojo() throws Exception {
-		POJOCLASS initial = getTestPojo();
+		POJO initial = getTestPojo();
 
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initial);
 

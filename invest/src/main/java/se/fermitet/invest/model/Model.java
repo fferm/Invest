@@ -6,7 +6,7 @@ import java.util.UUID;
 import se.fermitet.invest.storage.Storage;
 import se.fermitet.invest.storage.StorageFactory;
 
-public abstract class Model<POJOCLASS> {
+public abstract class Model<POJO> {
 	Storage storage;
 
 	protected Model() {
@@ -18,10 +18,10 @@ public abstract class Model<POJOCLASS> {
 		return new StorageFactory().getStorage();
 	}
 	
-	public abstract List<POJOCLASS> getAll();
-	public abstract POJOCLASS getById(UUID id);
-	public abstract void save(POJOCLASS obj);
-	public abstract void delete(POJOCLASS obj);
+	public abstract List<POJO> getAll();
+	public abstract POJO getById(UUID id);
+	public abstract void save(POJO obj);
+	public abstract void delete(POJO obj);
 
 	
 }

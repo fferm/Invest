@@ -1,5 +1,5 @@
 package se.fermitet.general;
 
-public interface IdAble<IDCLASS> {
-	public IDCLASS getId();
+public interface IdAble<ID> {
+	public ID getId();
 }

@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 import com.vaadin.ui.AbstractComponent;
 
-interface POJOAdapter<POJOCLASS, UICLASS extends AbstractComponent> extends Serializable {
+interface POJOAdapter<POJO, UI extends AbstractComponent> extends Serializable {
 	
-	public UICLASS getUI();
-	public Class<POJOCLASS> getPojoClass();
+	public UI getUI();
+	public Class<POJO> getPojoClass();
 }
 
-class POJOAdapterHelper<POJOCLASS, UICLASS extends AbstractComponent> implements POJOAdapter<POJOCLASS, UICLASS> {
+class POJOAdapterHelper<POJO, UI extends AbstractComponent> implements POJOAdapter<POJO, UI> {
 	private static final long serialVersionUID = 3489127965350620634L;
 
-	private UICLASS ui;
-	private Class<POJOCLASS> pojoClass;
+	private UI ui;
+	private Class<POJO> pojoClass;
 
-	POJOAdapterHelper(UICLASS ui, Class<POJOCLASS> pojoClass) {
+	POJOAdapterHelper(UI ui, Class<POJO> pojoClass) {
 		super();
 		this.ui = ui;
 		this.pojoClass = pojoClass;
@@ -25,12 +25,12 @@ class POJOAdapterHelper<POJOCLASS, UICLASS extends AbstractComponent> implements
 	}
 	
 	@Override
-	public UICLASS getUI() {
+	public UI getUI() {
 		return this.ui;
 	}
 
 	@Override
-	public Class<POJOCLASS> getPojoClass() {
+	public Class<POJO> getPojoClass() {
 		return this.pojoClass;
 	}
 	

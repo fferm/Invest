@@ -11,17 +11,17 @@ import se.fermitet.invest.model.Model;
 import se.fermitet.invest.viewinterface.SinglePOJOView;
 
 @SuppressWarnings("rawtypes")
-public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresenter, POJOCLASS, MODEL extends Model<POJOCLASS>, VIEWINTERFACECLASS extends SinglePOJOView> extends PresenterTest<PRESENTER, POJOCLASS, MODEL, VIEWINTERFACECLASS> {
+public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresenter, POJO, MODEL extends Model<POJO>, VIEWINTERFACE extends SinglePOJOView> extends PresenterTest<PRESENTER, POJO, MODEL, VIEWINTERFACE> {
 	public SinglePOJOPresenterTest(Class<?> viewInterfaceClass,	Class<?> pojoClass) {
 		super(viewInterfaceClass, pojoClass);
 	}
 
-	protected abstract void assessDefaultDO(POJOCLASS obj);
+	protected abstract void assessDefaultDO(POJO obj);
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetPOJOWithNullArgument() throws Exception {
-		POJOCLASS answer = (POJOCLASS) presenter.getDOBasedOnIdString(null);
+		POJO answer = (POJO) presenter.getDOBasedOnIdString(null);
 		
 		assessDefaultDO(answer);
 	}
@@ -29,7 +29,7 @@ public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresen
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetPOJOWithZeroLenghtArgument() throws Exception {
-		POJOCLASS answer = (POJOCLASS) presenter.getDOBasedOnIdString("");
+		POJO answer = (POJO) presenter.getDOBasedOnIdString("");
 		
 		assessDefaultDO(answer);
 	}
@@ -37,12 +37,12 @@ public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresen
 	@Test
 	public void testGetTransactionWithData() throws Exception {
 		UUID id = UUID.randomUUID();
-		POJOCLASS expected = createDefaultPOJO();
+		POJO expected = createDefaultPOJO();
 		
 		when(mockedModel.getById(id)).thenReturn(expected);
 		
 		@SuppressWarnings("unchecked")
-		POJOCLASS answer = (POJOCLASS) presenter.getDOBasedOnIdString(id.toString());
+		POJO answer = (POJO) presenter.getDOBasedOnIdString(id.toString());
 		
 		assertSame(expected, answer);
 	}
@@ -57,7 +57,7 @@ public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresen
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testOkSavesAndNavigatesBack() throws Exception {
-		POJOCLASS testData = createDefaultPOJO();
+		POJO testData = createDefaultPOJO();
 		
 		presenter.onOkButtonClick(testData);
 		
@@ -68,9 +68,9 @@ public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresen
 
 
 	@SuppressWarnings("unchecked")
-	private POJOCLASS createDefaultPOJO() {
+	private POJO createDefaultPOJO() {
 		try {
-			return (POJOCLASS) pojoClass.newInstance();
+			return (POJO) pojoClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 			fail("Exception: " + e.getMessage());

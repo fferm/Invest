@@ -3,7 +3,7 @@ package se.fermitet.invest.presenter;
 import se.fermitet.invest.model.Model;
 import se.fermitet.invest.model.Models;
 
-public abstract class Presenter<VIEWINTERFACE, POJOCLASS, MODEL extends Model<POJOCLASS>> {
+public abstract class Presenter<VIEWINTERFACE, POJO, MODEL extends Model<POJO>> {
 
 	protected VIEWINTERFACE view;
 	protected MODEL model;

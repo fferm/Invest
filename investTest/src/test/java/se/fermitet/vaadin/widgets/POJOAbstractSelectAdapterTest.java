@@ -17,9 +17,9 @@ import com.vaadin.ui.AbstractSelect;
 
 
 @SuppressWarnings("rawtypes")
-public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbstractSelectAdapter> {
+public abstract class POJOAbstractSelectAdapterTest<ADAPTER extends POJOAbstractSelectAdapter> {
 	protected List<TestPOJO> testData;
-	protected ADAPTERCLASS adapter;
+	protected ADAPTER adapter;
 
 
 	@Before
@@ -29,7 +29,7 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTERCLASS extends POJOAbs
 		adapter = createAdapter();
 	}
 
-	protected abstract ADAPTERCLASS createAdapter();
+	protected abstract ADAPTER createAdapter();
 	protected abstract void defineVisibleData();
 	protected abstract void defineIllegalColumn();
 	protected abstract void defineIllegalNestedColumn();

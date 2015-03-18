@@ -7,14 +7,14 @@ import se.fermitet.general.IdAble;
 
 import com.vaadin.ui.Table;
 
-public class POJOTableAdapter<POJOCLASS extends IdAble<?>> extends POJOAbstractSelectAdapter<POJOCLASS, Table> {
+public class POJOTableAdapter<POJO extends IdAble<?>> extends POJOAbstractSelectAdapter<POJO, Table> {
 	private static final long serialVersionUID = -8088105189014857952L;
 
-	public POJOTableAdapter(Class<POJOCLASS> pojoClass) {
+	public POJOTableAdapter(Class<POJO> pojoClass) {
 		this(pojoClass, null);
 	}
 
-	public POJOTableAdapter(Class<POJOCLASS> pojoClass, String caption) {
+	public POJOTableAdapter(Class<POJO> pojoClass, String caption) {
 		super(pojoClass, new Table(caption));
 	}
 	

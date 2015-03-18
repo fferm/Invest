@@ -10,7 +10,7 @@ import org.junit.Test;
 import se.fermitet.invest.model.Model;
 import se.fermitet.invest.viewinterface.ListView;
 
-public abstract class ListPresenterTest<PRESENTER extends ListPresenter<?, ?, ?>, POJOCLASS, MODEL extends Model<POJOCLASS>, VIEWINTERFACECLASS extends ListView<POJOCLASS>> extends PresenterTest<PRESENTER, POJOCLASS, MODEL, VIEWINTERFACECLASS> {
+public abstract class ListPresenterTest<PRESENTER extends ListPresenter<?, ?, ?>, POJO, MODEL extends Model<POJO>, VIEWINTERFACE extends ListView<POJO>> extends PresenterTest<PRESENTER, POJO, MODEL, VIEWINTERFACE> {
 
 	public ListPresenterTest(Class<?> viewInterfaceClass, Class<?> pojoClass) {
 		super(viewInterfaceClass, pojoClass);
@@ -18,7 +18,7 @@ public abstract class ListPresenterTest<PRESENTER extends ListPresenter<?, ?, ?>
 
 	@Test
 	public void testFillListWithAllPojos() throws Exception {
-		List<POJOCLASS> list = new ArrayList<POJOCLASS>();
+		List<POJO> list = new ArrayList<POJO>();
 		when(mockedModel.getAll()).thenReturn(list);
 	
 		presenter.fillViewWithData();

@@ -11,8 +11,8 @@ import org.junit.Test;
 import se.fermitet.invest.storage.Storage;
 
 @SuppressWarnings("rawtypes")
-public abstract class AbstractModelTest<MODELCLASS extends Model> {
-	protected MODELCLASS model;
+public abstract class AbstractModelTest<MODEL extends Model> {
+	protected MODEL model;
 	protected Storage mockedStorage;
 	private Class<? extends Model> modelClass;
 
@@ -27,7 +27,7 @@ public abstract class AbstractModelTest<MODELCLASS extends Model> {
 		mockedStorage = model.storage;
 	}
 	
-	public abstract MODELCLASS createModelWithMockedStorage();
+	public abstract MODEL createModelWithMockedStorage();
 	
 	@Test
 	public void testNoPublicConstructor() throws Exception {

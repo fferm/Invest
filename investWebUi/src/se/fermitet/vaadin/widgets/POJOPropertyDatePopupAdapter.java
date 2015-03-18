@@ -4,10 +4,10 @@ import org.joda.time.LocalDate;
 
 import com.vaadin.ui.PopupDateField;
 
-public class POJOPropertyDatePopupAdapter<POJOCLASS> extends POJOAbstractPropertyAdapter<POJOCLASS, PopupDateField, LocalDate>{
+public class POJOPropertyDatePopupAdapter<POJO> extends POJOAbstractPropertyAdapter<POJO, PopupDateField, LocalDate>{
 	private static final long serialVersionUID = -5381555555854972062L;
 
-	public POJOPropertyDatePopupAdapter(Class<POJOCLASS> pojoClass, String caption) {
+	public POJOPropertyDatePopupAdapter(Class<POJO> pojoClass, String caption) {
 		super(pojoClass, new PopupDateField(caption));
 	}
 
