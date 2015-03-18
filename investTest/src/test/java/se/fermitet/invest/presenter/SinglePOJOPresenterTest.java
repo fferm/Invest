@@ -5,36 +5,18 @@ import static org.mockito.Mockito.*;
 
 import java.util.UUID;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.model.Model;
 import se.fermitet.invest.viewinterface.SinglePOJOView;
 
 @SuppressWarnings("rawtypes")
-public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresenter, POJOCLASS, MODEL extends Model<POJOCLASS>, VIEWINTERFACECLASS extends SinglePOJOView> {
-	protected PRESENTER presenter;
-	protected MODEL mockedModel;
-	protected VIEWINTERFACECLASS mockedView;
-	private Class<?> viewInterfaceClass;
-	private Class<?> pojoClass;
-	
-	public SinglePOJOPresenterTest(Class<?> viewInterfaceClass, Class<?> pojoClass) {
-		super();
-		this.viewInterfaceClass = viewInterfaceClass;
-		this.pojoClass = pojoClass;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Before
-	public void setUp() throws Exception {
-		this.mockedView = (VIEWINTERFACECLASS) mock(viewInterfaceClass);
-		this.presenter = createPresenter(mockedView);
-		this.mockedModel = (MODEL) presenter.model;
+public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresenter, POJOCLASS, MODEL extends Model<POJOCLASS>, VIEWINTERFACECLASS extends SinglePOJOView> extends PresenterTest<PRESENTER, POJOCLASS, MODEL, VIEWINTERFACECLASS> {
+	public SinglePOJOPresenterTest(Class<?> viewInterfaceClass,	Class<?> pojoClass) {
+		super(viewInterfaceClass, pojoClass);
 	}
 
 	protected abstract void assessDefaultDO(POJOCLASS obj);
-	protected abstract PRESENTER createPresenter(SinglePOJOView view);
 	
 	@SuppressWarnings("unchecked")
 	@Test

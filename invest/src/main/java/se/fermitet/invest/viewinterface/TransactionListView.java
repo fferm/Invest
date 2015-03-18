@@ -1,13 +1,8 @@
 package se.fermitet.invest.viewinterface;
 
-import java.util.List;
-
 import se.fermitet.invest.domain.Transaction;
 
-public interface TransactionListView {
-	
-	public void displayData(List<Transaction> data);
-
+public interface TransactionListView extends ListView<Transaction> {
 	public void navigateToSingleTransactionView(Transaction data);
 
 }

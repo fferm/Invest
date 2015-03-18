@@ -31,7 +31,7 @@ public class StockListViewImplTest {
 
 		initTestStocks();
 		
-		view.displayStocks(testStocksUnsorted);
+		view.displayData(testStocksUnsorted);
 	}
 	
 	private void initTestStocks() {
@@ -49,7 +49,7 @@ public class StockListViewImplTest {
 	public void testEnterCallsFillStocks() throws Exception {
 		view.enter(null);
 	
-		verify(mockedPresenter).fillStockListWithAllStocks();
+		verify(mockedPresenter).fillViewWithData();
 	}
 	
 	@Test

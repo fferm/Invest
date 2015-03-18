@@ -14,7 +14,6 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.model.TransactionModel;
-import se.fermitet.invest.viewinterface.SinglePOJOView;
 import se.fermitet.invest.viewinterface.SingleTransactionView;
 
 public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<SingleTransactionPresenter, Transaction, TransactionModel, SingleTransactionView> {
@@ -32,7 +31,7 @@ public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<Sing
 	}
 
 	@Override
-	protected SingleTransactionPresenter createPresenter(SinglePOJOView view) {
+	protected SingleTransactionPresenter createPresenter(SingleTransactionView view) {
 		return new TestSingleTransactionPresenter((SingleTransactionView) view);
 	}
 

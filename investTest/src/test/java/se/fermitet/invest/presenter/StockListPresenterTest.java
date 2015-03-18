@@ -5,37 +5,20 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.StockListView;
 
-public class StockListPresenterTest {
-	private StockListView mockedView;
-	private StockListPresenter presenter;
-	private StockModel mockedModel;
-
-	@Before
-	public void setUp() throws Exception {
-		mockedView = mock(StockListView.class);
-		presenter = new TestStockListPresenter(mockedView);
-		mockedModel = presenter.model;
-		
-		reset(mockedView);
-		reset(mockedModel);
+public class StockListPresenterTest extends ListPresenterTest<StockListPresenter, Stock, StockModel, StockListView> {
+	public StockListPresenterTest() {
+		super(StockListView.class, Stock.class);
 	}
-	
-	@Test
-	public void testFillStockListWithAllStock() throws Exception {
-		List<Stock> list = new ArrayList<Stock>();
-		when(mockedModel.getAll()).thenReturn(list);
-	
-		presenter.fillStockListWithAllStocks();
-		
-		verify(mockedModel).getAll();
-		verify(mockedView).displayStocks(list);
+
+	@Override
+	protected StockListPresenter createPresenter(StockListView view) {
+		return new TestStockListPresenter(mockedView);
 	}
 	
 	@Test
@@ -47,7 +30,7 @@ public class StockListPresenterTest {
 		presenter.onDeleteButtonClick(toDelete);
 		
 		verify(mockedModel).delete(toDelete);
-		verify(mockedView).displayStocks(list);
+		verify(mockedView).displayData(list);
 	}
 	
 	@Test
@@ -65,6 +48,7 @@ public class StockListPresenterTest {
 
 		verify(mockedView).navigateToSingleStockView(editStock);
 	}
+
 }
 
 class TestStockListPresenter extends StockListPresenter {

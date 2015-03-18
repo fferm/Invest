@@ -48,7 +48,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
-		this.presenter.fillStockListWithAllStocks();
+		this.presenter.fillViewWithData();
 	}
 
 	protected StockListPresenter createPresenter() {
@@ -118,7 +118,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 	}
 
 	@Override
-	public void displayStocks(List<Stock> stocks) {
+	public void displayData(List<Stock> stocks) {
 		stockTableAdapter.setData(stocks);
 	}
 

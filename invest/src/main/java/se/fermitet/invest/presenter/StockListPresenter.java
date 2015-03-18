@@ -4,14 +4,10 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.StockListView;
 
-public class StockListPresenter extends Presenter<StockListView, Stock, StockModel>{
+public class StockListPresenter extends ListPresenter<StockListView, Stock, StockModel>{
 
 	public StockListPresenter(StockListView view) {
 		super(view, StockModel.class);
-	}
-
-	public void fillStockListWithAllStocks() {
-		this.view.displayStocks(model.getAll());
 	}
 
 	public void onNewButtonClick() {
@@ -24,7 +20,7 @@ public class StockListPresenter extends Presenter<StockListView, Stock, StockMod
 
 	public void onDeleteButtonClick(Stock toDelete) {
 		model.delete(toDelete);
-		view.displayStocks(model.getAll());
+		view.displayData(model.getAll());
 	}
 	
 

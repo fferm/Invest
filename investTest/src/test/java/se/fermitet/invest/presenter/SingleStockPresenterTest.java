@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.StockModel;
-import se.fermitet.invest.viewinterface.SinglePOJOView;
 import se.fermitet.invest.viewinterface.SingleStockView;
 
 public class SingleStockPresenterTest extends SinglePOJOPresenterTest<SingleStockPresenter, Stock, StockModel, SingleStockView> {
@@ -21,7 +20,7 @@ public class SingleStockPresenterTest extends SinglePOJOPresenterTest<SingleStoc
 	}
 
 	@Override
-	protected SingleStockPresenter createPresenter(SinglePOJOView view) {
+	protected SingleStockPresenter createPresenter(SingleStockView view) {
 		return new TestSingleStockPresenter((SingleStockView) view);
 	}
 }

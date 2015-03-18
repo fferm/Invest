@@ -1,11 +1,7 @@
 package se.fermitet.invest.viewinterface;
 
-import java.util.List;
-
 import se.fermitet.invest.domain.Stock;
 
-public interface StockListView {
-	public void displayStocks(List<Stock> stocks);
-
+public interface StockListView extends ListView<Stock> {
 	public void navigateToSingleStockView(Stock stock);
 }
