@@ -136,7 +136,7 @@ public class TransactionListViewImpl extends ViewImpl<TransactionListPresenter> 
 	}
 
 	@Override
-	public void navigateToSingleTransactionView(Transaction data) {
+	public void navigateToSingleView(Transaction data) {
 		if (data == null) {
 			getNavigator().navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW);
 		} else {

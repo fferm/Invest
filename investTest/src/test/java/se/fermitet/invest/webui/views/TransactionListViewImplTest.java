@@ -124,7 +124,7 @@ public class TransactionListViewImplTest {
 	
 	@Test
 	public void testEditSingle_nullValue() throws Exception {
-		view.navigateToSingleTransactionView(null);
+		view.navigateToSingleView(null);
 		
 		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW);
 	}
@@ -133,7 +133,7 @@ public class TransactionListViewImplTest {
 	public void testEditSingle_notNullValue() throws Exception {
 		Transaction testTrans = new Transaction();
 		
-		view.navigateToSingleTransactionView(testTrans);
+		view.navigateToSingleView(testTrans);
 		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW, new URIParameter(testTrans.getId().toString()));
 	}
 

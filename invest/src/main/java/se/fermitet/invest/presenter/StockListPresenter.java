@@ -9,20 +9,4 @@ public class StockListPresenter extends ListPresenter<StockListView, Stock, Stoc
 	public StockListPresenter(StockListView view) {
 		super(view, StockModel.class);
 	}
-
-	public void onNewButtonClick() {
-		view.navigateToSingleStockView(null);
-	}
-
-	public void onEditButtonClick(Stock selectedStock) {
-		view.navigateToSingleStockView(selectedStock);
-	}
-
-	public void onDeleteButtonClick(Stock toDelete) {
-		model.delete(toDelete);
-		view.displayData(model.getAll());
-	}
-	
-
-
 }

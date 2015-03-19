@@ -9,18 +9,4 @@ public class TransactionListPresenter extends ListPresenter<TransactionListView,
 	public TransactionListPresenter(TransactionListView view) {
 		super(view, TransactionModel.class);
 	}
-
-	public void onNewButtonClick() {
-		view.navigateToSingleTransactionView(null);
-	}
-
-	public void onEditButtonClick(Transaction selected) {
-		view.navigateToSingleTransactionView(selected);
-	}
-
-	public void onDeleteButtonClick(Transaction selected) {
-		model.delete(selected);
-		view.displayData(model.getAll());
-	}
-
 }

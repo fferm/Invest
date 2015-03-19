@@ -12,6 +12,22 @@ public abstract class ListPresenter<VIEWINTERFACE extends ListView<POJO>, POJO, 
 	public void fillViewWithData() {
 		this.view.displayData(model.getAll());
 	}
+	
+	public void onDeleteButtonClick(POJO toDelete) {
+		model.delete(toDelete);
+		view.displayData(model.getAll());
+	}
+	
+	public void onNewButtonClick() {
+		view.navigateToSingleView(null);
+	}
+	
+	public void onEditButtonClick(POJO selected) {
+		view.navigateToSingleView(selected);
+	}
+
+
+
 
 
 }

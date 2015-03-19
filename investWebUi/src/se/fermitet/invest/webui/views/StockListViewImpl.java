@@ -123,7 +123,7 @@ public class StockListViewImpl extends ViewImpl<StockListPresenter> implements S
 	}
 
 	@Override
-	public void navigateToSingleStockView(Stock stock) {
+	public void navigateToSingleView(Stock stock) {
 		if (stock == null) {
 			getNavigator().navigateTo(InvestWebUI.SINGLESTOCKVIEW);
 		} else {

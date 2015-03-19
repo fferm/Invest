@@ -114,7 +114,7 @@ public class StockListViewImplTest {
 	
 	@Test
 	public void testEditSingleStock_nullValue() throws Exception {
-		view.navigateToSingleStockView(null);
+		view.navigateToSingleView(null);
 		
 		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
 	}
@@ -123,7 +123,7 @@ public class StockListViewImplTest {
 	public void testEditSingleStock_notNullValue() throws Exception {
 		Stock testStock = new Stock("Test", "TST");
 		
-		view.navigateToSingleStockView(testStock);
+		view.navigateToSingleView(testStock);
 		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
 	}
 }
