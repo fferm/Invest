@@ -14,9 +14,9 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.model.TransactionModel;
-import se.fermitet.invest.viewinterface.SingleTransactionView;
+import se.fermitet.invest.viewinterface.TransactionSingleView;
 
-public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<SingleTransactionPresenter, Transaction, TransactionModel, SingleTransactionView> {
+public class TransactionSinglePresenterTest extends POJOSinglePresenterTest<TransactionSinglePresenter, Transaction, TransactionModel, TransactionSingleView> {
 
 	private StockModel mockedStocksModel;
 	
@@ -26,13 +26,13 @@ public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<Sing
 		this.mockedStocksModel = presenter.stocksModel;
 	}
 
-	public SingleTransactionPresenterTest() {
-		super(SingleTransactionView.class, Transaction.class);
+	public TransactionSinglePresenterTest() {
+		super(TransactionSingleView.class, Transaction.class);
 	}
 
 	@Override
-	protected SingleTransactionPresenter createPresenter(SingleTransactionView view) {
-		return new TestSingleTransactionPresenter((SingleTransactionView) view);
+	protected TransactionSinglePresenter createPresenter(TransactionSingleView view) {
+		return new TestSingleTransactionPresenter((TransactionSingleView) view);
 	}
 
 	
@@ -59,8 +59,8 @@ public class SingleTransactionPresenterTest extends SinglePOJOPresenterTest<Sing
 	}
 }
 
-class TestSingleTransactionPresenter extends SingleTransactionPresenter {
-	public TestSingleTransactionPresenter(SingleTransactionView view) {
+class TestSingleTransactionPresenter extends TransactionSinglePresenter {
+	public TestSingleTransactionPresenter(TransactionSingleView view) {
 		super(view);
 	}
 

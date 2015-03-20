@@ -2,8 +2,8 @@ package se.fermitet.invest.webui.views;
 
 import java.util.List;
 
-import se.fermitet.invest.presenter.SinglePOJOPresenter;
-import se.fermitet.invest.viewinterface.SinglePOJOView;
+import se.fermitet.invest.presenter.POJOSinglePresenter;
+import se.fermitet.invest.viewinterface.POJOSingleView;
 import se.fermitet.vaadin.navigation.URIParameter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -14,7 +14,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 
 																			   //  VIEWINTERFACE extends SinglePOJOView, POJO, MODEL extends Model<POJO>
-public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?, POJO, ?>, POJO> extends ViewImpl<PRESENTER> implements SinglePOJOView {
+public abstract class POJOSingleViewImpl<PRESENTER extends POJOSinglePresenter<?, POJO, ?>, POJO> extends ViewImpl<PRESENTER> implements POJOSingleView {
 	private static final long serialVersionUID = 7033937523664849158L;
 
 	protected POJO pojo;
@@ -22,7 +22,7 @@ public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?
 	Button okButton;
 	Button cancelButton;
 
-	public SinglePOJOViewImpl() {
+	public POJOSingleViewImpl() {
 		super();
 		super.init();
 	}

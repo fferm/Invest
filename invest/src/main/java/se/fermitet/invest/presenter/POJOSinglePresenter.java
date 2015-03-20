@@ -3,14 +3,14 @@ package se.fermitet.invest.presenter;
 import java.util.UUID;
 
 import se.fermitet.invest.model.Model;
-import se.fermitet.invest.viewinterface.SinglePOJOView;
+import se.fermitet.invest.viewinterface.POJOSingleView;
 
-public abstract class SinglePOJOPresenter<VIEWINTERFACE extends SinglePOJOView, POJO, MODEL extends Model<POJO>> extends Presenter<VIEWINTERFACE, POJO, MODEL> {
+public abstract class POJOSinglePresenter<VIEWINTERFACE extends POJOSingleView, POJO, MODEL extends Model<POJO>> extends Presenter<VIEWINTERFACE, POJO, MODEL> {
 
 	private Class<POJO> pojoClass;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public SinglePOJOPresenter(VIEWINTERFACE view, Class<MODEL> modelClass, Class<POJO> pojoClass) {
+	public POJOSinglePresenter(VIEWINTERFACE view, Class<MODEL> modelClass, Class<POJO> pojoClass) {
 		super(view, (Class<Model>) modelClass);
 		
 		this.pojoClass = pojoClass;

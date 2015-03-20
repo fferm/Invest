@@ -1,13 +1,13 @@
 package se.fermitet.invest.webui.views;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.presenter.SingleStockPresenter;
-import se.fermitet.invest.viewinterface.SingleStockView;
+import se.fermitet.invest.presenter.StockSinglePresenter;
+import se.fermitet.invest.viewinterface.StockSingleView;
 import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 
 import com.vaadin.ui.Layout;
 
-public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter, Stock> implements SingleStockView {
+public class StockSingleViewImpl extends POJOSingleViewImpl<StockSinglePresenter, Stock> implements StockSingleView {
 	private static final long serialVersionUID = 1028596715063809826L;
 
 	POJOPropertyTextFieldAdapter<Stock, String> symbolAdapter;
@@ -24,8 +24,8 @@ public class SingleStockViewImpl extends SinglePOJOViewImpl<SingleStockPresenter
 		layout.addComponent(nameAdapter.getUI());
 	}
 
-	protected SingleStockPresenter createPresenter() {
-		return new SingleStockPresenter(this);
+	protected StockSinglePresenter createPresenter() {
+		return new StockSinglePresenter(this);
 	}
 
 	@Override

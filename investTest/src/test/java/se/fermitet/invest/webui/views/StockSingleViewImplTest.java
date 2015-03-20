@@ -6,18 +6,18 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.presenter.SingleStockPresenter;
+import se.fermitet.invest.presenter.StockSinglePresenter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
-public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockViewImpl, SingleStockPresenter, Stock> {
+public class StockSingleViewImplTest extends POJOSingleViewImplTest<StockSingleViewImpl, StockSinglePresenter, Stock> {
 	
-	public SingleStockViewImplTest() {
+	public StockSingleViewImplTest() {
 		super(Stock.class);
 	}
 
 	@Override
-	protected SingleStockViewImpl createViewImpl() {
-		return new TestSingleStockViewImpl();
+	protected StockSingleViewImpl createViewImpl() {
+		return new TestSingleSingleViewImpl();
 	}
 
 	@Override
@@ -56,10 +56,10 @@ public class SingleStockViewImplTest extends SinglePOJOViewImplTest<SingleStockV
 }
 
 @SuppressWarnings("serial")
-class TestSingleStockViewImpl extends SingleStockViewImpl {
+class TestSingleSingleViewImpl extends StockSingleViewImpl {
 	@Override
-	protected SingleStockPresenter createPresenter() {
-		return mock(SingleStockPresenter.class);
+	protected StockSinglePresenter createPresenter() {
+		return mock(StockSinglePresenter.class);
 	}
 	
 	@Override

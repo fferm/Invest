@@ -30,7 +30,7 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 
 	@Override
 	protected String getSingleViewName() {
-		return InvestWebUI.SINGLESTOCKVIEW;
+		return InvestWebUI.STOCK_SINGLE;
 	}
 }
 

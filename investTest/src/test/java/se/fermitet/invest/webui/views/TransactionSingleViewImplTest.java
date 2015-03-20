@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
-import se.fermitet.invest.presenter.SingleTransactionPresenter;
+import se.fermitet.invest.presenter.TransactionSinglePresenter;
 import se.fermitet.invest.testData.StockDataProvider;
 import se.fermitet.vaadin.converters.MoneyConverter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
@@ -23,10 +23,10 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.ComboBox;
 
-public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<SingleTransactionViewImpl, SingleTransactionPresenter, Transaction> {
+public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<TransactionSingleViewImpl, TransactionSinglePresenter, Transaction> {
 	private List<Stock> testStocks;
 
-	public SingleTransactionViewImplTest() {
+	public TransactionSingleViewImplTest() {
 		super(Transaction.class);
 	}
 
@@ -40,8 +40,8 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 	}
 
 	@Override
-	protected SingleTransactionViewImpl createViewImpl() {
-		return new TestSingleTransactionViewImpl();
+	protected TransactionSingleViewImpl createViewImpl() {
+		return new TestTransactionSingleViewImpl();
 	}
 
 	@Override
@@ -153,10 +153,10 @@ public class SingleTransactionViewImplTest extends SinglePOJOViewImplTest<Single
 }
 
 @SuppressWarnings("serial")
-class TestSingleTransactionViewImpl extends SingleTransactionViewImpl {
+class TestTransactionSingleViewImpl extends TransactionSingleViewImpl {
 	@Override
-	protected SingleTransactionPresenter createPresenter() {
-		return mock(SingleTransactionPresenter.class);
+	protected TransactionSinglePresenter createPresenter() {
+		return mock(TransactionSinglePresenter.class);
 	}
 
 	@Override

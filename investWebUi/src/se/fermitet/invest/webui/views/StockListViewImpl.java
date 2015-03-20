@@ -37,6 +37,6 @@ public class StockListViewImpl extends ListViewImpl<StockListPresenter, Stock> {
 
 	@Override
 	protected String getSingleViewName() {
-		return InvestWebUI.SINGLESTOCKVIEW;
+		return InvestWebUI.STOCK_SINGLE;
 	}
 }

@@ -6,8 +6,8 @@ import org.joda.money.Money;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
-import se.fermitet.invest.presenter.SingleTransactionPresenter;
-import se.fermitet.invest.viewinterface.SingleTransactionView;
+import se.fermitet.invest.presenter.TransactionSinglePresenter;
+import se.fermitet.invest.viewinterface.TransactionSingleView;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.POJOComboBoxAdapter;
 import se.fermitet.vaadin.widgets.POJOPropertyDatePopupAdapter;
@@ -16,7 +16,7 @@ import se.fermitet.vaadin.widgets.POJOPropertyTextFieldAdapter;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Layout;
 
-public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransactionPresenter, Transaction> implements SingleTransactionView {
+public class TransactionSingleViewImpl extends POJOSingleViewImpl<TransactionSinglePresenter, Transaction> implements TransactionSingleView {
 
 	private static final long serialVersionUID = 8004896867328107503L;
 	
@@ -57,8 +57,8 @@ public class SingleTransactionViewImpl extends SinglePOJOViewImpl<SingleTransact
 	}
 	
 	@Override
-	protected SingleTransactionPresenter createPresenter() {
-		return new SingleTransactionPresenter(this);
+	protected TransactionSinglePresenter createPresenter() {
+		return new TransactionSinglePresenter(this);
 	}
 
 	@Override

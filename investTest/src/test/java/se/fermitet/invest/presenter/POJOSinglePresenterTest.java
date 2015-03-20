@@ -8,11 +8,11 @@ import java.util.UUID;
 import org.junit.Test;
 
 import se.fermitet.invest.model.Model;
-import se.fermitet.invest.viewinterface.SinglePOJOView;
+import se.fermitet.invest.viewinterface.POJOSingleView;
 
 @SuppressWarnings("rawtypes")
-public abstract class SinglePOJOPresenterTest<PRESENTER extends SinglePOJOPresenter, POJO, MODEL extends Model<POJO>, VIEWINTERFACE extends SinglePOJOView> extends PresenterTest<PRESENTER, POJO, MODEL, VIEWINTERFACE> {
-	public SinglePOJOPresenterTest(Class<?> viewInterfaceClass,	Class<?> pojoClass) {
+public abstract class POJOSinglePresenterTest<PRESENTER extends POJOSinglePresenter, POJO, MODEL extends Model<POJO>, VIEWINTERFACE extends POJOSingleView> extends PresenterTest<PRESENTER, POJO, MODEL, VIEWINTERFACE> {
+	public POJOSinglePresenterTest(Class<?> viewInterfaceClass,	Class<?> pojoClass) {
 		super(viewInterfaceClass, pojoClass);
 	}
 

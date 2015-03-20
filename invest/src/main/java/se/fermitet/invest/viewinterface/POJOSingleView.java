@@ -1,6 +1,6 @@
 package se.fermitet.invest.viewinterface;
 
-public interface SinglePOJOView extends InvestView {
+public interface POJOSingleView extends InvestView {
 	public void navigateBack();
 
 }

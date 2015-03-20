@@ -39,7 +39,7 @@ public class TransactionListViewImplTest extends ListViewImplTest<TransactionLis
 	
 	@Override
 	protected String getSingleViewName() {
-		return InvestWebUI.SINGLETRANSACTIONVIEW;
+		return InvestWebUI.TRANSACTION_SINGLE;
 	}
 }
 

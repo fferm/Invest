@@ -7,18 +7,18 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.fermitet.invest.presenter.SinglePOJOPresenter;
+import se.fermitet.invest.presenter.POJOSinglePresenter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 @SuppressWarnings("rawtypes")
-public abstract class SinglePOJOViewImplTest<VIEWIMPL extends SinglePOJOViewImpl, PRESENTER extends SinglePOJOPresenter, POJO> {
+public abstract class POJOSingleViewImplTest<VIEWIMPL extends POJOSingleViewImpl, PRESENTER extends POJOSinglePresenter, POJO> {
 	protected VIEWIMPL view;
 	protected PRESENTER mockedPresenter;
 	private Class<POJO> pojoClass;
 
-	public SinglePOJOViewImplTest(Class<POJO> pojoClass) {
+	public POJOSingleViewImplTest(Class<POJO> pojoClass) {
 		super();
 		this.pojoClass = pojoClass;
 	}
