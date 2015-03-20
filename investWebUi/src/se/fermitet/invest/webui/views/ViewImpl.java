@@ -14,6 +14,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HasComponents;
+import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("rawtypes")
 public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent implements View {
@@ -29,7 +30,11 @@ public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomCompon
 	}
 	
 	protected void init() {
-		setCompositionRoot(createMainLayout());
+		VerticalLayout mainLayout = new VerticalLayout();
+		mainLayout.addComponent(new NavBarViewImpl());
+		mainLayout.addComponent(createMainLayout());
+		
+		setCompositionRoot(mainLayout);
 	}
 	
 	protected abstract Component createMainLayout();
