@@ -22,6 +22,11 @@ public abstract class SinglePOJOViewImpl<PRESENTER extends SinglePOJOPresenter<?
 	Button okButton;
 	Button cancelButton;
 
+	public SinglePOJOViewImpl() {
+		super();
+		super.init();
+	}
+
 	protected abstract void bindToData();
 	protected abstract void initAndAddFields(Layout layout);
 	

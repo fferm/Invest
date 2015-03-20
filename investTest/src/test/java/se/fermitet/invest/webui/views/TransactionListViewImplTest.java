@@ -1,41 +1,25 @@
 package se.fermitet.invest.webui.views;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
 
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionListPresenter;
 import se.fermitet.invest.testData.TransactionDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
-import se.fermitet.vaadin.navigation.URIParameter;
 
-import com.vaadin.ui.Button;
-
-public class TransactionListViewImplTest {
-	private TransactionListViewImpl view;
-	private List<Transaction> testDataUnsorted;
-	private List<Transaction> testDataSorted;
-	private TransactionListPresenter mockedPresenter;
-
-	@Before
-	public void setUp() {
-		view = new TestTransactionListViewImpl();
-		mockedPresenter = view.presenter;
-
-		initTestData();
-		
-		view.displayData(testDataUnsorted);
+public class TransactionListViewImplTest extends ListViewImplTest<TransactionListViewImpl, TransactionListPresenter, Transaction> {
+	@Override
+	protected TransactionListViewImpl createViewImpl() {
+		return new TestTransactionListViewImpl();
 	}
 
-	private void initTestData() {
+	@Override
+	protected void initTestData() {
 		TransactionDataProvider provider = new TransactionDataProvider();
 		
 		testDataUnsorted = provider.getTestData();
@@ -51,99 +35,20 @@ public class TransactionListViewImplTest {
 			LocalDate o2Date = o2.getDate();
 			return o1Date.compareTo(o2Date);
 		});
-
-	}
-
-	@Test
-	public void testEnterCallsFillStocks() throws Exception {
-		view.enter(null);
-	
-		verify(mockedPresenter).fillViewWithData();
 	}
 	
-	@Test
-	public void testCallingDisplayDataDisplaysData() throws Exception {
-		view.displayData(testDataUnsorted);
-		List<Transaction> displayedData = view.tableAdapter.getData();
-		assertArrayEquals(testDataSorted.toArray(), displayedData.toArray());  // Sorting first by symbol, then by date
+	@Override
+	protected String getSingleViewName() {
+		return InvestWebUI.SINGLETRANSACTIONVIEW;
 	}
-	
-	@Test
-	public void testSelectionAffectstButtonsEnabledStatus() throws Exception {
-		Button deleteButton = view.deleteButton;
-		Button editButton = view.editButton;
-		
-		assertFalse("Before - delete", deleteButton.isEnabled());
-		assertFalse("Before - edit", editButton.isEnabled());
-		
-		view.table.select(testDataSorted.get(1).getId());
-		assertTrue("After select - delete", deleteButton.isEnabled());
-		assertTrue("After select - edit", editButton.isEnabled());
-
-		view.table.select(null);
-		assertFalse("After unselect - delete", deleteButton.isEnabled());
-		assertFalse("After unselect - edit", editButton.isEnabled());
-	}
-	
-	@Test
-	public void testNewButtonProperties() throws Exception {
-		Button newButton = view.newButton;
-		
-		assertNotNull("not null", newButton);
-		assertTrue("Enabled", newButton.isEnabled());
-		assertTrue("Visible", newButton.isVisible());
-		
-		newButton.click();
-		
-		verify(mockedPresenter).onNewButtonClick();
-	}
-	
-	@Test
-	public void testEditButton() throws Exception {
-		Button editButton = view.editButton;
-		
-		assertNotNull("not null", editButton);
-		
-		Transaction selected = testDataUnsorted.get(2);
-		view.tableAdapter.select(selected);
-		
-		editButton.click();
-		
-		verify(mockedPresenter).onEditButtonClick(selected);
-	}
-	
-	@Test
-	public void testDeleteButton() throws Exception {
-		Transaction toDelete = testDataSorted.get(2);
-		
-		view.tableAdapter.select(toDelete);
-		view.deleteButton.click();
-		
-		verify(mockedPresenter).onDeleteButtonClick(toDelete);
-	}
-	
-	@Test
-	public void testEditSingle_nullValue() throws Exception {
-		view.navigateToSingleView(null);
-		
-		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW);
-	}
-
-	@Test
-	public void testEditSingle_notNullValue() throws Exception {
-		Transaction testTrans = new Transaction();
-		
-		view.navigateToSingleView(testTrans);
-		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLETRANSACTIONVIEW, new URIParameter(testTrans.getId().toString()));
-	}
-
-	
-
-
 }
 
 @SuppressWarnings("serial")
 class TestTransactionListViewImpl extends TransactionListViewImpl {
+	TestTransactionListViewImpl() {
+		super();
+	}
+	
 	@Override
 	protected TransactionListPresenter createPresenter() {
 		return mock(TransactionListPresenter.class);

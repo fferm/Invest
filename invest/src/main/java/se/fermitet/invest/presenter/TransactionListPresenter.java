@@ -2,11 +2,11 @@ package se.fermitet.invest.presenter;
 
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.model.TransactionModel;
-import se.fermitet.invest.viewinterface.TransactionListView;
+import se.fermitet.invest.viewinterface.ListView;
 
-public class TransactionListPresenter extends ListPresenter<TransactionListView, Transaction, TransactionModel>{
+public class TransactionListPresenter extends ListPresenter<ListView<Transaction>, Transaction, TransactionModel>{
 
-	public TransactionListPresenter(TransactionListView view) {
+	public TransactionListPresenter(ListView<Transaction> view) {
 		super(view, TransactionModel.class);
 	}
 }

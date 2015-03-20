@@ -26,7 +26,9 @@ public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomCompon
 		super();
 		
 		this.presenter = createPresenter();
-		
+	}
+	
+	protected void init() {
 		setCompositionRoot(createMainLayout());
 	}
 	

@@ -1,135 +1,45 @@
 package se.fermitet.invest.webui.views;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.testData.StockDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
-import se.fermitet.vaadin.navigation.URIParameter;
-
-import com.vaadin.ui.Button;
  
-public class StockListViewImplTest {
-	private StockListViewImpl view;
-	private List<Stock> testStocksUnsorted;
-	private List<Stock> testStocksSorted;
-	private StockListPresenter mockedPresenter;
-
-	@Before
-	public void setUp() {
-		view = new TestStockListViewImpl();
-		mockedPresenter = view.presenter;
-
-		initTestStocks();
-		
-		view.displayData(testStocksUnsorted);
+public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, StockListPresenter, Stock> {
+	@Override
+	protected StockListViewImpl createViewImpl() {
+		return new TestStockListViewImpl();
 	}
-	
-	private void initTestStocks() {
-		testStocksUnsorted = new ArrayList<Stock>(new StockDataProvider().getTestStocks());
 
-		testStocksSorted = new ArrayList<Stock>(testStocksUnsorted);
-		testStocksSorted.sort((Stock o1, Stock o2) -> {
+	@Override
+	protected void initTestData() {
+		testDataUnsorted = new ArrayList<Stock>(new StockDataProvider().getTestStocks());
+
+		testDataSorted = new ArrayList<Stock>(testDataUnsorted);
+		testDataSorted.sort((Stock o1, Stock o2) -> {
 			String o1Symbol = o1.getSymbol();
 			String o2Symbol = o2.getSymbol();
 			return o1Symbol.compareTo(o2Symbol);
 		});
 	}
 
-	@Test
-	public void testEnterCallsFillStocks() throws Exception {
-		view.enter(null);
-	
-		verify(mockedPresenter).fillViewWithData();
-	}
-	
-	@Test
-	public void testCallingDisplayStocksDisplaysStocks() throws Exception {
-		List<Stock> displayedData = view.stockTableAdapter.getData();
-		assertArrayEquals(testStocksSorted.toArray(), displayedData.toArray());
-	}
-	
-	@Test
-	public void testSelectionAffectstButtonsEnabledStatus() throws Exception {
-		Button deleteButton = view.deleteButton;
-		Button editButton = view.editButton;
-		
-		assertFalse("Before - delete", deleteButton.isEnabled());
-		assertFalse("Before - edit", editButton.isEnabled());
-		
-		view.stockTable.select(this.testStocksSorted.get(1).getId());
-		assertTrue("After select - delete", deleteButton.isEnabled());
-		assertTrue("After select - edit", editButton.isEnabled());
-
-		view.stockTable.select(null);
-		assertFalse("After unselect - delete", deleteButton.isEnabled());
-		assertFalse("After unselect - edit", editButton.isEnabled());
-	}
-	
-	@Test
-	public void testNewButtonProperties() throws Exception {
-		Button newButton = view.newButton;
-		
-		assertNotNull("not null", newButton);
-		assertTrue("Enabled", newButton.isEnabled());
-		assertTrue("Visible", newButton.isVisible());
-		
-		newButton.click();
-		
-		verify(mockedPresenter).onNewButtonClick();
-	}
-	
-	@Test
-	public void testEditButton() throws Exception {
-		Button editButton = view.editButton;
-		
-		assertNotNull("not null", editButton);
-		
-		Stock toSelect = testStocksUnsorted.get(0);
-		view.stockTableAdapter.select(toSelect);
-
-		editButton.click();
-		
-		verify(mockedPresenter).onEditButtonClick(toSelect);
-	}
-	
-	@Test
-	public void testDeleteButton() throws Exception {
-		Stock toDelete = testStocksSorted.get(2);
-		
-		view.stockTableAdapter.select(toDelete);
-		view.deleteButton.click();
-		
-		verify(mockedPresenter).onDeleteButtonClick(toDelete);
-	}
-	
-	@Test
-	public void testEditSingleStock_nullValue() throws Exception {
-		view.navigateToSingleView(null);
-		
-		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW);
-	}
-
-	@Test
-	public void testEditSingleStock_notNullValue() throws Exception {
-		Stock testStock = new Stock("Test", "TST");
-		
-		view.navigateToSingleView(testStock);
-		verify(view.getNavigator()).navigateTo(InvestWebUI.SINGLESTOCKVIEW, new URIParameter(testStock.getId().toString()));
+	@Override
+	protected String getSingleViewName() {
+		return InvestWebUI.SINGLESTOCKVIEW;
 	}
 }
 
 @SuppressWarnings("serial")
 class TestStockListViewImpl extends StockListViewImpl {
+	TestStockListViewImpl() {
+		super();
+	}
+	
 	@Override
 	protected StockListPresenter createPresenter() {
 		return mock(StockListPresenter.class);

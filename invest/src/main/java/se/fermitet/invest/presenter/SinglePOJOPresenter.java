@@ -34,8 +34,6 @@ public abstract class SinglePOJOPresenter<VIEWINTERFACE extends SinglePOJOView, 
 		model.save(pojo);
 		view.navigateBack();
 	}
-
-
 	
 	private POJO newDefaultPOJO() {
 		try {

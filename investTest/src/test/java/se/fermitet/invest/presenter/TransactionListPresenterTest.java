@@ -3,21 +3,21 @@ package se.fermitet.invest.presenter;
 import static org.mockito.Mockito.*;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.model.TransactionModel;
-import se.fermitet.invest.viewinterface.TransactionListView;
+import se.fermitet.invest.viewinterface.ListView;
 
-public class TransactionListPresenterTest extends ListPresenterTest<TransactionListPresenter, Transaction, TransactionModel, TransactionListView> {
+public class TransactionListPresenterTest extends ListPresenterTest<TransactionListPresenter, Transaction, TransactionModel, ListView<Transaction>> {
 	public TransactionListPresenterTest() {
-		super(TransactionListView.class, Transaction.class);
+		super(ListView.class, Transaction.class);
 	}
 
 	@Override
-	protected TransactionListPresenter createPresenter(TransactionListView view) {
+	protected TransactionListPresenter createPresenter(ListView<Transaction> view) {
 		return new TestTransactionListPresenter(mockedView);
 	}
 }
 
 class TestTransactionListPresenter extends TransactionListPresenter {
-	public TestTransactionListPresenter(TransactionListView view) {
+	public TestTransactionListPresenter(ListView<Transaction> view) {
 		super(view);
 	}
 	
