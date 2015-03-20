@@ -13,8 +13,8 @@ public class NavBarViewImpl extends CustomComponent {
 
 	private static final long serialVersionUID = 6062040243787568085L;
 	
-	public Button stock;
-	public Button transaction;
+	Button stock;
+	Button transaction;
 
 	public NavBarViewImpl() {
 		super();
@@ -26,7 +26,6 @@ public class NavBarViewImpl extends CustomComponent {
 		HorizontalLayout mainLayout = new HorizontalLayout();
 		mainLayout.setSpacing(true);
 		mainLayout.setMargin(new MarginInfo(true, true, false, true));
-//		mainLayout.setMargin(true);
 		
 		stock = new Button("Aktier");
 		stock.addClickListener((Button.ClickListener) l -> {
