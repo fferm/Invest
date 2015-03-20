@@ -36,7 +36,7 @@ abstract class POJOAbstractSelectAdapter<POJO extends IdAble<?>, UI extends Abst
 
 	private void initContainer() {
 		this.container = new BeanContainer<Object, POJO>(getPojoClass());
-
+		
 		this.container.setItemSorter(new DefaultItemSorter() {
 			@Override
 			protected int compareProperty(Object propertyId, boolean sortDirection, Item item1, Item item2) {

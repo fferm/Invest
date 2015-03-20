@@ -3,8 +3,12 @@ package se.fermitet.vaadin.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.fermitet.general.IdAble;
+import org.joda.money.Money;
 
+import se.fermitet.general.IdAble;
+import se.fermitet.vaadin.converters.MoneyConverter;
+
+import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
 
 public class POJOTableAdapter<POJO extends IdAble<?>> extends POJOAbstractSelectAdapter<POJO, Table> {
@@ -51,6 +55,19 @@ public class POJOTableAdapter<POJO extends IdAble<?>> extends POJOAbstractSelect
 
 	@Override
 	protected void updateUIFromData() {
-		// Do nothing - Everything is handled by the container
+		assignConverters();
+	}
+
+	protected void assignConverters() {
+		Table table = getUI();
+		if (table.size() == 0) return;
+		
+		Object firstItemId = table.getItemIds().iterator().next();
+		for (Object propId : table.getContainerPropertyIds()) {
+			Property<?> prop = table.getContainerProperty(firstItemId, propId);
+			if (prop.getType().equals(Money.class)) {
+				table.setConverter(propId, new MoneyConverter());
+			}
+		}
 	}
 }

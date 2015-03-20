@@ -5,12 +5,15 @@ import static org.junit.Assert.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
+import org.joda.money.Money;
 import org.junit.Test;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Table;
 
 @SuppressWarnings("rawtypes")
@@ -85,6 +88,45 @@ public class POJOTableAdapterTest extends POJOAbstractSelectAdapterTest<POJOTabl
 			i++;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testMoneyDisplay() throws Exception {
+		List<ColumnDefinition> colDefs = new ArrayList<ColumnDefinition>();
+		String colName = "moneyAttribute";
+		colDefs.add(new ColumnDefinition(colName, "Money"));
+		adapter.setVisibleData(colDefs);
+		
+		String[] parseStrings = new String[]{"SEK 200", "SEK 200.25", "SEK 1010", "SEK -10"};
+		String[] expecteds    = new String[]{"200,00" , "200,25",     "1 010,00", "-10,00"};
+
+		List<TestPOJO> testData = new ArrayList<TestPOJO>();
+		for (int i = 0; i < parseStrings.length; i++) {
+			testData.add(new TestPOJO(Money.parse(parseStrings[i])));
+		}
+		adapter.setData(testData);
+		
+		Table ui = (Table) adapter.getUI();
+		int row = 0;
+		for(Object itemId : ui.getItemIds()) {
+			Item item = ui.getItem(itemId);
+			for (int col = 0; col < ui.getVisibleColumns().length; col++) {
+				Object propId = ui.getVisibleColumns()[col];
+				if (! propId.equals(colName)) continue;
+				
+				Object propValue = item.getItemProperty(propId).getValue();
+				
+				String displayedValue;
+				Converter<String, Object> converter = ui.getConverter(propId);
+				if (converter != null) displayedValue = converter.convertToPresentation(propValue, String.class, Locale.getDefault());
+				else displayedValue = propValue.toString();
+				
+				assertEquals("Row " + row, expecteds[row], displayedValue);
+			}
+			row++;
+		}
+	}
+
 
 	@SuppressWarnings("unchecked")
 	protected void defineVisibleData() {

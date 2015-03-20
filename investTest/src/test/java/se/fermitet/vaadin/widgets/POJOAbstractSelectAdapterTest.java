@@ -287,7 +287,4 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTER extends POJOAbstract
 		adapter.unselect();
 		assertNull("after unselect", myPOJO.getTestPOJO());
 	}
-
-	
-
 }

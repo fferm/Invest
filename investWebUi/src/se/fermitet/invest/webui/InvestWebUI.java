@@ -2,10 +2,10 @@ package se.fermitet.invest.webui;
 
 import javax.servlet.annotation.WebServlet;
 
-import se.fermitet.invest.webui.views.StockSingleViewImpl;
-import se.fermitet.invest.webui.views.TransactionSingleViewImpl;
 import se.fermitet.invest.webui.views.StockListViewImpl;
+import se.fermitet.invest.webui.views.StockSingleViewImpl;
 import se.fermitet.invest.webui.views.TransactionListViewImpl;
+import se.fermitet.invest.webui.views.TransactionSingleViewImpl;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.annotations.Theme;
