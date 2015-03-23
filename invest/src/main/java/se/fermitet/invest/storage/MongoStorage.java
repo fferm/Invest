@@ -8,6 +8,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 
+import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.storage.converter.JodaLocalDateConverter;
@@ -61,6 +62,24 @@ class MongoStorage implements Storage {
 
 	public void deleteTransaction(Transaction t1) {
 		delete(t1);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Portfolio> getAllPortfolios() {
+		return (List<Portfolio>) getAll(Portfolio.class);
+	}
+
+	public Portfolio getPortfolioById(UUID id) {
+		return (Portfolio) getById(Portfolio.class, id);
+	}
+
+	public void deletePortfolio(Portfolio toDelete) {
+		delete(toDelete);
+	}
+
+	public void savePortfolio(Portfolio toSave) {
+		save(toSave);
 	}
 
 
@@ -123,4 +142,6 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
+
+
 }

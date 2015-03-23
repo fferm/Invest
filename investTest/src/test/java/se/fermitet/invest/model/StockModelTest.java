@@ -21,7 +21,7 @@ public class StockModelTest extends AbstractModelTest<StockModel> {
 	}
 
 	@Test
-	public void testGetAllStocks() throws Exception {
+	public void testGetAll() throws Exception {
 		model.getAll();
 		verify(mockedStorage).getAllStocks();
 	}
