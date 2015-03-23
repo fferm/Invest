@@ -27,15 +27,6 @@ public abstract class InvestPOJO implements IdAble<UUID> {
 
 	public InvestPOJO() {
 		super();
-
-		toStringPropDefs = new ArrayList<InvestPOJO.PropertyDef>();
-		try {
-			initToStringProperties();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-			throw new InvestException("No such method", e);
-		} 
-
 	}
 
 	protected abstract void initToStringProperties() throws NoSuchMethodException;
@@ -44,9 +35,23 @@ public abstract class InvestPOJO implements IdAble<UUID> {
 		return this.id;
 	}
 
+	private void ensureToStringProperties() {
+		if (toStringPropDefs != null) return;
+		
+		toStringPropDefs = new ArrayList<InvestPOJO.PropertyDef>();
+		try {
+			initToStringProperties();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			throw new InvestException("No such method", e);
+		} 
+	}
+
 	@Override
 	public String toString() {
 		try {
+			ensureToStringProperties();
+			
 			StringBuilder retBuilder = new StringBuilder("[ ");
 
 			retBuilder.append(toStringClassName);
