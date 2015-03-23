@@ -15,6 +15,7 @@ public class NavBarViewImpl extends CustomComponent {
 	
 	Button stock;
 	Button transaction;
+	Button portfolio;
 
 	public NavBarViewImpl() {
 		super();
@@ -38,6 +39,12 @@ public class NavBarViewImpl extends CustomComponent {
 			getNavigator().navigateTo(InvestWebUI.TRANSACTION_LIST);
 		});
 		mainLayout.addComponent(transaction);
+		
+		portfolio = new Button("Portfšljer");
+		portfolio.addClickListener((Button.ClickListener) l-> {
+			getNavigator().navigateTo(InvestWebUI.PORTFOLIO_LIST);
+		});
+		mainLayout.addComponent(portfolio);
 		
 		return mainLayout;
 	}

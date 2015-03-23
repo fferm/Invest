@@ -8,23 +8,23 @@ import se.fermitet.invest.domain.Stock;
 
 public class StockDataProvider {
 
-	private static List<Stock> testStocks;
+	private static List<Stock> testData;
 	
-	public List<Stock> getTestStocks() {
-		if (testStocks == null) {
-			initTestStocks();
+	public List<Stock> getTestData() {
+		if (testData == null) {
+			initTestData();
 		}
-		return Collections.unmodifiableList(testStocks);
+		return Collections.unmodifiableList(testData);
 	}
 	
-	private void initTestStocks() {
-		testStocks = new ArrayList<Stock>();
+	private void initTestData() {
+		testData = new ArrayList<Stock>();
 		
-		testStocks.add(new Stock("Name 1", "C"));
-		testStocks.add(new Stock("Name 2", "B"));
-		testStocks.add(new Stock("A"));
-		testStocks.add(new Stock("B", "BB"));
-		testStocks.add(new Stock("AAB", "AAK"));
+		testData.add(new Stock("Name 1", "C"));
+		testData.add(new Stock("Name 2", "B"));
+		testData.add(new Stock("A"));
+		testData.add(new Stock("B", "BB"));
+		testData.add(new Stock("AAB", "AAK"));
 	}
 
 }

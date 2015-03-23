@@ -35,6 +35,16 @@ public class ModelsTest {
 		assertEquals(TransactionModel.class, obj.getClass());
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testPortfolioMOdelBasedOnClass() throws Exception {
+		Model obj = Models.fromClass(PortfolioModel.class);
+		
+		assertNotNull(obj);
+		assertEquals(PortfolioModel.class, obj.getClass());
+		
+	}
+	
 	@Test(expected = InvestException.class)
 	public void testModelBasedOnNullClassGivesException() throws Exception {
 		Models.fromClass(null);

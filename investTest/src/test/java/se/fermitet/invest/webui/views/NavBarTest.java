@@ -30,6 +30,7 @@ public class NavBarTest {
 	public void testHasComponents() throws Exception {
 		assertNotNull("Stock nav", view.stock);
 		assertNotNull("Transaction", view.transaction);
+		assertNotNull("Portfolio", view.portfolio);
 	}
 	
 	@Test
@@ -48,6 +49,15 @@ public class NavBarTest {
 		view.transaction.click();
 		
 		verify(navigator).navigateTo(InvestWebUI.TRANSACTION_LIST);
+	}
+	
+	@Test
+	public void testPortfolioClick() throws Exception {
+		DirectionalNavigator navigator = view.getNavigator();
+		
+		view.portfolio.click();
+		
+		verify(navigator).navigateTo(InvestWebUI.PORTFOLIO_LIST);
 	}
 	
 	@SuppressWarnings("rawtypes")

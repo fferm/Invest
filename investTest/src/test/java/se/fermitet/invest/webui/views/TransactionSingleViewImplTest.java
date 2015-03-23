@@ -35,7 +35,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 	public void setUp() {
 		super.setUp();
 
-		testStocks = new StockDataProvider().getTestStocks();
+		testStocks = new StockDataProvider().getTestData();
 		view.showStocksInSelection(testStocks);
 	}
 
@@ -110,7 +110,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 
 	@Test
 	public void testCallingShowStocksInSelectionDisplaysSymbolsSorted() throws Exception {
-		List<Stock> testStocks = new StockDataProvider().getTestStocks();
+		List<Stock> testStocks = new StockDataProvider().getTestData();
 
 		view.showStocksInSelection(testStocks);
 
@@ -134,7 +134,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 	
 	@Test
 	public void testErrorShouldNotAppearWhenClearingOutNumberField() throws Exception {
-		List<Stock> testStocks = new StockDataProvider().getTestStocks();
+		List<Stock> testStocks = new StockDataProvider().getTestData();
 		view.showStocksInSelection(testStocks);
 
 		Transaction initialTransaction = new Transaction(testStocks.get(1), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));

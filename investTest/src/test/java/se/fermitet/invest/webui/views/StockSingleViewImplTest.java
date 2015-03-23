@@ -17,7 +17,7 @@ public class StockSingleViewImplTest extends POJOSingleViewImplTest<StockSingleV
 
 	@Override
 	protected StockSingleViewImpl createViewImpl() {
-		return new TestSingleSingleViewImpl();
+		return new TestStockSingleViewImpl();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class StockSingleViewImplTest extends POJOSingleViewImplTest<StockSingleV
 }
 
 @SuppressWarnings("serial")
-class TestSingleSingleViewImpl extends StockSingleViewImpl {
+class TestStockSingleViewImpl extends StockSingleViewImpl {
 	@Override
 	protected StockSinglePresenter createPresenter() {
 		return mock(StockSinglePresenter.class);

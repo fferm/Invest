@@ -18,7 +18,7 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 
 	@Override
 	protected void initTestData() {
-		testDataUnsorted = new ArrayList<Stock>(new StockDataProvider().getTestStocks());
+		testDataUnsorted = new ArrayList<Stock>(new StockDataProvider().getTestData());
 
 		testDataSorted = new ArrayList<Stock>(testDataUnsorted);
 		testDataSorted.sort((Stock o1, Stock o2) -> {
