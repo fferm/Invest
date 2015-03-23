@@ -64,6 +64,12 @@ class MongoStorage implements Storage {
 		delete(t1);
 	}
 	
+	public List<Transaction> getTransactionsForStock(Stock stock) {
+		return getDatastore().createQuery(Transaction.class).field("stock").equal(stock).asList();
+	}
+
+
+	
 	
 	@SuppressWarnings("unchecked")
 	public List<Portfolio> getAllPortfolios() {

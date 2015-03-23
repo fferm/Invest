@@ -1,6 +1,7 @@
 package se.fermitet.invest.presenter;
 
 import se.fermitet.invest.model.Model;
+import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.viewinterface.ListView;
 
 public abstract class ListPresenter<VIEWINTERFACE extends ListView<POJO>, POJO, MODEL extends Model<POJO>> extends Presenter<VIEWINTERFACE, POJO, MODEL> {
@@ -14,7 +15,13 @@ public abstract class ListPresenter<VIEWINTERFACE extends ListView<POJO>, POJO, 
 	}
 	
 	public void onDeleteButtonClick(POJO toDelete) {
-		model.delete(toDelete);
+		try {
+			model.delete(toDelete);
+			view.clearApplicationException();
+		} catch (ModelException e) {
+			e.printStackTrace();
+			view.displayApplicationException(e);
+		}
 		view.displayData(model.getAll());
 	}
 	

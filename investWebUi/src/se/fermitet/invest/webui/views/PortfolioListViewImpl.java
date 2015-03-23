@@ -36,6 +36,4 @@ public class PortfolioListViewImpl extends ListViewImpl<PortfolioListPresenter, 
 	protected PortfolioListPresenter createPresenter() {
 		return new PortfolioListPresenter(this);
 	}
-
-
 }

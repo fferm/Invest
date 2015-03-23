@@ -42,4 +42,5 @@ public class TransactionListViewImpl extends ListViewImpl<TransactionListPresent
 	protected String getSingleViewName() {
 		return InvestWebUI.TRANSACTION_SINGLE;
 	}
+
 }

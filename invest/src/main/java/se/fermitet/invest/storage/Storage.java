@@ -18,6 +18,7 @@ public interface Storage {
 	public Transaction getTransactionById(UUID id);
 	public void saveTransaction(Transaction transaction);
 	public void deleteTransaction(Transaction t1);
+	public List<Transaction> getTransactionsForStock(Stock stock);
 
 	public List<Portfolio> getAllPortfolios();
 	public Portfolio getPortfolioById(UUID id);

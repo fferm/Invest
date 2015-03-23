@@ -3,13 +3,16 @@ package se.fermitet.invest.webui.views;
 import java.util.List;
 
 import se.fermitet.general.IdAble;
+import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.presenter.ListPresenter;
 import se.fermitet.invest.viewinterface.ListView;
+import se.fermitet.invest.webui.error.ErrorMessages;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.UserError;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -133,7 +136,14 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 			getNavigator().navigateTo(getSingleViewName(), new URIParameter(data.getId().toString()));
 		}
 	}
-
-
-
+	
+	@Override
+	public void displayApplicationException(ModelException exception) {
+		deleteButton.setComponentError(new UserError(ErrorMessages.getMessage(exception)));
+	}
+	
+	@Override
+	public void clearApplicationException() {
+		deleteButton.setComponentError(null);
+	}
 }

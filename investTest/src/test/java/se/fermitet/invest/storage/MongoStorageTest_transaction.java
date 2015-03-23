@@ -80,6 +80,34 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 		assertNull("should be null", shouldBeNull);
 	}
 	
+	@Test
+	public void testGetTransactionsForStock() throws Exception {
+		Stock s1 = new Stock("one");
+		Stock s2 = new Stock("two");
+		
+		objUnderTest.saveStock(s1);
+		objUnderTest.saveStock(s2);
+		
+		Transaction t11 = new Transaction(s1, LocalDate.now().minusDays(10), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		Transaction t12 = new Transaction(s1, LocalDate.now().minusDays(9), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		Transaction t13 = new Transaction(s1, LocalDate.now().minusDays(8), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+
+		Transaction t21 = new Transaction(s2, LocalDate.now().minusDays(7), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		
+		objUnderTest.saveTransaction(t11);
+		objUnderTest.saveTransaction(t12);
+		objUnderTest.saveTransaction(t13);
+		objUnderTest.saveTransaction(t21);
+
+		List<Transaction> fromDb = objUnderTest.getTransactionsForStock(s1);
+		
+		assertNotNull("not null", fromDb);
+		assertEquals("size", 3, fromDb.size());
+		assertTrue("contains t11", fromDb.contains(t11));
+		assertTrue("contains t12", fromDb.contains(t12));
+		assertTrue("contains t13", fromDb.contains(t13));
+	}
+	
 
 
 

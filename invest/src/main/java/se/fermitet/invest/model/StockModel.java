@@ -27,8 +27,14 @@ public class StockModel extends Model<Stock> {
 	}
 
 	@Override
-	public void delete(Stock toDelete) {
+	public void delete(Stock toDelete) throws ModelException {
+		verifyNoAssociatedTransactions(toDelete);
+		
 		storage.deleteStock(toDelete);
+	}
+
+	private void verifyNoAssociatedTransactions(Stock stock) throws ModelException {
+		if (storage.getTransactionsForStock(stock).size() > 0) throw ModelException.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS;
 	}
 
 
