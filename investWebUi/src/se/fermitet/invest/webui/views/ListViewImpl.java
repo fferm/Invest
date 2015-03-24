@@ -12,6 +12,7 @@ import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.ErrorMessage;
 import com.vaadin.server.UserError;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -31,6 +32,8 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 
 	private Class<POJO> pojoClass;
 	private String tableTitle;
+
+	private ErrorMessage applicationException;
 
 	protected abstract List<ColumnDefinition> getColumnDefinitions();
 	protected abstract void setSortOrder();
@@ -60,7 +63,7 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 		tableAdapter = new POJOTableAdapter<POJO>(this.pojoClass, tableTitle);
 
 		tableAdapter.setVisibleData(getColumnDefinitions());
-		tableAdapter.addSelectionListener((Object idx, POJO selected) -> handleSelectionEvent(idx, selected));
+		tableAdapter.addSelectionListener((POJO selected) -> handleSelectionEvent(selected));
 		setSortOrder();
 		
 		tableAdapter.getUI().setSelectable(true);
@@ -113,9 +116,9 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 		parent.addComponent(deleteButton);
 	}
 
-	private void handleSelectionEvent(Object idx, POJO selected) {
-		deleteButton.setEnabled(idx != null);
-		editButton.setEnabled(idx != null);
+	private void handleSelectionEvent(POJO selected) {
+		deleteButton.setEnabled(selected != null);
+		editButton.setEnabled(selected != null);
 	}
 
 
@@ -138,12 +141,22 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 	}
 	
 	@Override
+	public boolean hasApplicationException() {
+		return applicationException != null;
+	}
+	
+	@Override
 	public void displayApplicationException(ModelException exception) {
-		deleteButton.setComponentError(new UserError(ErrorMessages.getMessage(exception)));
+		handleApplicationException(new UserError(ErrorMessages.getMessage(exception)));
 	}
 	
 	@Override
 	public void clearApplicationException() {
-		deleteButton.setComponentError(null);
+		handleApplicationException(null);
+	}
+	
+	private void handleApplicationException(ErrorMessage applicationException) {
+		this.applicationException = applicationException;
+		deleteButton.setComponentError(applicationException);
 	}
 }

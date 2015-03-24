@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.ModelException;
+import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.ListView;
 
@@ -26,7 +27,7 @@ public class StockListPresenterTest extends ListPresenterTest<StockListPresenter
 		Stock okStock = new Stock("OK");
 		Stock errorStock = new Stock("ERROR");
 		
-		doThrow(ModelException.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS).when(mockedModel).delete(errorStock);
+		doThrow(new ModelException(ModelExceptionType.DUMMY)).when(mockedModel).delete(errorStock);
 		
 		presenter.onDeleteButtonClick(okStock);
 		
@@ -34,7 +35,7 @@ public class StockListPresenterTest extends ListPresenterTest<StockListPresenter
 		reset(mockedView);
 		
 		presenter.onDeleteButtonClick(errorStock);
-		verify(mockedView).displayApplicationException(ModelException.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS);
+		verify(mockedView).displayApplicationException(new ModelException(ModelExceptionType.DUMMY));
 		reset(mockedView);
 		
 		presenter.onDeleteButtonClick(okStock);

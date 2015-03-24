@@ -22,10 +22,6 @@ public class POJOTableAdapter<POJO extends IdAble<?>> extends POJOAbstractSelect
 		super(pojoClass, new Table(caption));
 	}
 	
-//	public Table getTable() {
-//		return super.getUI();
-//	}
-
 	public void setVisibleData(List<ColumnDefinition> columnDefinitionsToShow) {
 		try {
 			List<String> existingPropIds = new ArrayList<String>(this.container.getContainerPropertyIds());

@@ -75,28 +75,53 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTER extends POJOAbstract
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testSelection() throws Exception {
+	public void testSelection_before() throws Exception {
 		defineVisibleData();
 		adapter.setData(testData);
 
 		assertNull("Null selection before", adapter.getSelectedData());
 		assertNull("Null selection before from UI", getSelectionFromUI());
-
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelection_simple() throws Exception {
+		defineVisibleData();
+		adapter.setData(testData);
+		
 		TestPOJO toSelect = testData.get(1);
 		adapter.select(toSelect);
 
 		assertEquals("selectedItem", toSelect, adapter.getSelectedData());
 		assertEquals("selectedItem from UI", toSelect, getSelectionFromUI());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelection_nullAfterRealSelect() throws Exception {
+		defineVisibleData();
+		adapter.setData(testData);
+		TestPOJO toSelectFirst = testData.get(0);
 
+		adapter.select(toSelectFirst);
 		adapter.select(null);
+		
 		assertNull("Null selection when select(null) is called", adapter.getSelectedData());
 		assertNull("Null selection when select(null) is called  (UI)", getSelectionFromUI());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelection_unselectAfterRealSelect() throws Exception {
+		defineVisibleData();
+		adapter.setData(testData);
+		TestPOJO toSelectFirst = testData.get(0);
 
-		adapter.select(toSelect);
+		adapter.select(toSelectFirst);
 		adapter.unselect();
-
-		assertNull("Null selection when unselect is called", adapter.getSelectedData());
-		assertNull("Null selection when unselect is called  (UI)", getSelectionFromUI());
+		
+		assertNull("Null selection when select(null) is called", adapter.getSelectedData());
+		assertNull("Null selection when select(null) is called  (UI)", getSelectionFromUI());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -133,8 +158,8 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTER extends POJOAbstract
 		adapter.addSelectionListener(listener);
 
 		((AbstractSelect) adapter.getUI()).select(selectedPOJO.getId());
-		verify(listener).onSelect(selectedPOJO.getId(), selectedPOJO);
-	}
+		verify(listener).onSelect(selectedPOJO);
+}
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -152,7 +177,41 @@ public abstract class POJOAbstractSelectAdapterTest<ADAPTER extends POJOAbstract
 		adapter.addSelectionListener(listener);
 
 		ui.unselect(selectedPOJO.getId());
-		verify(listener).onSelect(null,  null);
+		verify(listener).onSelect(null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSecondSelectionShouldNotFireSelectionEvent() throws Exception {
+		defineVisibleData();
+		adapter.setData(testData);
+
+		TestPOJO selectedPOJO = testData.get(1);
+
+		adapter.select(selectedPOJO);
+
+		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
+		adapter.addSelectionListener(listener);
+
+		adapter.select(selectedPOJO);
+		verify(listener, never()).onSelect(selectedPOJO);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSecondNullSelectionShouldNotFireSelectionEvent() throws Exception {
+		defineVisibleData();
+		adapter.setData(testData);
+
+		TestPOJO selectedPOJO = testData.get(1);
+		adapter.select(selectedPOJO);
+		adapter.unselect();
+
+		SelectionListener<TestPOJO> listener = mock(SelectionListener.class);
+		adapter.addSelectionListener(listener);
+
+		adapter.unselect();
+		verify(listener, never()).onSelect(selectedPOJO);
 	}
 
 

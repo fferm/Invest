@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.ModelException;
+import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.testData.StockDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
@@ -39,9 +40,11 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 	
 	@Test
 	public void testErrorOnDeletingStockWithAssociatedTransactions() throws Exception {
+		Stock stock = new Stock("TEST");
+		
 		assertNull("null before", view.deleteButton.getComponentError());
 		
-		view.displayApplicationException(ModelException.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS);
+		view.displayApplicationException(new ModelException(ModelExceptionType.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, stock));
 		assertNotNull("not null after", view.deleteButton.getComponentError());
 		
 		view.clearApplicationException();

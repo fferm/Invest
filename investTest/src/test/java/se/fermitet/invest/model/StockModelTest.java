@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
+import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.storage.Storage;
 
 public class StockModelTest extends AbstractModelTest<StockModel> {
@@ -70,7 +71,7 @@ public class StockModelTest extends AbstractModelTest<StockModel> {
 			model.delete(stock);
 			fail("should give exception");
 		} catch (ModelException e) {
-			assertEquals(ModelException.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, e);
+			assertEquals(new ModelException(ModelExceptionType.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, stock), e);
 		}
 	}
 }

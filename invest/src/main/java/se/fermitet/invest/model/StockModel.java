@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import se.fermitet.invest.domain.Stock;
+import se.fermitet.invest.model.ModelException.ModelExceptionType;
 
 public class StockModel extends Model<Stock> {
 	
@@ -34,7 +35,7 @@ public class StockModel extends Model<Stock> {
 	}
 
 	private void verifyNoAssociatedTransactions(Stock stock) throws ModelException {
-		if (storage.getTransactionsForStock(stock).size() > 0) throw ModelException.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS;
+		if (storage.getTransactionsForStock(stock).size() > 0) throw new ModelException(ModelExceptionType.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, stock);
 	}
 
 

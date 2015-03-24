@@ -8,6 +8,7 @@ public interface ListView<POJO> extends InvestView {
 	public void displayData(List<POJO> data);
 	public void navigateToSingleView(POJO data);
 	
+	public boolean hasApplicationException();
 	public void displayApplicationException(ModelException error);
 	public void clearApplicationException();
 

@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.fermitet.general.IdAble;
+import se.fermitet.invest.model.ModelException;
+import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.presenter.ListPresenter;
 import se.fermitet.vaadin.navigation.URIParameter;
 
@@ -116,6 +118,15 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 		view.navigateToSingleView(testData);
 		verify(view.getNavigator()).navigateTo(getSingleViewName(), new URIParameter(testData.getId().toString()));
 	}
-
-
+	
+	@Test
+	public void testHasApplicationException() throws Exception {
+		assertFalse("false before", view.hasApplicationException());
+		
+		view.displayApplicationException(new ModelException(ModelExceptionType.DUMMY));
+		assertTrue("true after", view.hasApplicationException());
+		
+		view.clearApplicationException();
+		assertFalse("false after clear", view.hasApplicationException());
+	}
 }

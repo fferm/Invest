@@ -165,7 +165,7 @@ abstract class POJOAbstractSelectAdapter<POJO extends IdAble<?>, UI extends Abst
 	}
 
 	public interface SelectionListener<T> {
-		public void onSelect(Object itemId, T selectedPOJO);
+		public void onSelect(T selectedPOJO);
 	}
 
 	public void addSelectionListener(SelectionListener<POJO> listener) {
@@ -176,13 +176,12 @@ abstract class POJOAbstractSelectAdapter<POJO extends IdAble<?>, UI extends Abst
 		listeners.remove(listener);
 	}
 
-	protected void fireSelectionEvent(ValueChangeEvent event) {
-		POJO selectedPOJO = getSelectedData();
 
-		Object itemId = selectedPOJO == null ? null : selectedPOJO.getId();
-		
+	protected void fireSelectionEvent(ValueChangeEvent event) {
+		POJO currentlySelectedPOJO = getSelectedData();
+
 		for (SelectionListener<POJO> listener : listeners) {
-			listener.onSelect(itemId, selectedPOJO);
+			listener.onSelect(currentlySelectedPOJO);
 		}
 	}
 	
