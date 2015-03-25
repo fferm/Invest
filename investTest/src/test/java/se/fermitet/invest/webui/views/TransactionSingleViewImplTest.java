@@ -13,9 +13,11 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionSinglePresenter;
+import se.fermitet.invest.testData.PortfolioDataProvider;
 import se.fermitet.invest.testData.StockDataProvider;
 import se.fermitet.vaadin.converters.MoneyConverter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
@@ -25,6 +27,7 @@ import com.vaadin.ui.ComboBox;
 
 public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<TransactionSingleViewImpl, TransactionSinglePresenter, Transaction> {
 	private List<Stock> testStocks;
+	private List<Portfolio> testPortfolios;
 
 	public TransactionSingleViewImplTest() {
 		super(Transaction.class);
@@ -36,7 +39,9 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 		super.setUp();
 
 		testStocks = new StockDataProvider().getTestData();
+		testPortfolios = new PortfolioDataProvider().getTestData();
 		view.showStocksInSelection(testStocks);
+		view.showPortfoliosInSelection(testPortfolios);
 	}
 
 	@Override
@@ -51,7 +56,9 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 		int number = 10;
 		Money price = Money.parse("SEK 200");
 		Money fee = Money.parse("SEK 10");
-		Transaction trans = new Transaction(stock, date, number, price, fee);
+		Portfolio port = testPortfolios.get(0);
+		
+		Transaction trans = new Transaction(stock, date, number, price, fee, port);
 
 		return trans;
 	}
@@ -67,6 +74,11 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 		else
 			assertEquals("Symbol", pojo.getStock().getSymbol(), view.stockComboAdapter.getUI().getItemCaption(view.stockComboAdapter.getUI().getValue()));
 		
+		if (pojo.getPortfolio() == null || pojo.getPortfolio().getName() == null) 
+			assertNull("Portfolio", view.stockComboAdapter.getUI().getValue());
+		else
+			assertEquals("Symbol", pojo.getPortfolio().getName(), view.portfolioComboAdapter.getUI().getItemCaption(view.portfolioComboAdapter.getUI().getValue()));
+
 		assertEquals("Number", "" + pojo.getNumber(), view.numberFieldAdapter.getUI().getValue());
 		assertEquals("Price", conv.convertToPresentation(pojo.getPrice(),  null, null), view.priceFieldAdapter.getUI().getValue());
 		assertEquals("Fee", conv.convertToPresentation(pojo.getFee(),  null, null), view.feeFieldAdapter.getUI().getValue());
@@ -74,6 +86,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 	
 	@Override
 	protected void updateUIFromPOJO(Transaction updated) {
+		view.portfolioComboAdapter.select(updated.getPortfolio());
 		view.stockComboAdapter.select(updated.getStock());
 		view.dateAdapter.setValue(updated.getDate());
 		view.numberFieldAdapter.setValue(updated.getNumber());
@@ -94,6 +107,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 
 	@Test
 	public void testHasComponents() throws Exception {
+		assertNotNull("portfolio", view.portfolioComboAdapter);
 		assertNotNull("stock", view.stockComboAdapter);
 		assertNotNull("date", view.dateAdapter);
 		assertNotNull("price", view.priceFieldAdapter);
@@ -102,7 +116,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 	}
 
 	@Test
-	public void testEnterCallsFillStockCombo() throws Exception {
+	public void testEnterCallsPresenterToFillStocks() throws Exception {
 		view.enter(mock(ViewChangeEvent.class));
 
 		verify(mockedPresenter).provideAllStocks();
@@ -131,13 +145,44 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 			i++;
 		}
 	}
-	
+
+	@Test
+	public void testEnterCallsPresenterToFillPortfolios() throws Exception {
+		view.enter(mock(ViewChangeEvent.class));
+
+		verify(mockedPresenter).provideAllPortfolios();
+	}
+
+	@Test
+	public void testCallingShowPortfoliosInSelectionDisplaysNamesSorted() throws Exception {
+		List<Portfolio> testPortfolios = new PortfolioDataProvider().getTestData();
+
+		view.showPortfoliosInSelection(testPortfolios);
+
+		ComboBox portfolioCombo = view.portfolioComboAdapter.getUI();
+		assertEquals("size", testPortfolios.size(), portfolioCombo.size());
+
+		List<String> desiredCaptions = new ArrayList<String>();
+		for (Portfolio testPortfolio : testPortfolios) {
+			desiredCaptions.add(testPortfolio.getName());
+		}
+		Collections.sort(desiredCaptions);
+
+		int i = 0;
+		for(Object itemId : portfolioCombo.getItemIds()) {
+			String caption = portfolioCombo.getItemCaption(itemId);
+			assertEquals("Idx: " + i, desiredCaptions.get(i), caption);
+
+			i++;
+		}
+	}
+
 	@Test
 	public void testErrorShouldNotAppearWhenClearingOutNumberField() throws Exception {
 		List<Stock> testStocks = new StockDataProvider().getTestData();
 		view.showStocksInSelection(testStocks);
 
-		Transaction initialTransaction = new Transaction(testStocks.get(1), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		Transaction initialTransaction = new Transaction(testStocks.get(1), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"), testPortfolios.get(3));
 
 		when(mockedPresenter.getDOBasedOnIdString(anyString())).thenReturn(initialTransaction);
 

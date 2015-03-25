@@ -25,17 +25,21 @@ public class Transaction extends InvestPOJO {
 	private Money price;
 	private Money fee;
 
+	@NotNull
+	private Portfolio portfolio;
+
 	public Transaction() {
-		this(null, LocalDate.now(), 0, null, null);
+		this(null, LocalDate.now(), 0, null, null, null);
 	}
 
-	public Transaction(Stock stock, LocalDate date, int number,	Money price, Money fee) {
+	public Transaction(Stock stock, LocalDate date, int number,	Money price, Money fee, Portfolio portfolio) {
 		super();
 		setStock(stock);
 		setDate(date);
 		setNumber(number);
 		setPrice(price);
 		setFee(fee);
+		setPortfolio(portfolio);
 	}
 
 	public LocalDate getDate() {
@@ -78,6 +82,16 @@ public class Transaction extends InvestPOJO {
 	public void setFee(Money fee) {
 		this.fee = fee;
 	}
+	
+	public Portfolio getPortfolio() {
+		return this.portfolio;
+	}
+	
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+
+
 
 	@Override
 	public int hashCode() {
@@ -85,7 +99,9 @@ public class Transaction extends InvestPOJO {
 		int result = 1;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((fee == null) ? 0 : fee.hashCode());
-		result = prime * result + number;
+		result = prime * result + ((number == null) ? 0 : number.hashCode());
+		result = prime * result
+				+ ((portfolio == null) ? 0 : portfolio.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		result = prime * result + ((stock == null) ? 0 : stock.hashCode());
 		return result;
@@ -110,7 +126,15 @@ public class Transaction extends InvestPOJO {
 				return false;
 		} else if (!fee.equals(other.fee))
 			return false;
-		if (number != other.number)
+		if (number == null) {
+			if (other.number != null)
+				return false;
+		} else if (!number.equals(other.number))
+			return false;
+		if (portfolio == null) {
+			if (other.portfolio != null)
+				return false;
+		} else if (!portfolio.equals(other.portfolio))
 			return false;
 		if (price == null) {
 			if (other.price != null)
@@ -133,7 +157,9 @@ public class Transaction extends InvestPOJO {
 		this.addToStringPropDef("number", this.getClass().getMethod("getNumber"));
 		this.addToStringPropDef("price", this.getClass().getMethod("getPrice"));
 		this.addToStringPropDef("fee", this.getClass().getMethod("getFee"));
+		this.addToStringPropDef("portfolio", this.getClass().getMethod("getPortfolio"));
 	}
+
 
 	
 }

@@ -10,19 +10,22 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 
 public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 	private Stock stock;
 	private Transaction transaction;
+	private Portfolio portfolio;
 
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 
 		this.stock = new Stock("NAME", "SYMBOL");
-		this.transaction = new Transaction(stock, LocalDate.now(), 20, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		this.portfolio = new Portfolio("PORTFOLIO_NAME");
+		this.transaction = new Transaction(stock, LocalDate.now(), 20, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
 	}
 
 	@Test
@@ -45,8 +48,8 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 
 		objUnderTest.saveStock(s1);
 
-		Transaction t1 = new Transaction(s1, LocalDate.now(), -10, Money.parse("SEK 200"), Money.parse("SEK 2"));
-		Transaction t2 = new Transaction(s1, LocalDate.now().minusDays(10), 100, Money.parse("SEK 100"), Money.parse("SEK 2"));
+		Transaction t1 = new Transaction(s1, LocalDate.now(), -10, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
+		Transaction t2 = new Transaction(s1, LocalDate.now().minusDays(10), 100, Money.parse("SEK 100"), Money.parse("SEK 2"), portfolio);
 
 		objUnderTest.saveTransaction(t1);
 		objUnderTest.saveTransaction(t2);
@@ -65,8 +68,8 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 
 		objUnderTest.saveStock(s1);
 
-		Transaction t1 = new Transaction(s1, LocalDate.now(), -10, Money.parse("SEK 200"), Money.parse("SEK 2"));
-		Transaction t2 = new Transaction(s1, LocalDate.now().minusDays(10), 100, Money.parse("SEK 100"), Money.parse("SEK 2"));
+		Transaction t1 = new Transaction(s1, LocalDate.now(), -10, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
+		Transaction t2 = new Transaction(s1, LocalDate.now().minusDays(10), 100, Money.parse("SEK 100"), Money.parse("SEK 2"), portfolio);
 
 		objUnderTest.saveTransaction(t1);
 		objUnderTest.saveTransaction(t2);
@@ -88,11 +91,11 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 		objUnderTest.saveStock(s1);
 		objUnderTest.saveStock(s2);
 		
-		Transaction t11 = new Transaction(s1, LocalDate.now().minusDays(10), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
-		Transaction t12 = new Transaction(s1, LocalDate.now().minusDays(9), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
-		Transaction t13 = new Transaction(s1, LocalDate.now().minusDays(8), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		Transaction t11 = new Transaction(s1, LocalDate.now().minusDays(10), 10, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
+		Transaction t12 = new Transaction(s1, LocalDate.now().minusDays(9), 10, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
+		Transaction t13 = new Transaction(s1, LocalDate.now().minusDays(8), 10, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
 
-		Transaction t21 = new Transaction(s2, LocalDate.now().minusDays(7), 10, Money.parse("SEK 200"), Money.parse("SEK 2"));
+		Transaction t21 = new Transaction(s2, LocalDate.now().minusDays(7), 10, Money.parse("SEK 200"), Money.parse("SEK 2"), portfolio);
 		
 		objUnderTest.saveTransaction(t11);
 		objUnderTest.saveTransaction(t12);

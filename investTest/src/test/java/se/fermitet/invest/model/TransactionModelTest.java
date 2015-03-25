@@ -8,6 +8,7 @@ import org.joda.money.Money;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
+import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.storage.Storage;
@@ -36,7 +37,7 @@ public class TransactionModelTest extends AbstractModelTest<TransactionModel>{
 	
 	@Test
 	public void testDelete() throws Exception {
-		Transaction toDelete = new Transaction(new Stock("HEJ"), LocalDate.now(), 10, Money.parse("SEK 20"), Money.parse("SEK 2"));
+		Transaction toDelete = new Transaction(new Stock("HEJ"), LocalDate.now(), 10, Money.parse("SEK 20"), Money.parse("SEK 2"), new Portfolio("DUMMY"));
 		model.delete(toDelete);
 		
 		verify(mockedStorage).deleteTransaction(toDelete);
@@ -44,7 +45,7 @@ public class TransactionModelTest extends AbstractModelTest<TransactionModel>{
 	
 	@Test
 	public void testSave() throws Exception {
-		Transaction toSave = new Transaction(new Stock("HEJ"), LocalDate.now(), 10, Money.parse("SEK 20"), Money.parse("SEK 2"));
+		Transaction toSave = new Transaction(new Stock("HEJ"), LocalDate.now(), 10, Money.parse("SEK 20"), Money.parse("SEK 2"), new Portfolio("DUMMY"));
 		model.save(toSave);
 		
 		verify(mockedStorage).saveTransaction(toSave);

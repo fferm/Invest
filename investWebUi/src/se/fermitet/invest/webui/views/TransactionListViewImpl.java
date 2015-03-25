@@ -22,8 +22,9 @@ public class TransactionListViewImpl extends ListViewImpl<TransactionListPresent
 
 	protected List<ColumnDefinition> getColumnDefinitions() {
 		List<ColumnDefinition> cols = new ArrayList<ColumnDefinition>();
-		cols.add(new ColumnDefinition("date", "Datum"));
+		cols.add(new ColumnDefinition("portfolio.name", "Portfšlj"));
 		cols.add(new ColumnDefinition("stock.symbol", "Aktie"));
+		cols.add(new ColumnDefinition("date", "Datum"));
 		cols.add(new ColumnDefinition("number", "Antal"));
 		cols.add(new ColumnDefinition("price", "Pris"));
 		cols.add(new ColumnDefinition("fee", "Courtage"));
@@ -33,6 +34,7 @@ public class TransactionListViewImpl extends ListViewImpl<TransactionListPresent
 	@Override
 	protected void setSortOrder() {
 		List<String> sortOrder = new ArrayList<String>();
+		sortOrder.add("portfolio.name");
 		sortOrder.add("stock.symbol");
 		sortOrder.add("date");
 		tableAdapter.setSortOrder(sortOrder);

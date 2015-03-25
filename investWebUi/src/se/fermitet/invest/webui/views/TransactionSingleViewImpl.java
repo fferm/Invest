@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.joda.money.Money;
 
+import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionSinglePresenter;
@@ -20,14 +21,22 @@ public class TransactionSingleViewImpl extends POJOSingleViewImpl<TransactionSin
 
 	private static final long serialVersionUID = 8004896867328107503L;
 	
+	POJOComboBoxAdapter<Portfolio> portfolioComboAdapter;
 	POJOComboBoxAdapter<Stock> stockComboAdapter;
 	POJOPropertyDatePopupAdapter<Transaction> dateAdapter;
 	POJOPropertyTextFieldAdapter<Transaction, Money> priceFieldAdapter;
 	POJOPropertyTextFieldAdapter<Transaction, Money> feeFieldAdapter;
 	POJOPropertyTextFieldAdapter<Transaction, Integer> numberFieldAdapter;
+
 	
 	@Override
 	protected void initAndAddFields(Layout layout) {
+		portfolioComboAdapter = new POJOComboBoxAdapter<Portfolio>(Portfolio.class, "Portfšlj");
+		portfolioComboAdapter.setDisplayColumn("name");
+		portfolioComboAdapter.setSortOrder("name");
+		portfolioComboAdapter.getUI().addValueChangeListener(e -> valueChanged());
+		layout.addComponent(portfolioComboAdapter.getUI());
+
 		stockComboAdapter = new POJOComboBoxAdapter<Stock>(Stock.class, "Aktie");
 		stockComboAdapter.setDisplayColumn("symbol");
 		stockComboAdapter.setSortOrder("symbol");
@@ -57,6 +66,11 @@ public class TransactionSingleViewImpl extends POJOSingleViewImpl<TransactionSin
 	}
 	
 	@Override
+	public void showPortfoliosInSelection(List<Portfolio> list) {
+		portfolioComboAdapter.setData(list);
+	}
+
+	@Override
 	protected TransactionSinglePresenter createPresenter() {
 		return new TransactionSinglePresenter(this);
 	}
@@ -64,6 +78,7 @@ public class TransactionSingleViewImpl extends POJOSingleViewImpl<TransactionSin
 	@Override
  	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
 		presenter.provideAllStocks();
+		presenter.provideAllPortfolios();
 		
 		super.enter(event, parameters);
 	}
@@ -72,11 +87,13 @@ public class TransactionSingleViewImpl extends POJOSingleViewImpl<TransactionSin
 	protected void bindToData() {
 		if (this.pojo == null) return;
 
+		portfolioComboAdapter.bindSelectionToProperty(pojo, "portfolio");
 		stockComboAdapter.bindSelectionToProperty(pojo, "stock");
 		dateAdapter.bindToProperty(pojo, "date");
 		priceFieldAdapter.bindToProperty(pojo, "price");
 		numberFieldAdapter.bindToProperty(pojo, "number");
 		feeFieldAdapter.bindToProperty(pojo, "fee");
 	}
+
 
 }

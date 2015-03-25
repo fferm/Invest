@@ -25,31 +25,34 @@ public class TransactionTest {
 	}
 
 	@Test
-	public void testConstructor() throws Exception {
+	public void testDefaultConstructor() throws Exception {
 		Transaction tx = new Transaction();
 		assertNotNull("Transaction itself not null", tx);
 		assertNotNull("Transaction date not null", tx.getDate());
 		assertEquals("Transaction date today if used with default constructor", LocalDate.now(), tx.getDate());
 		assertNotNull("Transaction number cannot be null", tx.getNumber());
 		assertEquals("Default value of number", (Integer) 0, tx.getNumber());
+		assertNull("portfolio", tx.getPortfolio());
 	}
 
 	@Test
 	public void testConstructorWithArguments() throws Exception {
-		// date, stock, number, price, fee
+		// date, stock, number, price, fee, portfolio
 		Stock stock = new Stock("TST", "Test");
 		LocalDate date = LocalDate.now();
 		Integer number = 20;
 		Money price = Money.parse("SEK 100");
 		Money fee = Money.parse("SEK 20");
+		Portfolio port = new Portfolio("TEST");
 
-		Transaction trans = new Transaction(stock, date, number, price, fee);
+		Transaction trans = new Transaction(stock, date, number, price, fee, port);
 
 		assertEquals("stock", stock, trans.getStock());
 		assertEquals("date", date, trans.getDate());
 		assertEquals("number", number, trans.getNumber());
 		assertEquals("price", price,trans.getPrice());
 		assertEquals("fee", fee, trans.getFee());
+		assertEquals("portfolio", port, trans.getPortfolio());
 	}
 
 
@@ -119,6 +122,21 @@ public class TransactionTest {
 		tx.setFee(null);
 		assertNull("after set back to null", tx.getFee());
 	}
+	
+	@Test
+	public void testPortfolioProperty() throws Exception {
+		Transaction tx = new Transaction();
+		
+		assertNull("null when created", tx.getPortfolio());
+		
+		Portfolio port = new Portfolio("TEST");
+		tx.setPortfolio(port);
+		assertEquals("after setPortfolio", port, tx.getPortfolio());
+		
+		tx.setPortfolio(null);
+		assertNull("null after set back to null", tx.getPortfolio());
+		
+	}
 
 	@Test
 	public void testValueObject() throws Exception {
@@ -136,23 +154,29 @@ public class TransactionTest {
 
 		Money fee1 = Money.parse("NOK 1");
 		Money fee2 = Money.parse("NOK 2");
+		
+		Portfolio port1	= new Portfolio("port1");
+		Portfolio port2 = new Portfolio("port2");
 
-		Transaction t1 = new Transaction(s1, d1, num1, price1, fee1);
-		Transaction sameValues = new Transaction(s1, d1, num1, price1, fee1);
+		Transaction t1 = new Transaction(s1, d1, num1, price1, fee1, port1);
+		Transaction sameValues = new Transaction(s1, d1, num1, price1, fee1, port1);
 
-		Transaction diffDate = new Transaction(s1, d2, num1, price1, fee1);
-		Transaction nullDate = new Transaction(s1, null, num1, price1, fee1);
+		Transaction diffDate = new Transaction(s1, d2, num1, price1, fee1, port1);
+		Transaction nullDate = new Transaction(s1, null, num1, price1, fee1, port1);
 
-		Transaction diffStock = new Transaction(s2, d1, num1, price1, fee1);
-		Transaction nullStock = new Transaction(null, d1, num1, price1, fee1);
+		Transaction diffStock = new Transaction(s2, d1, num1, price1, fee1, port1);
+		Transaction nullStock = new Transaction(null, d1, num1, price1, fee1, port1);
 
-		Transaction diffNum = new Transaction(s1, d1, num2, price1, fee1);
+		Transaction diffNum = new Transaction(s1, d1, num2, price1, fee1, port1);
 
-		Transaction diffPrice = new Transaction(s1, d1, num1, price2, fee1);
-		Transaction nullPrice = new Transaction(s1, d1, num1, null, fee1);
+		Transaction diffPrice = new Transaction(s1, d1, num1, price2, fee1, port1);
+		Transaction nullPrice = new Transaction(s1, d1, num1, null, fee1, port1);
 
-		Transaction diffFee = new Transaction(s1, d1, num1, price1, fee2);
-		Transaction nullFee = new Transaction(s1, d1, num1, price1, null);
+		Transaction diffFee = new Transaction(s1, d1, num1, price1, fee2, port1);
+		Transaction nullFee = new Transaction(s1, d1, num1, price1, null, port1);
+
+		Transaction diffPortfolio = new Transaction(s1, d1, num1, price1, fee1, port2);
+		Transaction nullPortfolio = new Transaction(s1, d1, num1, price1, fee1, null);
 
 		assertTrue("Equal to itself", t1.equals(t1));
 		assertTrue("Equal to same values", t1.equals(sameValues));
@@ -171,6 +195,9 @@ public class TransactionTest {
 		assertFalse("Not equal to different fee", t1.equals(diffFee));
 		assertFalse("Not equal to null fee", t1.equals(nullFee));
 
+		assertFalse("Not equal to different portfolio", t1.equals(diffPortfolio));
+		assertFalse("Not equal to null portfolio", t1.equals(nullPortfolio));
+
 		assertFalse("Not equal to object of different class", t1.equals("TST"));
 		assertFalse("Not equal to null", t1.equals(null));
 
@@ -179,7 +206,7 @@ public class TransactionTest {
 
 	@Test
 	public void testValidateStock() throws Exception {
-		Transaction nullStock = new Transaction(null, LocalDate.now(), 10, Money.parse("SEK 100"), Money.parse("SEK 10"));
+		Transaction nullStock = new Transaction(null, LocalDate.now(), 10, Money.parse("SEK 100"), Money.parse("SEK 10"), new Portfolio());
 
 		Set<ConstraintViolation<Transaction>> results = validator.validate(nullStock);
 
@@ -189,7 +216,7 @@ public class TransactionTest {
 
 	@Test
 	public void testValidateDate() throws Exception {
-		Transaction nullDate = new Transaction(new Stock("TST"), null, 10, Money.parse("SEK 100"), Money.parse("SEK 10"));
+		Transaction nullDate = new Transaction(new Stock("TST"), null, 10, Money.parse("SEK 100"), Money.parse("SEK 10"), new Portfolio());
 
 		Set<ConstraintViolation<Transaction>> results = validator.validate(nullDate);
 
@@ -198,7 +225,7 @@ public class TransactionTest {
 
 	@Test
 	public void testValidatePrice() throws Exception {
-		Transaction nullPrice = new Transaction(new Stock("TST"), LocalDate.now(), 10, null, Money.parse("SEK 10"));
+		Transaction nullPrice = new Transaction(new Stock("TST"), LocalDate.now(), 10, null, Money.parse("SEK 10"), new Portfolio());
 
 		Set<ConstraintViolation<Transaction>> results = validator.validate(nullPrice);
 
@@ -212,7 +239,7 @@ public class TransactionTest {
 
 	@Test
 	public void testValidateNumber() throws Exception {
-		Transaction zeroNumber = new Transaction(new Stock("TST"), LocalDate.now(), 0, Money.parse("SEK 100"), Money.parse("SEK 10"));
+		Transaction zeroNumber = new Transaction(new Stock("TST"), LocalDate.now(), 0, Money.parse("SEK 100"), Money.parse("SEK 10"), new Portfolio());
 
 		Set<ConstraintViolation<Transaction>> results = validator.validate(zeroNumber);
 
@@ -220,8 +247,17 @@ public class TransactionTest {
 	}
 	
 	@Test
+	public void testValidatePortfolio() throws Exception {
+		Transaction nullPortfolio = new Transaction(new Stock("TST"), LocalDate.now(), 10, Money.parse("SEK 100"), Money.parse("SEK 10"), null);
+
+		Set<ConstraintViolation<Transaction>> results = validator.validate(nullPortfolio);
+
+		checkValidatorResults(results, "portfolio");
+	}
+	
+	@Test
 	public void testValidateValidStock() throws Exception {
-		Transaction validStock = new Transaction(new Stock(), LocalDate.now(), 0, Money.parse("SEK 100"), Money.parse("SEK 10"));
+		Transaction validStock = new Transaction(new Stock(), LocalDate.now(), 0, Money.parse("SEK 100"), Money.parse("SEK 10"), new Portfolio());
 
 		Set<ConstraintViolation<Transaction>> results = validator.validate(validStock);
 		assertTrue("size", results.size() > 0);
@@ -249,10 +285,11 @@ public class TransactionTest {
 		LocalDate date = LocalDate.now();
 		Money price = Money.parse("SEK 100");
 		Money fee = Money.parse("SEK 10");
-		Transaction validStock = new Transaction(stock, date, 0, price, fee);
+		Portfolio port = new Portfolio("TEST");
+		Transaction validTransaction = new Transaction(stock, date, 0, price, fee, port);
 	
-		String expected = "[ Transaction { stock : " + stock.toString() + " | date : " + date.toString() + " | number : 0 | price : " + price.toString() + " | fee : " + fee.toString() + " } ]";
+		String expected = "[ Transaction { stock : " + stock.toString() + " | date : " + date.toString() + " | number : 0 | price : " + price.toString() + " | fee : " + fee.toString() + " | portfolio : " + port.toString() + " } ]";
 		
-		assertEquals(expected, validStock.toString());
+		assertEquals(expected, validTransaction.toString());
 	}
 }

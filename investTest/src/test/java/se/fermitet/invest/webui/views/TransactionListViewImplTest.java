@@ -26,6 +26,11 @@ public class TransactionListViewImplTest extends ListViewImplTest<TransactionLis
 
 		testDataSorted = new ArrayList<Transaction>(testDataUnsorted);
 		testDataSorted.sort((Transaction o1, Transaction o2) -> {
+			String o1Port = o1.getPortfolio().getName();
+			String o2Port = o2.getPortfolio().getName();
+			int comparePortfolios = o1Port.compareTo(o2Port);
+			if (comparePortfolios != 0) return comparePortfolios;
+			
 			String o1Symbol = o1.getStock().getSymbol();
 			String o2Symbol = o2.getStock().getSymbol();
 			int compareSymbols = o1Symbol.compareTo(o2Symbol);
