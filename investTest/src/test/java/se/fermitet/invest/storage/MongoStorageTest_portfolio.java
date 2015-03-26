@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Portfolio;
+import se.fermitet.invest.storage.dataFiller.FillTestData;
 
 public class MongoStorageTest_portfolio extends MongoStorageTest_abstract {
 
@@ -59,6 +60,16 @@ public class MongoStorageTest_portfolio extends MongoStorageTest_abstract {
 		assertNull("should be null", shouldBeNull);
 	}
 
+	@Test
+	public void testGetPortfolioByName() throws Exception {
+		new FillTestData(objUnderTest).fillPortfolios();
+
+		Portfolio retrieved = objUnderTest.getPortfolioByName("Privat");
+		
+		assertNotNull("not null", retrieved);
+		
+		assertEquals("name", "Privat", retrieved.getName());
+	}
 
 
 }

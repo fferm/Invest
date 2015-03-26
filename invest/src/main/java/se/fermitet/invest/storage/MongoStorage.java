@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.query.Query;
 
 import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
@@ -32,9 +31,7 @@ class MongoStorage implements Storage {
 	}
 
 	public Stock getStockBySymbol(String symbol) {
-		Query<Stock> q = getDatastore().createQuery(Stock.class).field("symbol").equal(symbol);
-
-		return q.get();
+		return getDatastore().createQuery(Stock.class).field("symbol").equal(symbol).get();
 	}
 
 	public void saveStock(Stock stock) {
@@ -62,7 +59,7 @@ class MongoStorage implements Storage {
 	public void deleteTransaction(Transaction t1) {
 		delete(t1);
 	}
-	
+
 	public List<Transaction> getTransactionsForStock(Stock stock) {
 		return getDatastore().createQuery(Transaction.class).field("stock").equal(stock).asList();
 	}
@@ -71,8 +68,8 @@ class MongoStorage implements Storage {
 		return getDatastore().createQuery(Transaction.class).field("portfolio").equal(portfolio).asList();
 	}
 
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	public List<Portfolio> getAllPortfolios() {
 		return (List<Portfolio>) getAll(Portfolio.class);
@@ -90,7 +87,9 @@ class MongoStorage implements Storage {
 		save(toSave);
 	}
 
-
+	public Portfolio getPortfolioByName(String name) {
+		return getDatastore().createQuery(Portfolio.class).field("name").equal(name).get();
+	}
 
 
 
@@ -150,7 +149,4 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
-
-
-
 }

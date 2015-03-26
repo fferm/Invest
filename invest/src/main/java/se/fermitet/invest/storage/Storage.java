@@ -26,5 +26,6 @@ public interface Storage {
 	public Portfolio getPortfolioById(UUID id);
 	public void deletePortfolio(Portfolio toDelete);
 	public void savePortfolio(Portfolio toSave);
+	public Portfolio getPortfolioByName(String name);
 
 }

@@ -24,6 +24,8 @@ public class PortfolioModel extends Model<Portfolio>{
 
 	@Override
 	public void save(Portfolio obj) {
+		verifyNoPortfolioWithSameName(obj);
+		
 		storage.savePortfolio(obj);
 	}
 
@@ -36,6 +38,10 @@ public class PortfolioModel extends Model<Portfolio>{
 	
 	private void verifyNoAssociatedTransactions(Portfolio portfolio) {
 		if (storage.getTransactionsForPortfolio(portfolio).size() > 0) throw new ModelException(ModelExceptionType.CANNOT_DELETE_PORTFOLIO_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, portfolio);
+	}
+
+	private void verifyNoPortfolioWithSameName(Portfolio portfolio) {
+		if (storage.getPortfolioByName(portfolio.getName()) != null) throw new ModelException(ModelExceptionType.CANNOT_SAVE_PORTFOLIO_SINCE_THERE_IS_ALREADY_A_PORTFOLIO_WITH_THAT_NAME, portfolio);
 	}
 
 

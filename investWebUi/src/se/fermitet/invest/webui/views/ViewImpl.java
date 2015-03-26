@@ -25,25 +25,25 @@ import com.vaadin.ui.VerticalLayout;
 @SuppressWarnings("rawtypes")
 public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomComponent implements InvestView, View {
 	private static final long serialVersionUID = 1L;
-	
+
 	PRESENTER presenter;
 	private DirectionalNavigator navigator;
 	private ErrorMessage applicationException;
-	
+
 	public ViewImpl() {
 		super();
-		
+
 		this.presenter = createPresenter();
 	}
-	
+
 	protected void init() {
 		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.addComponent(new NavBarViewImpl());
 		mainLayout.addComponent(createMainLayout());
-		
+
 		setCompositionRoot(mainLayout);
 	}
-	
+
 	protected abstract Component createMainLayout();
 	protected abstract PRESENTER createPresenter();
 	protected abstract void enter(ViewChangeEvent event, List<URIParameter> parameters);
@@ -51,23 +51,23 @@ public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomCompon
 	@Override
 	public void enter(ViewChangeEvent event) {
 		String parameterString = null;
-		
+
 		if (event != null) parameterString = event.getParameters();
-		
+
 		enter(event, DirectionalNavigator.parse(parameterString));
 	}
-	
-	
+
+
 	public DirectionalNavigator getNavigator() {
 		if (navigator == null) {
 			navigator = createNavigator();
 		}
 		return navigator;
 	}
-	
+
 	protected DirectionalNavigator createNavigator() {
 		InvestWebUI ui = (InvestWebUI) getUI();
-		
+
 		if (ui != null) return ui.getDirectionalNavigator();
 		return null;
 	}
@@ -75,50 +75,51 @@ public abstract class ViewImpl<PRESENTER extends Presenter> extends CustomCompon
 	protected boolean isValid() {
 		return recursiveIsValid(this);
 	}
-	
+
 	private boolean recursiveIsValid(HasComponents comp) {
 		for (Iterator<Component> iter = comp.iterator(); iter.hasNext(); ) {
 			Component current = iter.next();
 
 			if (current instanceof Validatable) {
 				Validatable validatable = (Validatable) current;
-				
+
 				if (! validatable.isValid()) return false;
 			}
-			
+
 			if (current instanceof HasComponents) {
 				HasComponents hasComponents = (HasComponents) current;
-				
+
 				if (! recursiveIsValid(hasComponents)) return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	protected void handleApplicationException(ErrorMessage applicationException) {
 		throw new UnsupportedOperationException("Should be implemented in subclasses that need application exception support");
 	}
-	
+
 	@Override
 	public boolean hasApplicationException() {
 		return applicationException != null;
 	}
-	
+
 	@Override
 	public void displayApplicationException(ModelException exception) {
 		String message = ErrorMessages.getMessage(exception);
 		this.applicationException = new UserError(message);
 		handleApplicationException(this.applicationException);
-		
-		Notification.show(message, Notification.Type.TRAY_NOTIFICATION);
+
+		if (getUI() != null) Notification.show(message, Notification.Type.TRAY_NOTIFICATION);
+
 	}
-	
+
 	@Override
 	public void clearApplicationException() {
 		this.applicationException = null;
 		handleApplicationException(this.applicationException);
 	}
-	
+
 
 }

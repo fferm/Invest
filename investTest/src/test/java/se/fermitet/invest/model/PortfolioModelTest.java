@@ -74,6 +74,26 @@ public class PortfolioModelTest extends AbstractModelTest<PortfolioModel>{
 			assertEquals(new ModelException(ModelExceptionType.CANNOT_DELETE_PORTFOLIO_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, portfolio), e);
 		}
 	}
+	
+	@Test
+	public void testSaveSecondPortfolioWithSameName() throws Exception {
+		Portfolio first = new Portfolio("A");
+		Portfolio second = new Portfolio("A");
+		Portfolio third = new Portfolio("B");
+		
+		when(mockedStorage.getPortfolioByName(first.getName())).thenReturn(second);
+		when(mockedStorage.getPortfolioByName(third.getName())).thenReturn(null);
+		
+		model.save(third); // should be OK
+		
+		try {
+			model.save(first);
+			fail("Should give exception");
+		} catch (ModelException e) {
+			assertEquals(new ModelException(ModelExceptionType.CANNOT_SAVE_PORTFOLIO_SINCE_THERE_IS_ALREADY_A_PORTFOLIO_WITH_THAT_NAME, first), e);
+		}
+	}
+
 
 
 }

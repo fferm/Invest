@@ -76,7 +76,7 @@ public class StockModelTest extends AbstractModelTest<StockModel> {
 	}
 	
 	@Test
-	public void testSaveSecondStockWithSameName() throws Exception {
+	public void testSaveSecondStockWithSameSymbol() throws Exception {
 		Stock first = new Stock("A");
 		Stock second = new Stock("A");
 		Stock third = new Stock("B");

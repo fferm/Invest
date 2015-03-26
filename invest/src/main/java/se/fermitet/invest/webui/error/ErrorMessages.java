@@ -19,6 +19,9 @@ public class ErrorMessages {
 		if (type.equals(ModelExceptionType.CANNOT_SAVE_STOCK_SINCE_THERE_IS_ALREADY_A_STOCK_WITH_THAT_SYMBOL))
 			return "Kan ej spara en aktie med ticker " + ((Stock) exception.getContext().get(0)).getSymbol() + " eftersom det redan finns en sådan";
 
+		if (type.equals(ModelExceptionType.CANNOT_SAVE_PORTFOLIO_SINCE_THERE_IS_ALREADY_A_PORTFOLIO_WITH_THAT_NAME))
+			return "Kan ej spara en portfölj med namnet " + ((Portfolio) exception.getContext().get(0)).getName() + " eftersom det redan finns en sådan";
+
 		return "Okänt fel";
 	}
 

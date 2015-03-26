@@ -38,7 +38,16 @@ public class ErrorMessagesTest {
 		String actual = ErrorMessages.getMessage(new ModelException(ModelExceptionType.CANNOT_SAVE_STOCK_SINCE_THERE_IS_ALREADY_A_STOCK_WITH_THAT_SYMBOL, stock));
 
 		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void testCannotSavePortfolioSinceThereIsAlreadyAPortfolioWithThatNameSymbol() throws Exception {
+		Portfolio portfolio = new Portfolio("TEST");
 		
+		String expected = "Kan ej spara en portfölj med namnet " + portfolio.getName() + " eftersom det redan finns en sådan";
+		String actual = ErrorMessages.getMessage(new ModelException(ModelExceptionType.CANNOT_SAVE_PORTFOLIO_SINCE_THERE_IS_ALREADY_A_PORTFOLIO_WITH_THAT_NAME, portfolio));
+
+		assertEquals(expected, actual);
 	}
 
 }
