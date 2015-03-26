@@ -67,6 +67,9 @@ class MongoStorage implements Storage {
 		return getDatastore().createQuery(Transaction.class).field("stock").equal(stock).asList();
 	}
 
+	public List<Transaction> getTransactionsForPortfolio(Portfolio portfolio) {
+		return getDatastore().createQuery(Transaction.class).field("portfolio").equal(portfolio).asList();
+	}
 
 	
 	
@@ -147,6 +150,7 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
+
 
 
 }

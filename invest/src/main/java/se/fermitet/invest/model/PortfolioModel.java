@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import se.fermitet.invest.domain.Portfolio;
+import se.fermitet.invest.model.ModelException.ModelExceptionType;
 
 public class PortfolioModel extends Model<Portfolio>{
 
@@ -27,8 +28,15 @@ public class PortfolioModel extends Model<Portfolio>{
 	}
 
 	@Override
-	public void delete(Portfolio obj) {
+	public void delete(Portfolio obj) throws ModelException {
+		verifyNoAssociatedTransactions(obj);
+		
 		storage.deletePortfolio(obj);
 	}
+	
+	private void verifyNoAssociatedTransactions(Portfolio portfolio) throws ModelException {
+		if (storage.getTransactionsForPortfolio(portfolio).size() > 0) throw new ModelException(ModelExceptionType.CANNOT_DELETE_PORTFOLIO_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, portfolio);
+	}
+
 
 }

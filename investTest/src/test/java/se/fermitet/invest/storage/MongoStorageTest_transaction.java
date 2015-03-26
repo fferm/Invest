@@ -111,6 +111,37 @@ public class MongoStorageTest_transaction extends MongoStorageTest_abstract {
 		assertTrue("contains t13", fromDb.contains(t13));
 	}
 	
+	@Test
+	public void testGetTransactionsForPortfolio() throws Exception {
+		Portfolio p1 = new Portfolio("p1");
+		Portfolio p2 = new Portfolio("p2");
+		Stock s = new Stock("TEST");
+		
+		objUnderTest.savePortfolio(p1);
+		objUnderTest.savePortfolio(p2);
+		objUnderTest.saveStock(s);
+		
+		Transaction t11 = new Transaction(s, LocalDate.now().minusDays(1), 10, Money.parse("SEK 100"), Money.parse("SEK 2"), p1);
+		Transaction t12 = new Transaction(s, LocalDate.now().minusDays(2), 10, Money.parse("SEK 100"), Money.parse("SEK 2"), p1);
+		Transaction t13 = new Transaction(s, LocalDate.now().minusDays(3), 10, Money.parse("SEK 100"), Money.parse("SEK 2"), p1);
+		Transaction t21 = new Transaction(s, LocalDate.now().minusDays(4), 10, Money.parse("SEK 100"), Money.parse("SEK 2"), p2);
+		
+		objUnderTest.saveTransaction(t11);
+		objUnderTest.saveTransaction(t12);
+		objUnderTest.saveTransaction(t13);
+		objUnderTest.saveTransaction(t21);
+		
+		List<Transaction> fromDb = objUnderTest.getTransactionsForPortfolio(p1);
+		
+		assertNotNull("not null", fromDb);
+		assertEquals("size", 3, fromDb.size());
+		assertTrue("contains t11", fromDb.contains(t11));
+		assertTrue("contains t12", fromDb.contains(t12));
+		assertTrue("contains t13", fromDb.contains(t13));
+
+		
+	}
+	
 
 
 

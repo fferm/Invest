@@ -11,6 +11,7 @@ public class ModelException extends Exception {
 	
 	public enum ModelExceptionType {
 		CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS,
+		CANNOT_DELETE_PORTFOLIO_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS,
 		DUMMY  //TODO Delete when there is more
 	}
 
