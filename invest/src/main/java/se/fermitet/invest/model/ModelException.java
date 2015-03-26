@@ -5,14 +5,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class ModelException extends Exception {
+public class ModelException extends RuntimeException {
 
 	private static final long serialVersionUID = -7394909328890202728L;
 	
 	public enum ModelExceptionType {
+		DUMMY,
 		CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS,
 		CANNOT_DELETE_PORTFOLIO_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS,
-		DUMMY  //TODO Delete when there is more
+		CANNOT_SAVE_STOCK_SINCE_THERE_IS_ALREADY_A_STOCK_WITH_THAT_SYMBOL
 	}
 
 	private ModelExceptionType type;

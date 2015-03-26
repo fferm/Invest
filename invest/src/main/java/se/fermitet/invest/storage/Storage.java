@@ -13,6 +13,7 @@ public interface Storage {
 //	public Stock getStockBySymbol(String string);
 	public void saveStock(Stock stock);
 	public void deleteStock(Stock toDelete);
+	public Stock getStockBySymbol(String symbol);
 
 	public List<Transaction> getAllTransactions();
 	public Transaction getTransactionById(UUID id);

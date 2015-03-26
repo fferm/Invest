@@ -74,6 +74,25 @@ public class StockModelTest extends AbstractModelTest<StockModel> {
 			assertEquals(new ModelException(ModelExceptionType.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, stock), e);
 		}
 	}
+	
+	@Test
+	public void testSaveSecondStockWithSameName() throws Exception {
+		Stock first = new Stock("A");
+		Stock second = new Stock("A");
+		Stock third = new Stock("B");
+		
+		when(mockedStorage.getStockBySymbol(first.getSymbol())).thenReturn(second);
+		when(mockedStorage.getStockBySymbol(third.getSymbol())).thenReturn(null);
+		
+		model.save(third); // should be OK
+		
+		try {
+			model.save(first);
+			fail("Should give exception");
+		} catch (ModelException e) {
+			assertEquals(new ModelException(ModelExceptionType.CANNOT_SAVE_STOCK_SINCE_THERE_IS_ALREADY_A_STOCK_WITH_THAT_SYMBOL, first), e);
+		}
+	}
 }
 
 class StockModelWithTestStorageFactory extends StockModel {

@@ -24,17 +24,23 @@ public class StockModel extends Model<Stock> {
 
 	@Override
 	public void save(Stock stock) {
+		verifyNoStockWithSameSymbol(stock);
+		
 		storage.saveStock(stock);
 	}
 
 	@Override
-	public void delete(Stock toDelete) throws ModelException {
+	public void delete(Stock toDelete) {
 		verifyNoAssociatedTransactions(toDelete);
 		
 		storage.deleteStock(toDelete);
 	}
 
-	private void verifyNoAssociatedTransactions(Stock stock) throws ModelException {
+	private void verifyNoStockWithSameSymbol(Stock stock) {
+		if (storage.getStockBySymbol(stock.getSymbol()) != null) throw new ModelException(ModelExceptionType.CANNOT_SAVE_STOCK_SINCE_THERE_IS_ALREADY_A_STOCK_WITH_THAT_SYMBOL, stock);
+	}
+	
+	private void verifyNoAssociatedTransactions(Stock stock) {
 		if (storage.getTransactionsForStock(stock).size() > 0) throw new ModelException(ModelExceptionType.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, stock);
 	}
 

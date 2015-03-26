@@ -46,12 +46,15 @@ public class PortfolioListViewImplTest extends ListViewImplTest<PortfolioListVie
 		Portfolio portfolio = new Portfolio("TEST");
 		
 		assertNull("null before", view.deleteButton.getComponentError());
+		assertFalse(view.hasApplicationException());
 		
 		view.displayApplicationException(new ModelException(ModelExceptionType.CANNOT_DELETE_PORTFOLIO_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, portfolio));
 		assertNotNull("not null after", view.deleteButton.getComponentError());
+		assertTrue(view.hasApplicationException());
 		
 		view.clearApplicationException();
 		assertNull("null again after clear", view.deleteButton.getComponentError());
+		assertFalse(view.hasApplicationException());
 	}
 
 

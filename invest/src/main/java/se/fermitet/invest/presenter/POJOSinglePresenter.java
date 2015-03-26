@@ -3,6 +3,7 @@ package se.fermitet.invest.presenter;
 import java.util.UUID;
 
 import se.fermitet.invest.model.Model;
+import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.viewinterface.POJOSingleView;
 
 public abstract class POJOSinglePresenter<VIEWINTERFACE extends POJOSingleView, POJO, MODEL extends Model<POJO>> extends Presenter<VIEWINTERFACE, POJO, MODEL> {
@@ -31,8 +32,14 @@ public abstract class POJOSinglePresenter<VIEWINTERFACE extends POJOSingleView, 
 	}
 	
 	public void onOkButtonClick(POJO pojo) {
-		model.save(pojo);
-		view.navigateBack();
+		try {
+			model.save(pojo);
+			view.clearApplicationException();
+			view.navigateBack();
+		} catch (ModelException e) {
+			e.printStackTrace();
+			view.displayApplicationException(e);
+		}
 	}
 	
 	private POJO newDefaultPOJO() {

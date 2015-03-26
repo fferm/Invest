@@ -20,8 +20,8 @@ public abstract class Model<POJO> {
 	
 	public abstract List<POJO> getAll();
 	public abstract POJO getById(UUID id);
-	public abstract void save(POJO obj);
-	public abstract void delete(POJO obj) throws ModelException;
+	public abstract void save(POJO obj); 
+	public abstract void delete(POJO obj);
 
 	
 }

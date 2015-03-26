@@ -7,6 +7,7 @@ import se.fermitet.invest.viewinterface.POJOSingleView;
 import se.fermitet.vaadin.navigation.URIParameter;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.ErrorMessage;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
@@ -85,6 +86,9 @@ public abstract class POJOSingleViewImpl<PRESENTER extends POJOSinglePresenter<?
 		okButton.setEnabled(isValid());
 	}
 
-
+	@Override
+	protected void handleApplicationException(ErrorMessage applicationException) {
+		this.okButton.setComponentError(applicationException);
+	}
 
 }

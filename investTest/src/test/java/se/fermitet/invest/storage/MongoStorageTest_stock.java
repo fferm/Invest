@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
+import se.fermitet.invest.storage.dataFiller.FillTestData;
 
 public class MongoStorageTest_stock extends MongoStorageTest_abstract {
 	@Test
@@ -76,16 +77,16 @@ public class MongoStorageTest_stock extends MongoStorageTest_abstract {
 		assertTrue("contains", allLeft.contains(s2));
 	}
 	
-//	@Test
-//	public void testGetStocksBySymbol() throws Exception {
-//		new FillTestData(objUnderTest).fillStocks();
-//
-//		Stock retrieved = objUnderTest.getStockBySymbol("AAK");
-//		
-//		assertNotNull("not null", retrieved);
-//		
-//		assertEquals("symbol", "AAK", retrieved.getSymbol());
-//	}
+	@Test
+	public void testGetStocksBySymbol() throws Exception {
+		new FillTestData(objUnderTest).fillStocks();
+
+		Stock retrieved = objUnderTest.getStockBySymbol("AAK");
+		
+		assertNotNull("not null", retrieved);
+		
+		assertEquals("symbol", "AAK", retrieved.getSymbol());
+	}
 	
 
 }

@@ -43,12 +43,15 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 		Stock stock = new Stock("TEST");
 		
 		assertNull("null before", view.deleteButton.getComponentError());
+		assertFalse(view.hasApplicationException());
 		
 		view.displayApplicationException(new ModelException(ModelExceptionType.CANNOT_DELETE_STOCK_SINCE_IT_HAS_ASSOCIATED_TRANSACTIONS, stock));
 		assertNotNull("not null after", view.deleteButton.getComponentError());
+		assertTrue(view.hasApplicationException());
 		
 		view.clearApplicationException();
 		assertNull("null again after clear", view.deleteButton.getComponentError());
+		assertFalse(view.hasApplicationException());
 	}
 }
 
