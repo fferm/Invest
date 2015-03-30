@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import se.fermitet.invest.domain.Portfolio;
+import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 
@@ -27,5 +28,10 @@ public interface Storage {
 	public void deletePortfolio(Portfolio toDelete);
 	public void savePortfolio(Portfolio toSave);
 	public Portfolio getPortfolioByName(String name);
+
+	public List<Quote> getAllQuotes();
+	public void saveQuote(Quote quote);
+	public Quote getQuoteById(UUID id);
+	public void deleteQuote(Quote quote);
 
 }

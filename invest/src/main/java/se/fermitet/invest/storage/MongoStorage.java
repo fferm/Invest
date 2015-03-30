@@ -8,6 +8,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import se.fermitet.invest.domain.Portfolio;
+import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.storage.converter.JodaLocalDateConverter;
@@ -90,6 +91,25 @@ class MongoStorage implements Storage {
 	public Portfolio getPortfolioByName(String name) {
 		return getDatastore().createQuery(Portfolio.class).field("name").equal(name).get();
 	}
+	
+
+	@SuppressWarnings("unchecked")
+	public List<Quote> getAllQuotes() {
+		return (List<Quote>) getAll(Quote.class);
+	}
+
+	public void saveQuote(Quote toSave) {
+		save(toSave);
+	}
+
+	public Quote getQuoteById(UUID id) {
+		return (Quote) getById(Quote.class, id);
+	}
+
+	public void deleteQuote(Quote toDelete) {
+		delete(toDelete);
+	}
+
 
 
 
@@ -149,4 +169,5 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
+
 }
