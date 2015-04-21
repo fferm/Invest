@@ -1,5 +1,6 @@
 package se.fermitet.invest.webui.views;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import se.fermitet.general.IdAble;
@@ -50,7 +51,7 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 
 		initAndAddTable(mainLayout);
 		initAndAddButtonPanel(mainLayout);
-
+		
 		return mainLayout;
 	}
 	
@@ -77,8 +78,12 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 		initEditButton(buttonPanel);
 		initDeleteButton(buttonPanel);
 
+		initExtraButtons(buttonPanel);
+		
 		parent.addComponent(buttonPanel);
 	}
+	
+	protected void initExtraButtons(Layout parent) {};
 	
 	private void initNewButton(Layout parent) {
 		this.newButton = new Button("LŠgg till");
@@ -112,10 +117,20 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 	}
 
 	private void handleSelectionEvent(POJO selected) {
-		deleteButton.setEnabled(selected != null);
-		editButton.setEnabled(selected != null);
+		for (Component comp : getComponentsToEnableWhenItemSelectedInTable()) {
+			comp.setEnabled(selected != null);
+		}
 	}
 
+	protected List<Component> getComponentsToEnableWhenItemSelectedInTable() {
+		List<Component> ret = new ArrayList<Component>();
+		
+		ret.add(deleteButton);
+		ret.add(editButton);
+		
+		return ret;
+	}
+	
 
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {

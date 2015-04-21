@@ -26,6 +26,7 @@ public class InvestWebUI extends UI {
 	public final static String TRANSACTION_SINGLE = "transaction_single";
 	public final static String PORTFOLIO_LIST = "portfolio_list";
 	public static final String PORTFOLIO_SINGLE = "portfolio_single";
+	public static final String QUOTE_LIST = "quote_list";
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = InvestWebUI.class)
@@ -50,6 +51,7 @@ public class InvestWebUI extends UI {
 		navigator.addView(TRANSACTION_LIST, TransactionListViewImpl.class);
 		navigator.addView(PORTFOLIO_LIST, PortfolioListViewImpl.class);
 		navigator.addView(PORTFOLIO_SINGLE, PortfolioSingleViewImpl.class);
+		navigator.addView(QUOTE_LIST, QuoteListViewImpl.class);
 	}
 	
 	public DirectionalNavigator getDirectionalNavigator() {

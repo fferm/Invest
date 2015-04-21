@@ -9,19 +9,18 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.model.StockModel;
-import se.fermitet.invest.viewinterface.ListView;
+import se.fermitet.invest.viewinterface.StockListView;
 
-public class StockListPresenterTest extends ListPresenterTest<StockListPresenter, Stock, StockModel, ListView<Stock>> {
+public class StockListPresenterTest extends ListPresenterTest<StockListPresenter, Stock, StockModel, StockListView> {
 	public StockListPresenterTest() {
-		super(ListView.class, Stock.class);
+		super(StockListView.class, Stock.class);
 	}
 
 	@Override
-	protected StockListPresenter createPresenter(ListView<Stock> view) {
+	protected StockListPresenter createPresenter(StockListView view) {
 		return new TestStockListPresenter(mockedView);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testDeleteStockWithAssociatedTransactions() throws Exception {
 		Stock okStock = new Stock("OK");
@@ -42,10 +41,20 @@ public class StockListPresenterTest extends ListPresenterTest<StockListPresenter
 		verify(mockedView).clearApplicationException();
 		reset(mockedView);
 	}
+	
+	@Test
+	public void testQuotesButtonClickCallsNavigateToQuotesList() throws Exception {
+		Stock stock = new Stock();
+		presenter.onQuotesButtonClick(stock);
+
+		verify((StockListView) mockedView).navigateToQuotesList(stock);
+	}
+	
+
 }
 
 class TestStockListPresenter extends StockListPresenter {
-	public TestStockListPresenter(ListView<Stock> view) {
+	public TestStockListPresenter(StockListView view) {
 		super(view);
 	}
 	

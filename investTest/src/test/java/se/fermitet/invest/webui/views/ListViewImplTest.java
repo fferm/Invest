@@ -3,6 +3,7 @@ package se.fermitet.invest.webui.views;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -52,19 +53,32 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 	
 	@Test
 	public void testSelectionAffectstButtonsEnabledStatus() throws Exception {
-		Button deleteButton = view.deleteButton;
-		Button editButton = view.editButton;
+		List<Button> buttonsToTest = getButtonsToTestIsEnabledWhenItemSelectedInList();
 		
-		assertFalse("Before - delete", deleteButton.isEnabled());
-		assertFalse("Before - edit", editButton.isEnabled());
+		for (Button button : buttonsToTest) {
+			assertFalse("Before: " + button.getCaption(), button.isEnabled());
+		}
 		
 		view.tableAdapter.getUI().select(this.testDataSorted.get(1).getId());
-		assertTrue("After select - delete", deleteButton.isEnabled());
-		assertTrue("After select - edit", editButton.isEnabled());
+
+		for (Button button : buttonsToTest) {
+			assertTrue("After select: " + button.getCaption(), button.isEnabled());
+		}
 
 		view.tableAdapter.getUI().select(null);
-		assertFalse("After unselect - delete", deleteButton.isEnabled());
-		assertFalse("After unselect - edit", editButton.isEnabled());
+		
+		for (Button button : buttonsToTest) {
+			assertFalse("After unselect: " + button.getCaption(), button.isEnabled());
+		}
+	}
+	
+	protected List<Button> getButtonsToTestIsEnabledWhenItemSelectedInList() {
+		List<Button> ret = new ArrayList<Button>();
+		
+		ret.add(view.deleteButton);
+		ret.add(view.editButton);
+		
+		return ret;
 	}
 
 	@Test

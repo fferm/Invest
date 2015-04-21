@@ -59,6 +59,7 @@ public class DirectionalNavigator {
 	}
 	
 	private void navigateTo(String viewName, String parameterString) {
+		System.out.println("!!!! viewName: " + viewName);
 		if (! addedViews.contains(viewName)) throw new DirectionalNavigatorException("A view with the name " + viewName + " is not added to this DirectionalNavigator");
 		
 		String navString = viewName;

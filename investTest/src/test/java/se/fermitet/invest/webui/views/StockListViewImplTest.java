@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -14,6 +15,9 @@ import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.testData.StockDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
+import se.fermitet.vaadin.navigation.URIParameter;
+
+import com.vaadin.ui.Button;
  
 public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, StockListPresenter, Stock> {
 	@Override
@@ -53,6 +57,37 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 		assertNull("null again after clear", view.deleteButton.getComponentError());
 		assertFalse(view.hasApplicationException());
 	}
+	
+	@Override
+	protected List<Button> getButtonsToTestIsEnabledWhenItemSelectedInList() {
+		List<Button> superList = super.getButtonsToTestIsEnabledWhenItemSelectedInList();
+		superList.add(view.quotesButton);
+		
+		return superList;
+	}
+	
+	@Test
+	public void testQuotesButton() throws Exception {
+		Button quotesButton = view.quotesButton;
+		
+		assertNotNull("not null", quotesButton);
+		
+		Stock toSelect = testDataUnsorted.get(0);
+		view.tableAdapter.select(toSelect);
+
+		quotesButton.click();
+		
+		verify(mockedPresenter).onQuotesButtonClick(toSelect);
+	}
+	
+	@Test
+	public void testQuotesNavigation() throws Exception {
+		Stock testData = testDataSorted.get(2);
+		
+		view.navigateToQuotesList(testData);
+		verify(view.getNavigator()).navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(testData.getId().toString()));
+	}
+
 }
 
 @SuppressWarnings("serial")
