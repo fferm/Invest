@@ -19,7 +19,7 @@ import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionSinglePresenter;
 import se.fermitet.invest.testData.PortfolioDataProvider;
 import se.fermitet.invest.testData.StockDataProvider;
-import se.fermitet.vaadin.converters.MoneyConverter;
+import se.fermitet.vaadin.converters.MoneyVaadinConverter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -65,7 +65,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 
 	@Override
 	protected void checkUIAgainstPojo(Transaction pojo) {
-		MoneyConverter conv = new MoneyConverter();
+		MoneyVaadinConverter conv = new MoneyVaadinConverter();
 
 		assertEquals("Date", pojo.getDate().toDate(), view.dateAdapter.getUI().getValue());
 

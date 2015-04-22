@@ -1,23 +1,22 @@
-package se.fermitet.vaadin.converters;
+package se.fermitet.invest.converter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.util.Locale;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 
-public class MoneyConverter extends AbstractConverter<String, Money> {
-	private static final long serialVersionUID = -6251536302559035538L;
+
+public class MoneyConverter {
 	private DecimalFormat formatter;
 	private CurrencyUnit curr;
 
 	public MoneyConverter() {
-		super(String.class, Money.class);
-
+		super();
+		
 		formatter = (DecimalFormat) DecimalFormat.getInstance();
 		formatter.setMinimumFractionDigits(2);
 		formatter.setMaximumFractionDigits(2);
@@ -29,9 +28,8 @@ public class MoneyConverter extends AbstractConverter<String, Money> {
 		
 		curr = CurrencyUnit.of("SEK");
 	}
-
-	@Override
-	public Money convertToModel(String value, Class<? extends Money> targetType, Locale locale)	throws ConversionException {
+	
+	public Money moneyFromString(String value) {
 		try {
 			if (value == null) return null;
 			
@@ -39,8 +37,8 @@ public class MoneyConverter extends AbstractConverter<String, Money> {
 
 			BigDecimal amount = null;
 			
-			if (amountNumber instanceof Long) amount = new BigDecimal((long) amountNumber);
-			if (amountNumber instanceof Double) amount = new BigDecimal((double) amountNumber);
+			if (amountNumber instanceof Long) amount = new BigDecimal((Long) amountNumber);
+			if (amountNumber instanceof Double) amount = new BigDecimal((Double) amountNumber);
 
 			amount = amount.setScale(curr.getDecimalPlaces(), RoundingMode.HALF_UP);
 
@@ -53,13 +51,12 @@ public class MoneyConverter extends AbstractConverter<String, Money> {
 		}
 	}
 
-	@Override
-	public String convertToPresentation(Money value, Class<? extends String> targetType, Locale locale)	throws ConversionException {
+	public String stringFromMoney(Money value) {
 		if (value == null) return null;
 		
 		String presentationValue = formatter.format(value.getAmount());
 		
 		return presentationValue;
 	}
-}
 
+}

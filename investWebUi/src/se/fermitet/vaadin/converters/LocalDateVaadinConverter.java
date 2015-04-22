@@ -5,10 +5,10 @@ import java.util.Locale;
 
 import org.joda.time.LocalDate;
 
-public class LocalDateConverter extends AbstractConverter<Date, LocalDate> {
+public class LocalDateVaadinConverter extends AbstractVaadinConverter<Date, LocalDate> {
 	private static final long serialVersionUID = -3288012479071159027L;
 
-	public LocalDateConverter() {
+	public LocalDateVaadinConverter() {
 		super(Date.class, LocalDate.class);
 	}
 

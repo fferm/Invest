@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public abstract class AbstractConverterTest<PRESENTATION, MODEL, CONVERTER extends AbstractConverter<PRESENTATION, MODEL>> {
+public abstract class AbstractVaadinConverterTest<PRESENTATION, MODEL, CONVERTER extends AbstractVaadinConverter<PRESENTATION, MODEL>> {
 
 	protected CONVERTER converter;
 	
@@ -19,7 +19,7 @@ public abstract class AbstractConverterTest<PRESENTATION, MODEL, CONVERTER exten
 	protected abstract CONVERTER createConverter();
 	protected abstract Class<MODEL> getExpectedModelClass();
 	protected abstract Class<PRESENTATION> getExpectedPresentationClass();
-	protected abstract List<ConverterTestCase> getTestCases();
+	protected abstract List<VaadinConverterTestCase> getTestCases();
 	
 	@Test
 	public void testGetClasses() throws Exception {
@@ -29,20 +29,20 @@ public abstract class AbstractConverterTest<PRESENTATION, MODEL, CONVERTER exten
 	
 	@Test
 	public void testConversions() throws Exception {
-		List<AbstractConverterTest<PRESENTATION, MODEL, CONVERTER>.ConverterTestCase> testCases = getTestCases();
-		testCases.add(new ConverterTestCase(null, null));
+		List<AbstractVaadinConverterTest<PRESENTATION, MODEL, CONVERTER>.VaadinConverterTestCase> testCases = getTestCases();
+		testCases.add(new VaadinConverterTestCase(null, null));
 		
-		for (ConverterTestCase testCase : testCases) {
+		for (VaadinConverterTestCase testCase : testCases) {
 			assertEquals("to model", testCase.modelObject, converter.convertToModel(testCase.presentationObject,  null, null));
 			assertEquals("to presentation", testCase.presentationObject, converter.convertToPresentation(testCase.modelObject, null, null));
 		}
 	}
 	
-	class ConverterTestCase {
+	class VaadinConverterTestCase {
 		MODEL modelObject;
 		PRESENTATION presentationObject;
 		
-		public ConverterTestCase(MODEL modelObject, PRESENTATION presentationObject) {
+		public VaadinConverterTestCase(MODEL modelObject, PRESENTATION presentationObject) {
 			super();
 			this.modelObject = modelObject;
 			this.presentationObject = presentationObject;

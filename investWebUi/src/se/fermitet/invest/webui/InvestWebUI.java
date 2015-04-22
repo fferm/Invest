@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 
 import se.fermitet.invest.webui.views.PortfolioListViewImpl;
 import se.fermitet.invest.webui.views.PortfolioSingleViewImpl;
+import se.fermitet.invest.webui.views.QuoteListViewImpl;
 import se.fermitet.invest.webui.views.StockListViewImpl;
 import se.fermitet.invest.webui.views.StockSingleViewImpl;
 import se.fermitet.invest.webui.views.TransactionListViewImpl;

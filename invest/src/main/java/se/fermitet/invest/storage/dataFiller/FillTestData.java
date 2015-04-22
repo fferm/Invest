@@ -7,6 +7,7 @@ import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
 import se.fermitet.invest.domain.Portfolio;
+import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.storage.Storage;
@@ -33,6 +34,7 @@ public class FillTestData {
 		fillStocks();
 		fillPortfolios();
 		fillTransactions();
+		fillQuotes();
 	}
 
 	public void fillStocks() {
@@ -63,22 +65,41 @@ public class FillTestData {
 
 		return ret;
 	}
-	
+
 	public void fillPortfolios() {
 		for (Portfolio port : getPortfolios()) {
 			storage.savePortfolio(port);
 		}
 		System.out.println("Saved portfolios");
 	}
-	
+
 	public List<Portfolio> getPortfolios() {
 		List<Portfolio> ret = new ArrayList<Portfolio>();
-		
+
 		ret.add(new Portfolio("ISK"));
 		ret.add(new Portfolio("Privat"));
 		ret.add(new Portfolio("Barnen"));
 		ret.add(new Portfolio("Fšretag"));
 		ret.add(new Portfolio("Direktpension"));
+
+		return ret;
+	}
+
+	public void fillQuotes() {
+		for (Quote quote : getQuotes()) {
+			if (quote != null) storage.saveQuote(quote);
+		}
+		System.out.println("Saved quotes");
+	}
+
+	public List<Quote> getQuotes() {
+		// Quote files from http://www.nasdaqomxnordic.com/shares/historicalprices
+		FileQuoteHandler fqh = new FileQuoteHandler();
+		
+		List<Quote> ret = new ArrayList<Quote>();
+		
+		ret.addAll(fqh.getQuotesForStock(getStockBySymbol("AAK")));
+		ret.addAll(fqh.getQuotesForStock(getStockBySymbol("BMAX")));
 		
 		return ret;
 	}
@@ -87,10 +108,10 @@ public class FillTestData {
 		Portfolio priv = getPortfolioByName("Privat");
 		Stock axis = getStockBySymbol("AXIS");
 		fillSpecificTransactions(getPrivateAxisTransactions(axis, priv), "AXIS", "Privat");
-		
+
 		Stock hemfosa = getStockBySymbol("HEMF B");
 		fillSpecificTransactions(getPrivateHemfosaTransactions(hemfosa, priv), "Hemfosa", "Privat");
-		
+
 		Portfolio corp = getPortfolioByName("Fšretag");
 		Stock byggmax = getStockBySymbol("BMAX");
 		fillSpecificTransactions(getCorporateByggmaxTransactions(byggmax, corp), "Byggmax", "Fšretag");
@@ -128,7 +149,7 @@ public class FillTestData {
 		ret.add(new Transaction(axis, new LocalDate(2009,  4,  2),   9, Money.parse("SEK  52.50"), Money.parse("SEK 9"), priv));
 		ret.add(new Transaction(axis, new LocalDate(2009,  5,  4),   6, Money.parse("SEK  73.75"), Money.parse("SEK 9"), priv));
 		ret.add(new Transaction(axis, new LocalDate(2012,  8, 10), -15, Money.parse("SEK 174.50"), Money.parse("SEK 9"), priv));
-		
+
 		return ret;
 	}
 
@@ -141,7 +162,7 @@ public class FillTestData {
 
 		return ret;
 	}
-	
+
 	public List<Transaction> getCorporateByggmaxTransactions(Stock byggmax, Portfolio corp) {
 		List<Transaction> ret = new ArrayList<Transaction>();
 
@@ -153,9 +174,19 @@ public class FillTestData {
 	}
 
 	private void deleteAll() {
+		deleteQuotes();
 		deleteTransactions();
 		deletePortfolios();
 		deleteStocks();
+	}
+
+	private void deleteQuotes() {
+		List<Quote> all = storage.getAllQuotes();
+		for(Quote quote : all) {
+			storage.deleteQuote(quote);
+		}
+
+		System.out.println("Deleted quotes");
 	}
 
 	private void deletePortfolios() {

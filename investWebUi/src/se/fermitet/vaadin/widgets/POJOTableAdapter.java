@@ -6,7 +6,7 @@ import java.util.List;
 import org.joda.money.Money;
 
 import se.fermitet.general.IdAble;
-import se.fermitet.vaadin.converters.MoneyConverter;
+import se.fermitet.vaadin.converters.MoneyVaadinConverter;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
@@ -62,7 +62,7 @@ public class POJOTableAdapter<POJO extends IdAble<?>> extends POJOAbstractSelect
 		for (Object propId : table.getContainerPropertyIds()) {
 			Property<?> prop = table.getContainerProperty(firstItemId, propId);
 			if (prop.getType().equals(Money.class)) {
-				table.setConverter(propId, new MoneyConverter());
+				table.setConverter(propId, new MoneyVaadinConverter());
 			}
 		}
 	}

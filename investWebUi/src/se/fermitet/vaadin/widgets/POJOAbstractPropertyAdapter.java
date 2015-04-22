@@ -3,8 +3,8 @@ package se.fermitet.vaadin.widgets;
 import org.joda.money.Money;
 import org.joda.time.LocalDate;
 
-import se.fermitet.vaadin.converters.LocalDateConverter;
-import se.fermitet.vaadin.converters.MoneyConverter;
+import se.fermitet.vaadin.converters.LocalDateVaadinConverter;
+import se.fermitet.vaadin.converters.MoneyVaadinConverter;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -53,9 +53,9 @@ abstract class POJOAbstractPropertyAdapter<POJO, UI extends AbstractField<?>, VA
 		if (clz.equals(Integer.class)) {
 			this.getUI().setConverter((Converter) new StringToIntegerConverter());
 		} else if (clz.equals(Money.class)) {
-			this.getUI().setConverter((Converter) new MoneyConverter());
+			this.getUI().setConverter((Converter) new MoneyVaadinConverter());
 		}  else if (clz.equals(LocalDate.class)) {
-			this.getUI().setConverter((Converter) new LocalDateConverter());
+			this.getUI().setConverter((Converter) new LocalDateVaadinConverter());
 		}
 	}
 	

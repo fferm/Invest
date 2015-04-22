@@ -8,11 +8,6 @@
 	<description>Tool to keep track of personal investments (or for small businesses)</description>
 	<dependencies>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.6</version>
-		</dependency>
-		<dependency>
 			<groupId>org.mongodb.morphia</groupId>
 			<artifactId>morphia</artifactId>
 			<!-- See https://github.com/mongodb/morphia/releases for the latest version -->
@@ -58,6 +53,11 @@
 			<groupId>org.joda</groupId>
 			<artifactId>joda-money</artifactId>
 			<version>0.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.7</version>
 		</dependency>
 	</dependencies>
 </project>
