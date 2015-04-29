@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import se.fermitet.invest.domain.Portfolio;
-import se.fermitet.invest.storage.dataFiller.FillTestData;
+import se.fermitet.invest.storage.dataFiller.ExampleDataProvider;
 
 public class PortfolioDataProvider {
 	private static List<Portfolio> testData;
@@ -19,9 +19,7 @@ public class PortfolioDataProvider {
 	
 	private void initTestData() {
 		testData = new ArrayList<Portfolio>();
-		FillTestData ftd = new FillTestData(null);
-		
-		testData.addAll(ftd.getPortfolios());
+		testData.addAll(new ExampleDataProvider().getPortfolios());
 		Collections.shuffle(testData);
 	}
 

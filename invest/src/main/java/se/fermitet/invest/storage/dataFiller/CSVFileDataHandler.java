@@ -14,29 +14,34 @@ import se.fermitet.invest.converter.MoneyConverter;
 import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 
-class FileQuoteHandler {
+class CSVFileDataHandler {
 	
+	// move out of here
 	List<Quote> getQuotesForStock(Stock stock) {
 		List<Quote> ret = new ArrayList<Quote>();
 		
-		String filename = stock.getSymbol() + ".csv";
+		String filename = "Quotes_" + stock.getSymbol() + ".csv";
 		
-		List<String> lines = getLines(filename);
-		for (String line : lines) {
-			ret.add(getQuoteFromLine(stock, line));
-		}
+////		List<String> lines = getLines(filename);
+//		for (String line : lines) {
+//			ret.add(getQuoteFromLine(stock, line));
+//		}
 		return ret;
 	}
 
 	@SuppressWarnings("finally")
-	private List<String> getLines(String filename) {
+	List<String[]> getSplitLines(String filename) {
 		BufferedReader br = null;
-		List<String> ret = new ArrayList<String>();
+		List<String[]> ret = new ArrayList<String[]>();
 		try {
 			br = new BufferedReader(new FileReader(new File("src/main/resources/dataFiller", filename)));
 			String line;
+			int i = 0;
 			while ((line = br.readLine()) != null) {
-				ret.add(line);
+				i++;
+				if (i == 1) continue;
+				
+				ret.add(line.split(";"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,6 +56,7 @@ class FileQuoteHandler {
 		}
 	}
 	
+	// TODO move out of here
 	private Quote getQuoteFromLine(Stock stock, String line) {
 		if (line.contains("Date")) return null;
 		

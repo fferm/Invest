@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Stock;
-import se.fermitet.invest.storage.dataFiller.FillTestData;
+import se.fermitet.invest.storage.dataFiller.FillExampleData;
 
 public class MongoStorageTest_stock extends MongoStorageTest_abstract {
 	@Test
@@ -79,7 +79,7 @@ public class MongoStorageTest_stock extends MongoStorageTest_abstract {
 	
 	@Test
 	public void testGetStocksBySymbol() throws Exception {
-		new FillTestData(objUnderTest).fillStocks();
+		new FillExampleData(objUnderTest).fillStocks();
 
 		Stock retrieved = objUnderTest.getStockBySymbol("AAK");
 		

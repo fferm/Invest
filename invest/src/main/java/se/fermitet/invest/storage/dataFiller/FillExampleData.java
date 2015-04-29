@@ -13,16 +13,18 @@ import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.storage.Storage;
 import se.fermitet.invest.storage.StorageFactory;
 
-public class FillTestData {
+public class FillExampleData {
 	private Storage storage;
+	private ExampleDataProvider exampleDataProvider;
 
 	public static void main(String[] args) {
-		FillTestData obj = new FillTestData(new StorageFactory().getStorage());
+		FillExampleData obj = new FillExampleData(new StorageFactory().getStorage());
 		obj.run();
 	}
 
-	public FillTestData(Storage storage) {
+	public FillExampleData(Storage storage) {
 		this.storage = storage;
+		this.exampleDataProvider = new ExampleDataProvider();
 	}
 
 	private void run() {
@@ -38,63 +40,34 @@ public class FillTestData {
 	}
 
 	public void fillStocks() {
-		for (Stock stock : getStocks()) {
+		List<Stock> stocks = exampleDataProvider.getStocks();
+		for (Stock stock : stocks) {
 			storage.saveStock(stock);
 		}
 
-		System.out.println("Saved stocks");
+		System.out.println("Saved " + stocks.size() + " stocks");
 
-	}
-
-	public List<Stock> getStocks() {
-		List<Stock> ret = new ArrayList<Stock>();
-
-		ret.add(new Stock("Axis", "AXIS"));
-		ret.add(new Stock("Handelsbanken B", "SHB B"));
-		ret.add(new Stock("NET B"));
-		ret.add(new Stock("SCA B", "SCA B"));
-		ret.add(new Stock("AAK", "AAK"));
-		ret.add(new Stock("Assa Abloy", "ASSA"));
-		ret.add(new Stock("Billerud Korsnäs", "BILL"));
-		ret.add(new Stock("Byggmax", "BMAX"));
-		ret.add(new Stock("Fenix Outdoor", "FIX B"));
-		ret.add(new Stock("Hemfosa","HEMF B"));
-		ret.add(new Stock("Hexagon B", "HEXA B"));
-		ret.add(new Stock("Latour", "LATO"));
-		ret.add(new Stock("Lundbergs", "LUND"));
-
-		return ret;
 	}
 
 	public void fillPortfolios() {
-		for (Portfolio port : getPortfolios()) {
+		List<Portfolio> portfolios = exampleDataProvider.getPortfolios();
+		for (Portfolio port : portfolios) {
 			storage.savePortfolio(port);
 		}
-		System.out.println("Saved portfolios");
-	}
-
-	public List<Portfolio> getPortfolios() {
-		List<Portfolio> ret = new ArrayList<Portfolio>();
-
-		ret.add(new Portfolio("ISK"));
-		ret.add(new Portfolio("Privat"));
-		ret.add(new Portfolio("Barnen"));
-		ret.add(new Portfolio("Företag"));
-		ret.add(new Portfolio("Direktpension"));
-
-		return ret;
+		System.out.println("Saved " + portfolios.size() + " portfolios");
 	}
 
 	public void fillQuotes() {
-		for (Quote quote : getQuotes()) {
+		List<Quote> quotes = getQuotes();
+		for (Quote quote : quotes) {
 			if (quote != null) storage.saveQuote(quote);
 		}
-		System.out.println("Saved quotes");
+		System.out.println("Saved " + quotes.size() + " quotes");
 	}
 
 	public List<Quote> getQuotes() {
 		// Quote files from http://www.nasdaqomxnordic.com/shares/historicalprices
-		FileQuoteHandler fqh = new FileQuoteHandler();
+		CSVFileDataHandler fqh = new CSVFileDataHandler();
 		
 		List<Quote> ret = new ArrayList<Quote>();
 		
