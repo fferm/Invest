@@ -3,7 +3,7 @@ package se.fermitet.invest.webui.views;
 import static org.mockito.Mockito.*;
 import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.presenter.QuoteListPresenter;
-import se.fermitet.invest.storage.dataFiller.FillExampleData;
+import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, QuoteListPresenter, Quote> {
@@ -15,11 +15,12 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 
 	@Override
 	protected void initTestData() {
-		testDataUnsorted = new FillExampleData(null).getQuotes();
+		testDataUnsorted = new TestDataProvider().getQuotes();
 		
-		for (Quote quote : testDataSorted) {
+		for (Quote quote : testDataUnsorted) {
 			System.out.println("!!!! " + quote);
 		}
+		// TODO: !!!! HŠr
 		throw new UnsupportedOperationException("unimplemented");
 	}
 

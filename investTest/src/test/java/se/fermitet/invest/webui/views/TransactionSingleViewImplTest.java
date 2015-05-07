@@ -17,8 +17,7 @@ import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionSinglePresenter;
-import se.fermitet.invest.testData.PortfolioDataProvider;
-import se.fermitet.invest.testData.StockDataProvider;
+import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.vaadin.converters.MoneyVaadinConverter;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
@@ -38,8 +37,10 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 	public void setUp() {
 		super.setUp();
 
-		testStocks = new StockDataProvider().getTestData();
-		testPortfolios = new PortfolioDataProvider().getTestData();
+		TestDataProvider provider = new TestDataProvider();
+		
+		testStocks = provider.getStocks();
+		testPortfolios = provider.getPortfolios();
 		view.showStocksInSelection(testStocks);
 		view.showPortfoliosInSelection(testPortfolios);
 	}
@@ -124,7 +125,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 
 	@Test
 	public void testCallingShowStocksInSelectionDisplaysSymbolsSorted() throws Exception {
-		List<Stock> testStocks = new StockDataProvider().getTestData();
+		List<Stock> testStocks = new TestDataProvider().getStocks();
 
 		view.showStocksInSelection(testStocks);
 
@@ -155,7 +156,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 
 	@Test
 	public void testCallingShowPortfoliosInSelectionDisplaysNamesSorted() throws Exception {
-		List<Portfolio> testPortfolios = new PortfolioDataProvider().getTestData();
+		List<Portfolio> testPortfolios = new TestDataProvider().getPortfolios();
 
 		view.showPortfoliosInSelection(testPortfolios);
 
@@ -179,7 +180,7 @@ public class TransactionSingleViewImplTest extends POJOSingleViewImplTest<Transa
 
 	@Test
 	public void testErrorShouldNotAppearWhenClearingOutNumberField() throws Exception {
-		List<Stock> testStocks = new StockDataProvider().getTestData();
+		List<Stock> testStocks = new TestDataProvider().getStocks();
 		view.showStocksInSelection(testStocks);
 
 		Transaction initialTransaction = new Transaction(testStocks.get(1), LocalDate.now(), 10, Money.parse("SEK 200"), Money.parse("SEK 2"), testPortfolios.get(3));

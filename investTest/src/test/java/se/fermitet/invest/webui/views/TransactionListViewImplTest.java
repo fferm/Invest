@@ -8,7 +8,7 @@ import org.joda.time.LocalDate;
 
 import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.presenter.TransactionListPresenter;
-import se.fermitet.invest.testData.TransactionDataProvider;
+import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
@@ -20,9 +20,7 @@ public class TransactionListViewImplTest extends ListViewImplTest<TransactionLis
 
 	@Override
 	protected void initTestData() {
-		TransactionDataProvider provider = new TransactionDataProvider();
-		
-		testDataUnsorted = provider.getTestData();
+		testDataUnsorted = new TestDataProvider().getTransactions();
 
 		testDataSorted = new ArrayList<Transaction>(testDataUnsorted);
 		testDataSorted.sort((Transaction o1, Transaction o2) -> {

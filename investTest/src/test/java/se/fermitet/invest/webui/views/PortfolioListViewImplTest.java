@@ -11,7 +11,7 @@ import se.fermitet.invest.domain.Portfolio;
 import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.presenter.PortfolioListPresenter;
-import se.fermitet.invest.testData.PortfolioDataProvider;
+import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
@@ -24,9 +24,9 @@ public class PortfolioListViewImplTest extends ListViewImplTest<PortfolioListVie
 
 	@Override
 	protected void initTestData() {
-		PortfolioDataProvider provider = new PortfolioDataProvider();
+		TestDataProvider provider = new TestDataProvider();
 		
-		testDataUnsorted = provider.getTestData();
+		testDataUnsorted = provider.getPortfolios();
 
 		testDataSorted = new ArrayList<Portfolio>(testDataUnsorted);
 		testDataSorted.sort((Portfolio o1, Portfolio o2) -> {

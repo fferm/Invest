@@ -12,7 +12,7 @@ import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.presenter.StockListPresenter;
-import se.fermitet.invest.testData.StockDataProvider;
+import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import se.fermitet.vaadin.navigation.URIParameter;
@@ -27,7 +27,7 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 
 	@Override
 	protected void initTestData() {
-		testDataUnsorted = new ArrayList<Stock>(new StockDataProvider().getTestData());
+		testDataUnsorted = new ArrayList<Stock>(new TestDataProvider().getStocks());
 
 		testDataSorted = new ArrayList<Stock>(testDataUnsorted);
 		testDataSorted.sort((Stock o1, Stock o2) -> {
