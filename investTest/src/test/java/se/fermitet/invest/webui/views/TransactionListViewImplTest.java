@@ -2,7 +2,8 @@ package se.fermitet.invest.webui.views;
 
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import org.joda.time.LocalDate;
 
@@ -17,13 +18,15 @@ public class TransactionListViewImplTest extends ListViewImplTest<TransactionLis
 	protected TransactionListViewImpl createViewImpl() {
 		return new TestTransactionListViewImpl();
 	}
+	
+	@Override
+	protected List<Transaction> getTestData() {
+		return new TestDataProvider().getTransactions();
+	}
 
 	@Override
-	protected void initTestData() {
-		testDataUnsorted = new TestDataProvider().getTransactions();
-
-		testDataSorted = new ArrayList<Transaction>(testDataUnsorted);
-		testDataSorted.sort((Transaction o1, Transaction o2) -> {
+	protected Comparator<? super Transaction> getComparator() {
+		return (Transaction o1, Transaction o2) -> {
 			String o1Port = o1.getPortfolio().getName();
 			String o2Port = o2.getPortfolio().getName();
 			int comparePortfolios = o1Port.compareTo(o2Port);
@@ -37,13 +40,14 @@ public class TransactionListViewImplTest extends ListViewImplTest<TransactionLis
 			LocalDate o1Date = o1.getDate();
 			LocalDate o2Date = o2.getDate();
 			return o1Date.compareTo(o2Date);
-		});
+		};
 	}
-	
+
 	@Override
 	protected String getSingleViewName() {
 		return InvestWebUI.TRANSACTION_SINGLE;
 	}
+
 }
 
 @SuppressWarnings("serial")

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Before;
@@ -35,8 +36,18 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 	}
 	
 	protected abstract VIEWIMPL createViewImpl();
-	protected abstract void initTestData();
 	protected abstract String getSingleViewName();
+	protected abstract List<POJO> getTestData();
+	protected abstract Comparator<? super POJO> getComparator();
+
+	private void initTestData() {
+		testDataUnsorted = getTestData();
+
+		testDataSorted = new ArrayList<POJO>(testDataUnsorted);
+		testDataSorted.sort(getComparator());
+	}
+
+
 
 	@Test
 	public void testEnterCallsFillViewWithData() throws Exception {

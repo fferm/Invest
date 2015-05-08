@@ -3,7 +3,8 @@ package se.fermitet.invest.webui.views;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -23,18 +24,21 @@ public class PortfolioListViewImplTest extends ListViewImplTest<PortfolioListVie
 	}
 
 	@Override
-	protected void initTestData() {
-		TestDataProvider provider = new TestDataProvider();
-		
-		testDataUnsorted = provider.getPortfolios();
+	protected List<Portfolio> getTestData() {
+		return new TestDataProvider().getPortfolios();
+	}
 
-		testDataSorted = new ArrayList<Portfolio>(testDataUnsorted);
-		testDataSorted.sort((Portfolio o1, Portfolio o2) -> {
+	@Override
+	protected Comparator<? super Portfolio> getComparator() {
+		return (Portfolio o1, Portfolio o2) -> {
 			String o1Name = o1.getName();
 			String o2Name = o2.getName();
 			return o1Name.compareTo(o2Name);
-		});
+		};
 	}
+
+
+
 
 	@Override
 	protected String getSingleViewName() {
@@ -56,7 +60,6 @@ public class PortfolioListViewImplTest extends ListViewImplTest<PortfolioListVie
 		assertNull("null again after clear", view.deleteButton.getComponentError());
 		assertFalse(view.hasApplicationException());
 	}
-
 
 }
 

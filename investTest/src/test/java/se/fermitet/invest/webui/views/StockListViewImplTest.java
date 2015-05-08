@@ -3,7 +3,7 @@ package se.fermitet.invest.webui.views;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Test;
@@ -26,15 +26,17 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 	}
 
 	@Override
-	protected void initTestData() {
-		testDataUnsorted = new ArrayList<Stock>(new TestDataProvider().getStocks());
+	protected List<Stock> getTestData() {
+		return new TestDataProvider().getStocks();
+	}
 
-		testDataSorted = new ArrayList<Stock>(testDataUnsorted);
-		testDataSorted.sort((Stock o1, Stock o2) -> {
+	@Override
+	protected Comparator<? super Stock> getComparator() {
+		return (Stock o1, Stock o2) -> {
 			String o1Symbol = o1.getSymbol();
 			String o2Symbol = o2.getSymbol();
 			return o1Symbol.compareTo(o2Symbol);
-		});
+		};
 	}
 
 	@Override
