@@ -7,6 +7,7 @@ public class Models {
 	private static StockModel stockModel;
 	private static TransactionModel transactionModel;
 	private static PortfolioModel portfolioModel;
+	private static QuoteModel quoteModel;
 	
 	public static Model<?> fromClass(Class<?> clz) {
 		if (clz == null) throw new InvestException("Null model class");
@@ -14,8 +15,9 @@ public class Models {
 		if (clz.equals(StockModel.class)) return stocksModel();
 		if (clz.equals(TransactionModel.class)) return transactionModel();
 		if (clz.equals(PortfolioModel.class)) return portfolioModel();
+		if (clz.equals(QuoteModel.class)) return quoteModel();
 		
-		throw new InvestException("Unknonw model class: " + clz);
+		throw new InvestException("Unknown model class: " + clz);
 	}
 
 	static StockModel stocksModel() {
@@ -37,6 +39,13 @@ public class Models {
 			portfolioModel = new PortfolioModel();
 		}
 		return portfolioModel;
+	}
+	
+	static QuoteModel quoteModel() {
+		if (quoteModel == null) {
+			quoteModel = new QuoteModel();
+		}
+		return quoteModel;
 	}
 
 }

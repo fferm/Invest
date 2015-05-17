@@ -37,12 +37,20 @@ public class ModelsTest {
 	
 	@SuppressWarnings("rawtypes")
 	@Test
-	public void testPortfolioMOdelBasedOnClass() throws Exception {
+	public void testPortfolioModelBasedOnClass() throws Exception {
 		Model obj = Models.fromClass(PortfolioModel.class);
 		
 		assertNotNull(obj);
 		assertEquals(PortfolioModel.class, obj.getClass());
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testQuoteoModelBasedOnClass() throws Exception {
+		Model obj = Models.fromClass(QuoteModel.class);
 		
+		assertNotNull(obj);
+		assertEquals(QuoteModel.class, obj.getClass());
 	}
 	
 	@Test(expected = InvestException.class)

@@ -52,7 +52,7 @@ public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 
 	@Override
 	protected QuoteListPresenter createPresenter() {
-		throw new UnsupportedOperationException("unimplemented");
+		return new QuoteListPresenter(this);
 	}
 
 }
