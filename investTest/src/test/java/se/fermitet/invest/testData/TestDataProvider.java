@@ -1,5 +1,6 @@
 package se.fermitet.invest.testData;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,6 +24,13 @@ public class TestDataProvider extends ExampleDataProvider {
 		Collections.shuffle(ret);
 		return ret;
 	}
+	
+	public Stock getStockBySymbol(String symbol) {
+		for (Stock stock : getStocks()) {
+			if (stock.getSymbol().equals(symbol)) return stock;
+		}
+		return null;
+	}
 
 	@Override
 	public List<Transaction> getTransactions() {
@@ -42,6 +50,19 @@ public class TestDataProvider extends ExampleDataProvider {
 	public List<Quote> getQuotes() {
 		List<Quote> ret = super.getQuotes();
 		Collections.shuffle(ret);
+		return ret;
+	}
+	
+	public List<Quote> getQuotesForStock(Stock stock) {
+		return getQuotesForStockBySymbol(stock.getSymbol());
+	}
+
+	public List<Quote> getQuotesForStockBySymbol(String stockSymbol) {
+		List<Quote> all = this.getQuotes();
+		List<Quote> ret = new ArrayList<Quote>();
+		for (Quote quote : all) {
+			if (quote.getStock().getSymbol().equals(stockSymbol)) ret.add(quote);
+		}
 		return ret;
 	}
 }

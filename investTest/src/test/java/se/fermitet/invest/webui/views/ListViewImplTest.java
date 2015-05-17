@@ -50,7 +50,7 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 
 
 	@Test
-	public void testEnterCallsFillViewWithData() throws Exception {
+	public void testEnterWithNullCallsFillViewWithData() throws Exception {
 		view.enter(null);
 	
 		verify(mockedPresenter).fillViewWithData();

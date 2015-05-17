@@ -5,7 +5,10 @@ import java.util.List;
 
 import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.presenter.QuoteListPresenter;
+import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
+
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 
@@ -15,6 +18,13 @@ public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 		super(Quote.class, "Kurser");
 	}
 
+	@Override
+	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
+		String stockId = parameters.get(0).getValue();
+		
+		List<Quote> quotes = presenter.getQuotesByStockId(stockId);
+		this.displayData(quotes);
+	}
 
 	@Override
 	protected List<ColumnDefinition> getColumnDefinitions() {

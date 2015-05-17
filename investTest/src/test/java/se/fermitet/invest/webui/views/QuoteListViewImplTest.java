@@ -1,19 +1,36 @@
 package se.fermitet.invest.webui.views;
 
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.joda.time.LocalDate;
+import org.junit.Test;
 
 import se.fermitet.invest.domain.Quote;
+import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.QuoteListPresenter;
 import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
+import se.fermitet.vaadin.navigation.URIParameter;
+
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, QuoteListPresenter, Quote> {
 
+	private String STOCK_SYMBOL = "AAK";
+	private String OTHER_STOCK_SYMBOL = "BMAX";
+	private TestDataProvider testDataProvider;
+	
+	public QuoteListViewImplTest() {
+		super();
+		this.testDataProvider = new TestDataProvider();
+	}
+	
 	@Override
 	protected QuoteListViewImpl createViewImpl() {
 		return new TestQuoteListViewImpl();
@@ -21,7 +38,7 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 
 	@Override
 	protected List<Quote> getTestData() {
-		return new TestDataProvider().getQuotes();
+		return testDataProvider.getQuotesForStockBySymbol(STOCK_SYMBOL);
 	}
 
 	@Override
@@ -41,6 +58,33 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 	@Override
 	protected String getSingleViewName() {
 		throw new UnsupportedOperationException("unimplemented");
+	}
+	
+	@Override
+	@Test
+	public void testEnterWithNullCallsFillViewWithData() throws Exception {
+		// make it pass, this is not how it should be called
+	}
+
+	@Test
+	public void testEnterWithParameter() throws Exception {
+		Stock otherStock = testDataProvider.getStockBySymbol(OTHER_STOCK_SYMBOL);
+		List<Quote> quotes = testDataProvider.getQuotesForStock(otherStock);
+
+		when(mockedPresenter.getQuotesByStockId(anyString())).thenReturn(quotes);
+		
+		List<URIParameter> parameters = new ArrayList<URIParameter>();
+		parameters.add(new URIParameter(otherStock.getId().toString()));
+
+		view.enter(mock(ViewChangeEvent.class), parameters);
+
+		List<Quote> displayedData = view.tableAdapter.getData();
+		
+		assertEquals("size of array", quotes.size(), displayedData.size());
+		for (Quote displayed : displayedData) {
+			assertTrue(quotes.contains(displayed));
+		}
+
 	}
 
 }

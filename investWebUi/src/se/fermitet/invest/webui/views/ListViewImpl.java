@@ -134,6 +134,7 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
+		// TODO: Consider having presenter return the list and UIImpl fills its data instead of presenter doing it.  Similar to how Single views do it (and also QuoteListImpl)
 		this.presenter.fillViewWithData();
 	}
 
