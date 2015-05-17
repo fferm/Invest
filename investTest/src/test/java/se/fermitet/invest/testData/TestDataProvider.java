@@ -1,9 +1,12 @@
 package se.fermitet.invest.testData;
 
+import java.util.Collections;
 import java.util.List;
 
 import se.fermitet.invest.domain.Portfolio;
+import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
+import se.fermitet.invest.domain.Transaction;
 import se.fermitet.invest.storage.dataFiller.DataQuery;
 import se.fermitet.invest.storage.dataFiller.ExampleDataProvider;
 
@@ -12,6 +15,34 @@ public class TestDataProvider extends ExampleDataProvider {
 	public TestDataProvider() {
 		super(null);
 		this.dq = new TestDataQuery(this);
+	}
+	
+	@Override
+	public List<Stock> getStocks() {
+		List<Stock> ret = super.getStocks();
+		Collections.shuffle(ret);
+		return ret;
+	}
+
+	@Override
+	public List<Transaction> getTransactions() {
+		List<Transaction> ret = super.getTransactions();
+		Collections.shuffle(ret);
+		return ret;
+	}
+	
+	@Override
+	public List<Portfolio> getPortfolios() {
+		List<Portfolio> ret = super.getPortfolios();
+		Collections.shuffle(ret);
+		return ret;
+	}
+
+	@Override
+	public List<Quote> getQuotes() {
+		List<Quote> ret = super.getQuotes();
+		Collections.shuffle(ret);
+		return ret;
 	}
 }
 
