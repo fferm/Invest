@@ -3,10 +3,12 @@ package se.fermitet.invest.webui.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.viewinterface.StockListView;
 import se.fermitet.invest.webui.InvestWebUI;
+import se.fermitet.invest.webui.navigation.EntityNameHelper;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 
@@ -72,6 +74,6 @@ public class StockListViewImpl extends ListViewImpl<StockListPresenter, Stock> i
 
 	@Override
 	public void navigateToQuotesList(Stock stock) {
-		getNavigator().navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(stock.getId().toString()));
+		getNavigator().navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(EntityNameHelper.entityNameFor(Quote.class), stock.getId().toString()));
 	}
 }

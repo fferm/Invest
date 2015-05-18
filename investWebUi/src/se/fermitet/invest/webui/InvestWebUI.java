@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import se.fermitet.invest.webui.views.PortfolioListViewImpl;
 import se.fermitet.invest.webui.views.PortfolioSingleViewImpl;
 import se.fermitet.invest.webui.views.QuoteListViewImpl;
+import se.fermitet.invest.webui.views.QuoteSingleViewImpl;
 import se.fermitet.invest.webui.views.StockListViewImpl;
 import se.fermitet.invest.webui.views.StockSingleViewImpl;
 import se.fermitet.invest.webui.views.TransactionListViewImpl;
@@ -28,6 +29,7 @@ public class InvestWebUI extends UI {
 	public final static String PORTFOLIO_LIST = "portfolio_list";
 	public static final String PORTFOLIO_SINGLE = "portfolio_single";
 	public static final String QUOTE_LIST = "quote_list";
+	public static final String QUOTE_SINGLE = "quote_single";
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = InvestWebUI.class)
@@ -53,6 +55,7 @@ public class InvestWebUI extends UI {
 		navigator.addView(PORTFOLIO_LIST, PortfolioListViewImpl.class);
 		navigator.addView(PORTFOLIO_SINGLE, PortfolioSingleViewImpl.class);
 		navigator.addView(QUOTE_LIST, QuoteListViewImpl.class);
+		navigator.addView(QUOTE_SINGLE, QuoteSingleViewImpl.class);
 	}
 	
 	public DirectionalNavigator getDirectionalNavigator() {

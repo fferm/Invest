@@ -14,6 +14,7 @@ import se.fermitet.general.IdAble;
 import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.presenter.ListPresenter;
+import se.fermitet.invest.webui.navigation.EntityNameHelper;
 import se.fermitet.vaadin.navigation.URIParameter;
 
 import com.vaadin.ui.Button;
@@ -23,7 +24,13 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 	protected List<POJO> testDataUnsorted;
 	protected List<POJO> testDataSorted;
 	protected PRESENTER mockedPresenter;
+	private Class<POJO> pojoClass;
 
+	public ListViewImplTest(Class<POJO> pojoClass) {
+		super();
+		this.pojoClass = pojoClass;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() {
@@ -141,7 +148,7 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 		POJO testData = testDataSorted.get(2);
 		
 		view.navigateToSingleView(testData);
-		verify(view.getNavigator()).navigateTo(getSingleViewName(), new URIParameter(testData.getId().toString()));
+		verify(view.getNavigator()).navigateTo(getSingleViewName(), new URIParameter(EntityNameHelper.entityNameFor(pojoClass), testData.getId().toString()));
 	}
 	
 	@Test

@@ -14,6 +14,11 @@ import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 public class TransactionListViewImplTest extends ListViewImplTest<TransactionListViewImpl, TransactionListPresenter, Transaction> {
+
+	public TransactionListViewImplTest() {
+		super(Transaction.class);
+	}
+
 	@Override
 	protected TransactionListViewImpl createViewImpl() {
 		return new TestTransactionListViewImpl();

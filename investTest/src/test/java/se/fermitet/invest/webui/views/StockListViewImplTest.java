@@ -8,18 +8,25 @@ import java.util.List;
 
 import org.junit.Test;
 
+import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.model.ModelException.ModelExceptionType;
 import se.fermitet.invest.presenter.StockListPresenter;
 import se.fermitet.invest.testData.TestDataProvider;
 import se.fermitet.invest.webui.InvestWebUI;
+import se.fermitet.invest.webui.navigation.EntityNameHelper;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import se.fermitet.vaadin.navigation.URIParameter;
 
 import com.vaadin.ui.Button;
  
 public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, StockListPresenter, Stock> {
+
+	public StockListViewImplTest() {
+		super(Stock.class);
+	}
+
 	@Override
 	protected StockListViewImpl createViewImpl() {
 		return new TestStockListViewImpl();
@@ -87,7 +94,7 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 		Stock testData = testDataSorted.get(2);
 		
 		view.navigateToQuotesList(testData);
-		verify(view.getNavigator()).navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(testData.getId().toString()));
+		verify(view.getNavigator()).navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(EntityNameHelper.entityNameFor(Quote.class), testData.getId().toString()));
 	}
 
 }

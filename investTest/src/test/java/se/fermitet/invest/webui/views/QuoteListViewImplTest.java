@@ -15,6 +15,8 @@ import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.QuoteListPresenter;
 import se.fermitet.invest.testData.TestDataProvider;
+import se.fermitet.invest.webui.InvestWebUI;
+import se.fermitet.invest.webui.navigation.EntityNameHelper;
 import se.fermitet.vaadin.navigation.DirectionalNavigator;
 import se.fermitet.vaadin.navigation.URIParameter;
 
@@ -27,7 +29,7 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 	private TestDataProvider testDataProvider;
 	
 	public QuoteListViewImplTest() {
-		super();
+		super(Quote.class);
 		this.testDataProvider = new TestDataProvider();
 	}
 	
@@ -57,7 +59,7 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 
 	@Override
 	protected String getSingleViewName() {
-		throw new UnsupportedOperationException("unimplemented");
+		return InvestWebUI.QUOTE_SINGLE;
 	}
 	
 	@Override
@@ -74,7 +76,7 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 		when(mockedPresenter.getQuotesByStockId(anyString())).thenReturn(quotes);
 		
 		List<URIParameter> parameters = new ArrayList<URIParameter>();
-		parameters.add(new URIParameter(otherStock.getId().toString()));
+		parameters.add(new URIParameter(EntityNameHelper.entityNameFor(Stock.class), otherStock.getId().toString()));
 
 		view.enter(mock(ViewChangeEvent.class), parameters);
 

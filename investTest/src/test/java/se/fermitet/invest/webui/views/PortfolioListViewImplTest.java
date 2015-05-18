@@ -18,6 +18,10 @@ import se.fermitet.vaadin.navigation.DirectionalNavigator;
 
 public class PortfolioListViewImplTest extends ListViewImplTest<PortfolioListViewImpl, PortfolioListPresenter, Portfolio>{
 
+	public PortfolioListViewImplTest() {
+		super(Portfolio.class);
+	}
+
 	@Override
 	protected PortfolioListViewImpl createViewImpl() {
 		return new TestPortfolioListViewImpl();
@@ -36,9 +40,6 @@ public class PortfolioListViewImplTest extends ListViewImplTest<PortfolioListVie
 			return o1Name.compareTo(o2Name);
 		};
 	}
-
-
-
 
 	@Override
 	protected String getSingleViewName() {

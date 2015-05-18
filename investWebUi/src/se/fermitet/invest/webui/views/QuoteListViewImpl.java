@@ -5,6 +5,7 @@ import java.util.List;
 
 import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.presenter.QuoteListPresenter;
+import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 
@@ -47,7 +48,7 @@ public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 
 	@Override
 	protected String getSingleViewName() {
-		throw new UnsupportedOperationException("unimplemented");
+		return InvestWebUI.QUOTE_SINGLE;
 	}
 
 	@Override

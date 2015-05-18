@@ -6,6 +6,7 @@ import java.util.List;
 import se.fermitet.general.IdAble;
 import se.fermitet.invest.presenter.ListPresenter;
 import se.fermitet.invest.viewinterface.ListView;
+import se.fermitet.invest.webui.navigation.EntityNameHelper;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 import se.fermitet.vaadin.widgets.POJOTableAdapter;
@@ -147,7 +148,7 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 		if (data == null) {
 			getNavigator().navigateTo(getSingleViewName());
 		} else {
-			getNavigator().navigateTo(getSingleViewName(), new URIParameter(data.getId().toString()));
+			getNavigator().navigateTo(getSingleViewName(), new URIParameter(EntityNameHelper.entityNameFor(pojoClass), data.getId().toString()));
 		}
 	}
 	
