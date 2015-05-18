@@ -9,8 +9,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.fermitet.vaadin.navigation.DirectionalNavigator.DirectionalNavigatorException;
-
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -60,8 +58,7 @@ public class DirectionalNavigatorTest {
 
 	@Test
 	public void testNavigateWithSingleParamter() throws Exception {
-		String value = "Value";
-		URIParameter param = new URIParameter(value);
+		URIParameter param = new URIParameter("Name", "Value");
 
 		objUnderTest.navigateTo(TEST_VIEW3, param);
 
@@ -89,7 +86,7 @@ public class DirectionalNavigatorTest {
 
 	@Test(expected = DirectionalNavigatorException.class)
 	public void testNavigatingToUndeclaredViewIllegal_withSingleParameters() throws Exception {
-		objUnderTest.navigateTo("NOT DEFINED NAME", new URIParameter(null, null));
+		objUnderTest.navigateTo("NOT DEFINED NAME", new URIParameter("Name", "Value"));
 	}
 
 	@Test(expected = DirectionalNavigatorException.class)
@@ -207,23 +204,25 @@ public class DirectionalNavigatorTest {
 	
 	@Test
 	public void testParse_single() throws Exception {
-		String testString = "singleValue";
+		String testString = new URIParameter("Name", "Value").toString();
 		
 		List<URIParameter> parameters = DirectionalNavigator.parse(testString);
 		
 		assertEquals("size", 1, parameters.size());
-		assertTrue("contains", parameters.contains(new URIParameter(testString)));
+		assertTrue("contains", parameters.contains(URIParameter.parse(testString)));
 	}
 
 	@Test
 	public void testParse_multiple() throws Exception {
-		String testString = "value1&value2";
+		String str1 = new URIParameter("Name1", "Value1").toString();
+		String str2 = new URIParameter("Name2", "Value2").toString();
+		String testString = str1 + DirectionalNavigator.PARAMETERS_SEPARATOR + str2;
 		
 		List<URIParameter> parameters = DirectionalNavigator.parse(testString);
 		
 		assertEquals("size", 2, parameters.size());
-		assertTrue("contains", parameters.contains(new URIParameter("value1")));
-		assertTrue("contains", parameters.contains(new URIParameter("value2")));
+		assertTrue("contains", parameters.contains(URIParameter.parse(str1)));
+		assertTrue("contains", parameters.contains(URIParameter.parse(str2)));
 	}
 
 	@Test
