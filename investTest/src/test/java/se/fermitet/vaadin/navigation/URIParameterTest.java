@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import se.fermitet.vaadin.navigation.URIParameter.URIParameterException;
-
 public class URIParameterTest {
 	@Test
 	public void testNameAndValueParameters() throws Exception {
@@ -19,15 +17,24 @@ public class URIParameterTest {
 		assertEquals("toString", name + "=" + value, parameter.toString());
 	}
 	
-	@Test
-	public void testOnlyValueParameters() throws Exception {
-		String value = "Value";
-		URIParameter parameter = new URIParameter(value);
-		
-		assertNotNull("not null", parameter);
-		assertNull("name", parameter.getName());
-		assertEquals("value", value, parameter.getValue());
-		assertEquals("toString", value, parameter.toString());
+	@Test(expected=URIParameterException.class)
+	public void testNullNameIllegal() throws Exception {
+		new URIParameter(null, "value");
+	}
+	
+	@Test(expected=URIParameterException.class)
+	public void testEmptyNameIllegal() throws Exception {
+		new URIParameter("", "value");
+	}
+	
+	@Test(expected=URIParameterException.class)
+	public void testNullValueIllegal() throws Exception {
+		new URIParameter("Name", null);
+	}
+	
+	@Test(expected=URIParameterException.class)
+	public void testEmptyValueIllegal() throws Exception {
+		new URIParameter("Name", "");
 	}
 	
 	@Test
@@ -39,7 +46,7 @@ public class URIParameterTest {
 
 	protected void runTestsForIllegalCharacter(String illegal) {
 		try {
-			new URIParameter("text" + illegal + "withIllegal");
+			new URIParameter("Name", "text" + illegal + "withIllegal");
 			fail(illegal + " in value");
 		} catch (URIParameterException e) {
 			// OK
@@ -62,23 +69,14 @@ public class URIParameterTest {
 	@Test
 	public void testValueObject() throws Exception {
 		URIParameter hasBoth = new URIParameter("Name", "Value");
-		URIParameter hasValue = new URIParameter("Value");
 		
 		assertEquals("both equal to same", hasBoth, hasBoth);
 		assertEquals("both equal to another object with same", hasBoth, new URIParameter("Name", "Value"));
-		assertNotEquals("both equal to null name", hasBoth, hasValue);
-		assertNotEquals("both equal to null value", hasBoth, new URIParameter("Name", null));
-		assertNotEquals("both equal to both nulls", hasBoth, new URIParameter(null, null));
 		assertNotEquals("both equal to other values", hasBoth, new URIParameter("Other", "Other"));
 		assertNotEquals("both equal to null", hasBoth, null);
 		assertNotEquals("both equal to object of other class", hasBoth, "TESTSTRING");
 		
-		assertEquals("value equal to same", hasValue, hasValue);
-		assertEquals("value equal to another object with same", hasValue, new URIParameter("Value"));
-		assertNotEquals("value equal to object of different values", hasValue, new URIParameter("Another"));
-		
 		assertTrue("Hash code of both", hasBoth.hashCode() == new URIParameter("Name", "Value").hashCode());
-		assertTrue("Hash code of value", hasValue.hashCode() == new URIParameter("Value").hashCode());
 	}
 	
 	@Test
@@ -89,12 +87,19 @@ public class URIParameterTest {
 		assertEquals("name and value", new URIParameter("param", "value"), param);
 	}
 	
-	@Test
-	public void testParseString_onlyValue() throws Exception {
-		String testString = "only value";
-		
-		URIParameter param = URIParameter.parse(testString);
-		assertEquals("name and value", new URIParameter(testString), param);
+	@Test(expected=URIParameterException.class)
+	public void testParseString_withoutSeparator() throws Exception {
+		URIParameter.parse("hello");
+	}
+	
+	@Test(expected=URIParameterException.class)
+	public void testParseString_emptyName() throws Exception {
+		URIParameter.parse("=value");
+	}
+	
+	@Test(expected=URIParameterException.class)
+	public void testParseString_emptyValue() throws Exception {
+		URIParameter.parse("Name=");
 	}
 
 }
