@@ -109,6 +109,11 @@ class MongoStorage implements Storage {
 	public void deleteQuote(Quote toDelete) {
 		delete(toDelete);
 	}
+	
+	public List<Quote> getQuotesByStock(Stock stock) {
+		return getDatastore().createQuery(Quote.class).field("stock").equal(stock).asList();
+	}
+
 
 
 
@@ -169,5 +174,4 @@ class MongoStorage implements Storage {
 			morphia.mapPackage(Stock.class.getPackage().getName());
 		}
 	}
-
 }

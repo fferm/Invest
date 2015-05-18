@@ -33,5 +33,6 @@ public interface Storage {
 	public void saveQuote(Quote quote);
 	public Quote getQuoteById(UUID id);
 	public void deleteQuote(Quote quote);
+	public List<Quote> getQuotesByStock(Stock theStock);
 
 }

@@ -1,5 +1,6 @@
 package se.fermitet.invest.model;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.UUID;
@@ -7,16 +8,17 @@ import java.util.UUID;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Quote;
+import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.storage.Storage;
 
-public class QuoteModelTest extends AbstractModelTest<QuoteModel>{
+public class QuoteModelTest extends AbstractModelTest<TestQuoteModel>{
 
 	public QuoteModelTest() {
 		super(QuoteModel.class);
 	}
 
 	@Override
-	public QuoteModel createModelWithMockedStorage() {
+	public TestQuoteModel createModelWithMockedStorage() {
 		return new TestQuoteModel();
 	}
 
@@ -48,6 +50,16 @@ public class QuoteModelTest extends AbstractModelTest<QuoteModel>{
 
 		verify(mockedStorage).saveQuote(toSave);
 	}
+	
+	@Test
+	public void testGetQuotesByStockId() throws Exception {
+		Stock theStock = new Stock("TEST", "Test");
+		when(model.mockedStockModel.getById(any())).thenReturn(theStock);
+		
+		model.getQuotesByStockId(theStock.getId());
+		
+		verify(mockedStorage).getQuotesByStock(theStock);
+	}
 
 
 
@@ -57,9 +69,16 @@ public class QuoteModelTest extends AbstractModelTest<QuoteModel>{
 }
 
 class TestQuoteModel extends QuoteModel {
+	StockModel mockedStockModel = mock(StockModel.class);
+	
 	@Override
 	protected Storage createStorage() {
 		return mock(Storage.class);
+	}
+	
+	@Override
+	protected StockModel getStockModel() {
+		return mockedStockModel;
 	}
 }
 

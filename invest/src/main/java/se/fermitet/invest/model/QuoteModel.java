@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import se.fermitet.invest.domain.Quote;
+import se.fermitet.invest.domain.Stock;
 
 public class QuoteModel extends Model<Quote> {
 
@@ -13,6 +14,7 @@ public class QuoteModel extends Model<Quote> {
 	
 	@Override
 	public List<Quote> getAll() {
+		// TODO: Should there be a getAll for quotes?
 		return storage.getAllQuotes();
 	}
 
@@ -29,6 +31,18 @@ public class QuoteModel extends Model<Quote> {
 	@Override
 	public void delete(Quote obj) {
 		storage.deleteQuote(obj);
+	}
+
+	public List<Quote> getQuotesByStockId(UUID stockId) {
+		StockModel stockModel = getStockModel();
+		
+		Stock myStock = stockModel.getById(stockId);
+		
+		return storage.getQuotesByStock(myStock);
+	}
+
+	protected StockModel getStockModel() {
+		return Models.stocksModel();
 	}
 
 }

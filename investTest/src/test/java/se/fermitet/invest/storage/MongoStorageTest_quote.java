@@ -69,6 +69,42 @@ public class MongoStorageTest_quote extends MongoStorageTest_abstract {
 		assertTrue("contains", allLeft.contains(s2));
 	}
 	
+	@Test
+	public void testGetByStock() throws Exception {
+		Stock s1 = new Stock("s1");
+		Stock s2 = new Stock("s2");
+		Stock s3 = new Stock("s3");
+		objUnderTest.saveStock(s1);
+		objUnderTest.saveStock(s2);
+		objUnderTest.saveStock(s3);
+		
+		Quote q11 = new Quote();
+		Quote q12 = new Quote();
+		q11.setStock(s1);
+		q12.setStock(s1);
+		q11.setAsk(Money.parse("SEK 11"));
+		q12.setAsk(Money.parse("SEK 12"));
+		objUnderTest.saveQuote(q11);
+		objUnderTest.saveQuote(q12);
+		
+		Quote q21 = new Quote();
+		q21.setStock(s2);
+		q21.setAsk(Money.parse("SEK 21"));
+		objUnderTest.saveQuote(q21);
+
+		List<Quote> s1Results = objUnderTest.getQuotesByStock(s1);
+		assertEquals("size s1", 2, s1Results.size());
+		assertTrue("contains q11", s1Results.contains(q11));
+		assertTrue("contains q12", s1Results.contains(q12));
+		
+		List<Quote> s2Results = objUnderTest.getQuotesByStock(s2);
+		assertEquals("size s2", 1, s2Results.size());
+		assertTrue("contains q21", s2Results.contains(q21));
+		
+		List<Quote> s3Results = objUnderTest.getQuotesByStock(s3);
+		assertEquals("s3 size", 0, s3Results.size());
+	}
+	
 
 	
 

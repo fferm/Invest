@@ -1,6 +1,7 @@
 package se.fermitet.invest.presenter;
 
 import java.util.List;
+import java.util.UUID;
 
 import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.model.QuoteModel;
@@ -12,8 +13,8 @@ public class QuoteListPresenter extends ListPresenter<ListView<Quote>, Quote, Qu
 		super(view, QuoteModel.class);
 	}
 
-	public List<Quote> getQuotesByStockId(String anyString) {
-		throw new UnsupportedOperationException("unimplemented");
+	public List<Quote> getQuotesByStockId(String stockId) {
+		return model.getQuotesByStockId(UUID.fromString(stockId));
 	}
 
 }
