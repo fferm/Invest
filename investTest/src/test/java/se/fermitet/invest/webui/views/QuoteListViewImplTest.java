@@ -69,11 +69,12 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 	}
 
 	@Test
-	public void testEnterWithParameter() throws Exception {
+	public void testEnterWithParameter_quotes() throws Exception {
 		Stock otherStock = testDataProvider.getStockBySymbol(OTHER_STOCK_SYMBOL);
 		List<Quote> quotes = testDataProvider.getQuotesForStock(otherStock);
 
-		when(mockedPresenter.getQuotesByStockId(anyString())).thenReturn(quotes);
+		when(mockedPresenter.getStockById(any())).thenReturn(otherStock);
+		when(mockedPresenter.getQuotesByStock(otherStock)).thenReturn(quotes);
 		
 		List<URIParameter> parameters = new ArrayList<URIParameter>();
 		parameters.add(new URIParameter(EntityNameHelper.entityNameFor(Stock.class), otherStock.getId().toString()));
@@ -86,7 +87,22 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 		for (Quote displayed : displayedData) {
 			assertTrue(quotes.contains(displayed));
 		}
+		
+		assertEquals("stock of QuoteListViewImpl", otherStock, view.getStock());
+	}
+	
+	@Test
+	public void testEnterWithParameter_stock() throws Exception {
+		Stock otherStock = testDataProvider.getStockBySymbol(OTHER_STOCK_SYMBOL);
 
+		when(mockedPresenter.getStockById(any())).thenReturn(otherStock);
+		
+		List<URIParameter> parameters = new ArrayList<URIParameter>();
+		parameters.add(new URIParameter(EntityNameHelper.entityNameFor(Stock.class), otherStock.getId().toString()));
+
+		view.enter(mock(ViewChangeEvent.class), parameters);
+
+		assertEquals("stock of QuoteListViewImpl", otherStock, view.getStock());
 	}
 
 }

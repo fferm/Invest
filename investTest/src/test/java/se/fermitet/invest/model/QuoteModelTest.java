@@ -1,6 +1,5 @@
 package se.fermitet.invest.model;
 
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.UUID;
@@ -52,11 +51,10 @@ public class QuoteModelTest extends AbstractModelTest<TestQuoteModel>{
 	}
 	
 	@Test
-	public void testGetQuotesByStockId() throws Exception {
+	public void testGetQuotesByStock() throws Exception {
 		Stock theStock = new Stock("TEST", "Test");
-		when(model.mockedStockModel.getById(any())).thenReturn(theStock);
 		
-		model.getQuotesByStockId(theStock.getId());
+		model.getQuotesByStock(theStock);
 		
 		verify(mockedStorage).getQuotesByStock(theStock);
 	}

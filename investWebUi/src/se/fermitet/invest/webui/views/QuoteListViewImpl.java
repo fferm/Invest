@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.fermitet.invest.domain.Quote;
+import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.QuoteListPresenter;
 import se.fermitet.invest.webui.InvestWebUI;
 import se.fermitet.vaadin.navigation.URIParameter;
@@ -14,6 +15,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 
 	private static final long serialVersionUID = 5301419382984303433L;
+	private Stock stock;
 
 	public QuoteListViewImpl() {
 		super(Quote.class, "Kurser");
@@ -22,8 +24,9 @@ public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 	@Override
 	protected void enter(ViewChangeEvent event, List<URIParameter> parameters) {
 		String stockId = parameters.get(0).getValue();
+		this.stock = presenter.getStockById(stockId);
 		
-		List<Quote> quotes = presenter.getQuotesByStockId(stockId);
+		List<Quote> quotes = presenter.getQuotesByStock(this.stock);
 		this.displayData(quotes);
 	}
 
@@ -54,6 +57,10 @@ public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 	@Override
 	protected QuoteListPresenter createPresenter() {
 		return new QuoteListPresenter(this);
+	}
+
+	public Stock getStock() {
+		return this.stock;
 	}
 
 }

@@ -7,7 +7,9 @@ import java.util.UUID;
 import org.junit.Test;
 
 import se.fermitet.invest.domain.Quote;
+import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.QuoteModel;
+import se.fermitet.invest.model.StockModel;
 import se.fermitet.invest.viewinterface.ListView;
 
 public class QuoteListPresenterTest extends ListPresenterTest<QuoteListPresenter, Quote, QuoteModel, ListView<Quote>> {
@@ -22,12 +24,21 @@ public class QuoteListPresenterTest extends ListPresenterTest<QuoteListPresenter
 	}
 	
 	@Test
-	public void testGetQuotesByStockIdCallsModel() throws Exception {
+	public void testGetStockByIdCallsStockModel() throws Exception {
 		String stockId = UUID.randomUUID().toString();
 		
-		this.presenter.getQuotesByStockId(stockId);
+		this.presenter.getStockById(stockId);
 		
-		verify(mockedModel).getQuotesByStockId(UUID.fromString(stockId));
+		verify(this.presenter.stockModel).getById(UUID.fromString(stockId));
+	}
+	
+	@Test
+	public void testGetQuotesByStockCallsModel() throws Exception {
+		Stock stock = new Stock("TEST", "Test");
+		
+		this.presenter.getQuotesByStock(stock);
+		
+		verify(mockedModel).getQuotesByStock(stock);
 	}
 
 }
@@ -40,6 +51,11 @@ class TestQuoteListPresenter extends QuoteListPresenter {
 	@Override
 	protected QuoteModel createModel() {
 		return mock(QuoteModel.class);
+	}
+	
+	@Override
+	protected StockModel createStockModel() {
+		return mock(StockModel.class);
 	}
 }
 

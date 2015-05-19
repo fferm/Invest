@@ -33,16 +33,12 @@ public class QuoteModel extends Model<Quote> {
 		storage.deleteQuote(obj);
 	}
 
-	public List<Quote> getQuotesByStockId(UUID stockId) {
-		StockModel stockModel = getStockModel();
-		
-		Stock myStock = stockModel.getById(stockId);
-		
-		return storage.getQuotesByStock(myStock);
-	}
-
 	protected StockModel getStockModel() {
 		return Models.stocksModel();
+	}
+
+	public List<Quote> getQuotesByStock(Stock stock) {
+		return storage.getQuotesByStock(stock);
 	}
 
 }
