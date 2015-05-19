@@ -7,6 +7,7 @@ import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.presenter.QuoteListPresenter;
 import se.fermitet.invest.webui.InvestWebUI;
+import se.fermitet.invest.webui.navigation.EntityNameHelper;
 import se.fermitet.vaadin.navigation.URIParameter;
 import se.fermitet.vaadin.widgets.ColumnDefinition;
 
@@ -61,6 +62,11 @@ public class QuoteListViewImpl extends ListViewImpl<QuoteListPresenter, Quote> {
 
 	public Stock getStock() {
 		return this.stock;
+	}
+	
+	@Override
+	protected void navigateToSingleViewForNew() {
+		getNavigator().navigateTo(getSingleViewName(), new URIParameter(EntityNameHelper.entityNameFor(Stock.class), getStock().getId().toString()));
 	}
 
 }

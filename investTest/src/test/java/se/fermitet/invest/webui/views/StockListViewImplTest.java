@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import se.fermitet.invest.domain.Quote;
 import se.fermitet.invest.domain.Stock;
 import se.fermitet.invest.model.ModelException;
 import se.fermitet.invest.model.ModelException.ModelExceptionType;
@@ -94,7 +93,7 @@ public class StockListViewImplTest extends ListViewImplTest<StockListViewImpl, S
 		Stock testData = testDataSorted.get(2);
 		
 		view.navigateToQuotesList(testData);
-		verify(view.getNavigator()).navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(EntityNameHelper.entityNameFor(Quote.class), testData.getId().toString()));
+		verify(view.getNavigator()).navigateTo(InvestWebUI.QUOTE_LIST, new URIParameter(EntityNameHelper.entityNameFor(Stock.class), testData.getId().toString()));
 	}
 
 }

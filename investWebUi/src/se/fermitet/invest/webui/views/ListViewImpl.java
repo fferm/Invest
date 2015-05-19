@@ -146,10 +146,17 @@ public abstract class ListViewImpl<PRESENTER extends ListPresenter<?, POJO, ?>, 
 	@Override
 	public void navigateToSingleView(POJO data) {
 		if (data == null) {
-			getNavigator().navigateTo(getSingleViewName());
+			navigateToSingleViewForNew();
 		} else {
-			getNavigator().navigateTo(getSingleViewName(), new URIParameter(EntityNameHelper.entityNameFor(pojoClass), data.getId().toString()));
+			navigateToSingleViewForEdit(data);
 		}
+	}
+	protected void navigateToSingleViewForNew() {
+		getNavigator().navigateTo(getSingleViewName());
+	}
+
+	protected void navigateToSingleViewForEdit(POJO data) {
+		getNavigator().navigateTo(getSingleViewName(), new URIParameter(EntityNameHelper.entityNameFor(pojoClass), data.getId().toString()));
 	}
 	
 	@Override

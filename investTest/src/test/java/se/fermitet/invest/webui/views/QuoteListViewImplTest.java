@@ -71,15 +71,7 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 	@Test
 	public void testEnterWithParameter_quotes() throws Exception {
 		Stock otherStock = testDataProvider.getStockBySymbol(OTHER_STOCK_SYMBOL);
-		List<Quote> quotes = testDataProvider.getQuotesForStock(otherStock);
-
-		when(mockedPresenter.getStockById(any())).thenReturn(otherStock);
-		when(mockedPresenter.getQuotesByStock(otherStock)).thenReturn(quotes);
-		
-		List<URIParameter> parameters = new ArrayList<URIParameter>();
-		parameters.add(new URIParameter(EntityNameHelper.entityNameFor(Stock.class), otherStock.getId().toString()));
-
-		view.enter(mock(ViewChangeEvent.class), parameters);
+		List<Quote> quotes = enterViewWithStock(otherStock);
 
 		List<Quote> displayedData = view.tableAdapter.getData();
 		
@@ -90,20 +82,38 @@ public class QuoteListViewImplTest extends ListViewImplTest<QuoteListViewImpl, Q
 		
 		assertEquals("stock of QuoteListViewImpl", otherStock, view.getStock());
 	}
-	
+
 	@Test
 	public void testEnterWithParameter_stock() throws Exception {
 		Stock otherStock = testDataProvider.getStockBySymbol(OTHER_STOCK_SYMBOL);
+		enterViewWithStock(otherStock);
+
+		assertEquals("stock of QuoteListViewImpl", otherStock, view.getStock());
+	}
+	
+	private List<Quote> enterViewWithStock(Stock otherStock) {
+		List<Quote> quotes = testDataProvider.getQuotesForStock(otherStock);
 
 		when(mockedPresenter.getStockById(any())).thenReturn(otherStock);
+		when(mockedPresenter.getQuotesByStock(otherStock)).thenReturn(quotes);
 		
 		List<URIParameter> parameters = new ArrayList<URIParameter>();
 		parameters.add(new URIParameter(EntityNameHelper.entityNameFor(Stock.class), otherStock.getId().toString()));
 
 		view.enter(mock(ViewChangeEvent.class), parameters);
-
-		assertEquals("stock of QuoteListViewImpl", otherStock, view.getStock());
+		return quotes;
 	}
+	
+	@Override
+	public void testEditSinglePojo_nullValue() throws Exception {
+		enterViewWithStock(testDataProvider.getStockBySymbol(OTHER_STOCK_SYMBOL));
+
+		view.navigateToSingleView(null);
+		
+		verify(view.getNavigator()).navigateTo(getSingleViewName(), new URIParameter(EntityNameHelper.entityNameFor(Stock.class), view.getStock().getId().toString()));
+	}
+	
+
 
 }
 

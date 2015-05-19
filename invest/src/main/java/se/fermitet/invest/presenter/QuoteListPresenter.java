@@ -36,4 +36,8 @@ public class QuoteListPresenter extends ListPresenter<ListView<Quote>, Quote, Qu
 		return model.getQuotesByStock(stock);
 	}
 
+	public void onNewButtonClick(Stock otherStock) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
 }

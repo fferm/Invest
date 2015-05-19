@@ -100,13 +100,13 @@ public abstract class ListViewImplTest<VIEWIMPL extends ListViewImpl<?, POJO>, P
 	}
 
 	@Test
-	public void testNewButton() throws Exception {
+	public void testNewButton_properties() throws Exception {
 		Button newButton = view.newButton;
 		
 		assertNotNull("not null", newButton);
 		assertTrue("Enabled", newButton.isEnabled());
 		assertTrue("Visible", newButton.isVisible());
-		
+
 		newButton.click();
 		
 		verify(mockedPresenter).onNewButtonClick();
